@@ -1,0 +1,209 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1320" viewBox="0 0 1800 1320" role="img" aria-labelledby="title description">
+  <title id="title">Finsight Financial Report RAG Copilot — High-Level Architecture</title>
+  <desc id="description">End-to-end financial report question answering architecture using a bounded LangGraph multi-agent workflow, LangChain retrieval and adapters, deterministic finance tools, guardrails, one shared hosted OpenAI-compatible instruct model of at most 8B parameters, and a supplied embeddings endpoint.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#081322"/>
+      <stop offset="1" stop-color="#10243a"/>
+    </linearGradient>
+    <linearGradient id="header" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#173553"/>
+      <stop offset="1" stop-color="#102b45"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#78b8ff"/>
+    </marker>
+    <marker id="arrow-teal" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#55d6b0"/>
+    </marker>
+    <marker id="arrow-amber" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#e2b663"/>
+    </marker>
+    <style>
+      text { font-family: "Segoe UI", Arial, sans-serif; fill: #e8f1fb; }
+      .title { font-size: 30px; font-weight: 700; }
+      .subtitle { font-size: 15px; fill: #adc2d8; }
+      .band-title { font-size: 14px; font-weight: 700; letter-spacing: 1.3px; fill: #8eb6da; }
+      .box-title { font-size: 16px; font-weight: 700; }
+      .box-copy { font-size: 13px; fill: #c4d2e2; }
+      .small { font-size: 12px; fill: #b7c8da; }
+      .layer { fill: #0c1a2a; stroke: #28415c; stroke-width: 1.4; }
+      .ui { fill: #112941; stroke: #3895d5; stroke-width: 1.5; }
+      .api { fill: #132d47; stroke: #61a8ea; stroke-width: 1.5; }
+      .agent { fill: #16384a; stroke: #3ab89f; stroke-width: 1.5; }
+      .tool { fill: #26334b; stroke: #9c91ed; stroke-width: 1.5; }
+      .data { fill: #173a35; stroke: #55c5a5; stroke-width: 1.5; }
+      .source { fill: #3a3022; stroke: #d3a85d; stroke-width: 1.5; }
+      .control { fill: #3a2431; stroke: #da8294; stroke-width: 1.5; }
+      .hosted { fill: #302748; stroke: #bf9bff; stroke-width: 1.6; }
+      .connector { fill: none; stroke: #78b8ff; stroke-width: 2; marker-end: url(#arrow); }
+      .connector-teal { fill: none; stroke: #55d6b0; stroke-width: 2; marker-end: url(#arrow-teal); }
+      .connector-amber { fill: none; stroke: #e2b663; stroke-width: 2; marker-end: url(#arrow-amber); }
+      .dashed { stroke-dasharray: 7 6; }
+      .divider { stroke: #29415b; stroke-width: 1; }
+    </style>
+  </defs>
+  <rect width="1800" height="1320" fill="url(#background)"/>
+  <rect x="0" y="0" width="1800" height="100" fill="url(#header)"/>
+  <text x="48" y="46" class="title">Finsight | Financial Report RAG Copilot</text>
+  <text x="50" y="74" class="subtitle">Hosted ≤8B instruct model • one shared chat endpoint • supplied embeddings endpoint • LangChain + bounded LangGraph</text>
+
+  <rect x="32" y="118" width="1736" height="142" rx="18" class="layer"/>
+  <text x="52" y="145" class="band-title">1  USERS, EXPERIENCE AND API TRUST BOUNDARY</text>
+  <rect x="58" y="164" width="230" height="72" rx="12" class="ui"/>
+  <text x="76" y="191" class="box-title">Finance researcher</text>
+  <text x="76" y="214" class="box-copy">Company • period • question</text>
+  <rect x="335" y="164" width="290" height="72" rx="12" class="ui"/>
+  <text x="353" y="191" class="box-title">React + TypeScript UI</text>
+  <text x="353" y="214" class="box-copy">Answer • citations • formula • status</text>
+  <rect x="680" y="164" width="320" height="72" rx="12" class="api"/>
+  <text x="698" y="191" class="box-title">FastAPI /api/v1</text>
+  <text x="698" y="214" class="box-copy">Auth • schema validation • rate limits</text>
+  <rect x="1055" y="164" width="340" height="72" rx="12" class="control"/>
+  <text x="1073" y="191" class="box-title">Policy / authorization gate</text>
+  <text x="1073" y="214" class="box-copy">Scope • PII minimization • pre-guardrails</text>
+  <rect x="1450" y="154" width="285" height="92" rx="12" class="control"/>
+  <text x="1468" y="181" class="box-title">Decision support only</text>
+  <text x="1468" y="204" class="box-copy">No trading, approvals or writes</text>
+  <text x="1468" y="225" class="small">Endpoint data handling must be approved</text>
+  <path d="M288 200 H335" class="connector"/>
+  <path d="M625 200 H680" class="connector"/>
+  <path d="M1000 200 H1055" class="connector"/>
+  <path d="M1395 200 H1450" class="connector-amber"/>
+
+  <rect x="32" y="280" width="1736" height="270" rx="18" class="layer"/>
+  <text x="52" y="307" class="band-title">2  BOUNDED MULTI-AGENT ORCHESTRATION — LANGGRAPH STATE GRAPH</text>
+  <rect x="58" y="330" width="252" height="94" rx="12" class="agent"/>
+  <text x="76" y="357" class="box-title">Supervisor / planner</text>
+  <text x="76" y="380" class="box-copy">Intent • entity • fiscal period</text>
+  <text x="76" y="401" class="small">Typed plan • tool allowlist</text>
+  <rect x="345" y="330" width="252" height="94" rx="12" class="agent"/>
+  <text x="363" y="357" class="box-title">Financial research</text>
+  <text x="363" y="380" class="box-copy">Extract • compare • synthesize</text>
+  <text x="363" y="401" class="small">Evidence-only context</text>
+  <rect x="632" y="330" width="252" height="94" rx="12" class="tool"/>
+  <text x="650" y="357" class="box-title">Retrieval specialist</text>
+  <text x="650" y="380" class="box-copy">Hybrid search • sufficiency</text>
+  <text x="650" y="401" class="small">ACL and period filters first</text>
+  <rect x="919" y="330" width="252" height="94" rx="12" class="tool"/>
+  <text x="937" y="357" class="box-title">Calculation specialist</text>
+  <text x="937" y="380" class="box-copy">Calls deterministic finance tools</text>
+  <text x="937" y="401" class="small">No model-authoritative arithmetic</text>
+  <rect x="1206" y="330" width="252" height="94" rx="12" class="agent"/>
+  <text x="1224" y="357" class="box-title">Answer synthesizer</text>
+  <text x="1224" y="380" class="box-copy">Direct answer • citations • basis</text>
+  <text x="1224" y="401" class="small">Formula and inputs for metrics</text>
+  <rect x="1493" y="330" width="242" height="94" rx="12" class="agent"/>
+  <text x="1511" y="357" class="box-title">Critic / verifier</text>
+  <text x="1511" y="380" class="box-copy">Claims • citations • math</text>
+  <text x="1511" y="401" class="small">One bounded repair</text>
+  <path d="M310 377 H345" class="connector"/>
+  <path d="M597 377 H632" class="connector"/>
+  <path d="M884 377 H919" class="connector"/>
+  <path d="M1171 377 H1206" class="connector"/>
+  <path d="M1458 377 H1493" class="connector"/>
+  <rect x="92" y="455" width="1616" height="62" rx="12" class="control"/>
+  <text x="112" y="481" class="box-title">Guardrail routes and typed terminal states</text>
+  <text x="112" y="502" class="box-copy">answered • clarify • refuse • insufficient evidence • provider unavailable — bounded steps, calls, tokens, timeout and retry budget</text>
+  <path d="M1680 424 V455" class="connector-amber"/>
+  <path d="M1055 236 V290 H184 V330" class="connector"/>
+
+  <rect x="32" y="570" width="1060" height="282" rx="18" class="layer"/>
+  <text x="52" y="597" class="band-title">3  LANGCHAIN EVIDENCE AND DETERMINISTIC FINANCE TOOLS</text>
+  <rect x="58" y="622" width="300" height="96" rx="12" class="tool"/>
+  <text x="76" y="649" class="box-title">Hybrid RAG retriever</text>
+  <text x="76" y="672" class="box-copy">Dense vector + BM25 / lexical</text>
+  <text x="76" y="695" class="small">Rank fusion • dedupe • rerank</text>
+  <rect x="395" y="622" width="300" height="96" rx="12" class="tool"/>
+  <text x="413" y="649" class="box-title">Evidence and citation builder</text>
+  <text x="413" y="672" class="box-copy">Document • section • page • period</text>
+  <text x="413" y="695" class="small">Units • accession • source IDs</text>
+  <rect x="732" y="622" width="330" height="96" rx="12" class="tool"/>
+  <text x="750" y="649" class="box-title">Read-only finance tools</text>
+  <text x="750" y="672" class="box-copy">Growth • margins • FCF • ratios • bps</text>
+  <text x="750" y="695" class="small">Decimal math • GAAP/Non-GAAP checks</text>
+  <rect x="58" y="748" width="1004" height="72" rx="12" class="control"/>
+  <text x="78" y="777" class="box-title">Evidence contract</text>
+  <text x="78" y="800" class="box-copy">ACL/entity/period filters before retrieval • only retrieved sources may be cited • missing/conflicting data abstains</text>
+  <path d="M758 424 V576 H208 V622" class="connector"/>
+  <path d="M358 670 H395" class="connector"/>
+  <path d="M695 670 H732" class="connector"/>
+  <path d="M1040 424 V580 H575 V622" class="connector-teal"/>
+  <path d="M862 718 V748" class="connector-amber"/>
+
+  <rect x="1118" y="570" width="650" height="282" rx="18" class="layer"/>
+  <text x="1138" y="597" class="band-title">4  SINGLE SHARED HOSTED MODEL BOUNDARY</text>
+  <rect x="1148" y="622" width="590" height="96" rx="12" class="hosted"/>
+  <text x="1170" y="651" class="box-title">OpenAI-compatible chat-completions API</text>
+  <text x="1170" y="675" class="box-copy">One shared instruct model, provider-attested ≤8B</text>
+  <text x="1170" y="698" class="small">All reasoning roles • no fine-tuning • no alternate-model fallback</text>
+  <rect x="1148" y="748" width="285" height="72" rx="12" class="control"/>
+  <text x="1165" y="777" class="box-title">Secret / egress policy</text>
+  <text x="1165" y="800" class="box-copy">TLS • quotas • timeout • redaction</text>
+  <rect x="1453" y="748" width="285" height="72" rx="12" class="control"/>
+  <text x="1470" y="777" class="box-title">Endpoint governance</text>
+  <text x="1470" y="800" class="box-copy">Retention • residency • data-use review</text>
+  <path d="M1330 424 V580 H1443 V622" class="connector"/>
+  <path d="M1620 424 V600 H1443 V622" class="connector-teal dashed"/>
+  <path d="M1290 718 V748" class="connector-amber"/>
+  <path d="M1595 718 V748" class="connector-amber"/>
+
+  <rect x="32" y="872" width="1060" height="254" rx="18" class="layer"/>
+  <text x="52" y="899" class="band-title">5  DOCUMENT INGESTION — OFFLINE/OPERATOR-CONTROLLED PIPELINE</text>
+  <rect x="58" y="924" width="220" height="92" rx="12" class="source"/>
+  <text x="76" y="951" class="box-title">Source filing pack</text>
+  <text x="76" y="974" class="box-copy">10-K / 10-Q / 8-K</text>
+  <text x="76" y="996" class="small">Releases • decks • transcripts</text>
+  <rect x="310" y="924" width="220" height="92" rx="12" class="tool"/>
+  <text x="328" y="951" class="box-title">Parse and normalize</text>
+  <text x="328" y="974" class="box-copy">Pages • tables • OCR path</text>
+  <text x="328" y="996" class="small">Units • signs • period labels</text>
+  <rect x="562" y="924" width="220" height="92" rx="12" class="tool"/>
+  <text x="580" y="951" class="box-title">Chunk and annotate</text>
+  <text x="580" y="974" class="box-copy">Section-aware chunks</text>
+  <text x="580" y="996" class="small">Page • period • basis • ACL</text>
+  <rect x="814" y="924" width="248" height="92" rx="12" class="data"/>
+  <text x="832" y="951" class="box-title">Version and publish index</text>
+  <text x="832" y="974" class="box-copy">Validate • test • atomic swap</text>
+  <text x="832" y="996" class="small">Original source remains immutable</text>
+  <path d="M278 970 H310" class="connector-amber"/>
+  <path d="M530 970 H562" class="connector-amber"/>
+  <path d="M782 970 H814" class="connector-amber"/>
+  <text x="58" y="1062" class="box-copy">Provenance: source URL/accession • acquisition/terms • content hash • parser version • embedding version</text>
+  <text x="58" y="1087" class="small">The DOCX golden answers are evaluation labels, not a substitute for ingesting their referenced primary sources.</text>
+
+  <rect x="1118" y="872" width="650" height="254" rx="18" class="layer"/>
+  <text x="1138" y="899" class="band-title">6  INDEX, STORAGE AND SUPPLIED EMBEDDINGS SERVICE</text>
+  <rect x="1148" y="924" width="285" height="92" rx="12" class="data"/>
+  <text x="1166" y="951" class="box-title">PostgreSQL + pgvector</text>
+  <text x="1166" y="974" class="box-copy">Chunks • vectors • ACL metadata</text>
+  <text x="1166" y="996" class="small">Tenant-scoped repositories</text>
+  <rect x="1453" y="924" width="285" height="92" rx="12" class="data"/>
+  <text x="1471" y="951" class="box-title">Lexical / BM25 index</text>
+  <text x="1471" y="974" class="box-copy">Keyword and exact-term search</text>
+  <text x="1471" y="996" class="small">Index rebuildable from source</text>
+  <rect x="1148" y="1035" width="590" height="64" rx="12" class="hosted"/>
+  <text x="1168" y="1062" class="box-title">Supplied embeddings endpoint</text>
+  <text x="1168" y="1084" class="box-copy">Indexing + query vectors • model/version/dimension recorded</text>
+  <path d="M1062 970 H1148" class="connector-amber"/>
+  <path d="M672 1016 V1067 H1148" class="connector-teal dashed"/>
+  <path d="M1433 970 H1453" class="connector-teal"/>
+  <path d="M1335 1035 V1016" class="connector-teal"/>
+
+  <rect x="32" y="1146" width="1736" height="128" rx="18" class="layer"/>
+  <text x="52" y="1173" class="band-title">7  EVALUATION, TRACEABILITY AND GOVERNANCE</text>
+  <rect x="58" y="1192" width="510" height="60" rx="12" class="control"/>
+  <text x="76" y="1218" class="box-title">75-query golden evaluation set</text>
+  <text x="76" y="1240" class="box-copy">Extraction • calculation • multi-hop • refusal • edge case</text>
+  <rect x="645" y="1192" width="510" height="60" rx="12" class="control"/>
+  <text x="663" y="1218" class="box-title">Metrics by layer</text>
+  <text x="663" y="1240" class="box-copy">Recall@k • math • citations • refusal • latency • tokens</text>
+  <rect x="1232" y="1192" width="506" height="60" rx="12" class="control"/>
+  <text x="1250" y="1218" class="box-title">Sanitized trace and audit</text>
+  <text x="1250" y="1240" class="box-copy">Request IDs • graph/tool events • prompt/index/model versions</text>
+  <path d="M300 517 V1146 H300 V1192" class="connector dashed"/>
+  <path d="M850 517 V1146 H850 V1192" class="connector dashed"/>
+  <path d="M1515 517 V1146 H1485 V1192" class="connector dashed"/>
+  <line x1="52" y1="1294" x2="1748" y2="1294" class="divider"/>
+  <text x="54" y="1312" class="small">No fabricated evidence • no hidden model fallback • no autonomous financial action • hosted endpoint use is subject to approved data policy</text>
+</svg>

@@ -1,0 +1,2004 @@
+{
+  "questions": [
+    {
+      "question_id": "Q001",
+      "category": "financial_report",
+      "user_query": "What was the revenue growth between FY2024 and FY2025?",
+      "expected_intent": "financial_report",
+      "expected_agent": "financial_report",
+      "required_tools": [
+        "retrieval",
+        "ratio_calculator"
+      ],
+      "expected_answer": "Revenue grew by 18% and operating expenses rose from Q1 to Q4 as noted in the annual report.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q002",
+      "category": "invoice_po",
+      "user_query": "Check for duplicate invoice risk in the supplier payment batch.",
+      "expected_intent": "invoice_po",
+      "expected_agent": "invoice_po",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Match the invoice, PO and receipt and identify manual review if discrepancies exist.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q003",
+      "category": "expense_policy",
+      "user_query": "Is a domestic hotel expense of INR 18,500 compliant for a G3 employee?",
+      "expected_intent": "expense_policy",
+      "expected_agent": "expense_policy",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "The claim exceeds grade limits and should be rejected or escalated for approval.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q004",
+      "category": "vendor_risk",
+      "user_query": "Review whether the vendor is missing compliance documents and payment anomalies.",
+      "expected_intent": "vendor_risk",
+      "expected_agent": "vendor_risk",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Vendor has moderate risk due to missing vendor documents and unusual weekend payments.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q005",
+      "category": "anomaly_detection",
+      "user_query": "Find unusual payment transactions from the last quarter.",
+      "expected_intent": "anomaly_detection",
+      "expected_agent": "anomaly_detection",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Flag unusual high-value weekend transactions and duplicate payment patterns.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q006",
+      "category": "compliance_audit",
+      "user_query": "Review exceptions and evidence across the AP policy controls.",
+      "expected_intent": "compliance_audit",
+      "expected_agent": "compliance_audit",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Summarize exceptions and evidence with clear distinction from confirmed wrongdoing.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q007",
+      "category": "financial_report",
+      "user_query": "What was the revenue growth between FY2024 and FY2025?",
+      "expected_intent": "financial_report",
+      "expected_agent": "financial_report",
+      "required_tools": [
+        "retrieval",
+        "ratio_calculator"
+      ],
+      "expected_answer": "Revenue grew by 18% and operating expenses rose from Q1 to Q4 as noted in the annual report.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q008",
+      "category": "invoice_po",
+      "user_query": "Check for duplicate invoice risk in the supplier payment batch.",
+      "expected_intent": "invoice_po",
+      "expected_agent": "invoice_po",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Match the invoice, PO and receipt and identify manual review if discrepancies exist.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q009",
+      "category": "expense_policy",
+      "user_query": "Is a domestic hotel expense of INR 18,500 compliant for a G3 employee?",
+      "expected_intent": "expense_policy",
+      "expected_agent": "expense_policy",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "The claim exceeds grade limits and should be rejected or escalated for approval.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q010",
+      "category": "vendor_risk",
+      "user_query": "Review whether the vendor is missing compliance documents and payment anomalies.",
+      "expected_intent": "vendor_risk",
+      "expected_agent": "vendor_risk",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Vendor has moderate risk due to missing vendor documents and unusual weekend payments.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q011",
+      "category": "anomaly_detection",
+      "user_query": "Find unusual payment transactions from the last quarter.",
+      "expected_intent": "anomaly_detection",
+      "expected_agent": "anomaly_detection",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Flag unusual high-value weekend transactions and duplicate payment patterns.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q012",
+      "category": "compliance_audit",
+      "user_query": "Review exceptions and evidence across the AP policy controls.",
+      "expected_intent": "compliance_audit",
+      "expected_agent": "compliance_audit",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Summarize exceptions and evidence with clear distinction from confirmed wrongdoing.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q013",
+      "category": "financial_report",
+      "user_query": "What was the revenue growth between FY2024 and FY2025?",
+      "expected_intent": "financial_report",
+      "expected_agent": "financial_report",
+      "required_tools": [
+        "retrieval",
+        "ratio_calculator"
+      ],
+      "expected_answer": "Revenue grew by 18% and operating expenses rose from Q1 to Q4 as noted in the annual report.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q014",
+      "category": "invoice_po",
+      "user_query": "Check for duplicate invoice risk in the supplier payment batch.",
+      "expected_intent": "invoice_po",
+      "expected_agent": "invoice_po",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Match the invoice, PO and receipt and identify manual review if discrepancies exist.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q015",
+      "category": "expense_policy",
+      "user_query": "Is a domestic hotel expense of INR 18,500 compliant for a G3 employee?",
+      "expected_intent": "expense_policy",
+      "expected_agent": "expense_policy",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "The claim exceeds grade limits and should be rejected or escalated for approval.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q016",
+      "category": "vendor_risk",
+      "user_query": "Review whether the vendor is missing compliance documents and payment anomalies.",
+      "expected_intent": "vendor_risk",
+      "expected_agent": "vendor_risk",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Vendor has moderate risk due to missing vendor documents and unusual weekend payments.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q017",
+      "category": "anomaly_detection",
+      "user_query": "Find unusual payment transactions from the last quarter.",
+      "expected_intent": "anomaly_detection",
+      "expected_agent": "anomaly_detection",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Flag unusual high-value weekend transactions and duplicate payment patterns.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q018",
+      "category": "compliance_audit",
+      "user_query": "Review exceptions and evidence across the AP policy controls.",
+      "expected_intent": "compliance_audit",
+      "expected_agent": "compliance_audit",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Summarize exceptions and evidence with clear distinction from confirmed wrongdoing.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q019",
+      "category": "financial_report",
+      "user_query": "What was the revenue growth between FY2024 and FY2025?",
+      "expected_intent": "financial_report",
+      "expected_agent": "financial_report",
+      "required_tools": [
+        "retrieval",
+        "ratio_calculator"
+      ],
+      "expected_answer": "Revenue grew by 18% and operating expenses rose from Q1 to Q4 as noted in the annual report.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q020",
+      "category": "invoice_po",
+      "user_query": "Check for duplicate invoice risk in the supplier payment batch.",
+      "expected_intent": "invoice_po",
+      "expected_agent": "invoice_po",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Match the invoice, PO and receipt and identify manual review if discrepancies exist.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q021",
+      "category": "expense_policy",
+      "user_query": "Is a domestic hotel expense of INR 18,500 compliant for a G3 employee?",
+      "expected_intent": "expense_policy",
+      "expected_agent": "expense_policy",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "The claim exceeds grade limits and should be rejected or escalated for approval.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q022",
+      "category": "vendor_risk",
+      "user_query": "Review whether the vendor is missing compliance documents and payment anomalies.",
+      "expected_intent": "vendor_risk",
+      "expected_agent": "vendor_risk",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Vendor has moderate risk due to missing vendor documents and unusual weekend payments.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q023",
+      "category": "anomaly_detection",
+      "user_query": "Find unusual payment transactions from the last quarter.",
+      "expected_intent": "anomaly_detection",
+      "expected_agent": "anomaly_detection",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Flag unusual high-value weekend transactions and duplicate payment patterns.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q024",
+      "category": "compliance_audit",
+      "user_query": "Review exceptions and evidence across the AP policy controls.",
+      "expected_intent": "compliance_audit",
+      "expected_agent": "compliance_audit",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Summarize exceptions and evidence with clear distinction from confirmed wrongdoing.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q025",
+      "category": "financial_report",
+      "user_query": "What was the revenue growth between FY2024 and FY2025?",
+      "expected_intent": "financial_report",
+      "expected_agent": "financial_report",
+      "required_tools": [
+        "retrieval",
+        "ratio_calculator"
+      ],
+      "expected_answer": "Revenue grew by 18% and operating expenses rose from Q1 to Q4 as noted in the annual report.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q026",
+      "category": "invoice_po",
+      "user_query": "Check for duplicate invoice risk in the supplier payment batch.",
+      "expected_intent": "invoice_po",
+      "expected_agent": "invoice_po",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Match the invoice, PO and receipt and identify manual review if discrepancies exist.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q027",
+      "category": "expense_policy",
+      "user_query": "Is a domestic hotel expense of INR 18,500 compliant for a G3 employee?",
+      "expected_intent": "expense_policy",
+      "expected_agent": "expense_policy",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "The claim exceeds grade limits and should be rejected or escalated for approval.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q028",
+      "category": "vendor_risk",
+      "user_query": "Review whether the vendor is missing compliance documents and payment anomalies.",
+      "expected_intent": "vendor_risk",
+      "expected_agent": "vendor_risk",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Vendor has moderate risk due to missing vendor documents and unusual weekend payments.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q029",
+      "category": "anomaly_detection",
+      "user_query": "Find unusual payment transactions from the last quarter.",
+      "expected_intent": "anomaly_detection",
+      "expected_agent": "anomaly_detection",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Flag unusual high-value weekend transactions and duplicate payment patterns.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q030",
+      "category": "compliance_audit",
+      "user_query": "Review exceptions and evidence across the AP policy controls.",
+      "expected_intent": "compliance_audit",
+      "expected_agent": "compliance_audit",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Summarize exceptions and evidence with clear distinction from confirmed wrongdoing.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q031",
+      "category": "financial_report",
+      "user_query": "What was the revenue growth between FY2024 and FY2025?",
+      "expected_intent": "financial_report",
+      "expected_agent": "financial_report",
+      "required_tools": [
+        "retrieval",
+        "ratio_calculator"
+      ],
+      "expected_answer": "Revenue grew by 18% and operating expenses rose from Q1 to Q4 as noted in the annual report.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q032",
+      "category": "invoice_po",
+      "user_query": "Check for duplicate invoice risk in the supplier payment batch.",
+      "expected_intent": "invoice_po",
+      "expected_agent": "invoice_po",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Match the invoice, PO and receipt and identify manual review if discrepancies exist.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q033",
+      "category": "expense_policy",
+      "user_query": "Is a domestic hotel expense of INR 18,500 compliant for a G3 employee?",
+      "expected_intent": "expense_policy",
+      "expected_agent": "expense_policy",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "The claim exceeds grade limits and should be rejected or escalated for approval.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q034",
+      "category": "vendor_risk",
+      "user_query": "Review whether the vendor is missing compliance documents and payment anomalies.",
+      "expected_intent": "vendor_risk",
+      "expected_agent": "vendor_risk",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Vendor has moderate risk due to missing vendor documents and unusual weekend payments.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q035",
+      "category": "anomaly_detection",
+      "user_query": "Find unusual payment transactions from the last quarter.",
+      "expected_intent": "anomaly_detection",
+      "expected_agent": "anomaly_detection",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Flag unusual high-value weekend transactions and duplicate payment patterns.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q036",
+      "category": "compliance_audit",
+      "user_query": "Review exceptions and evidence across the AP policy controls.",
+      "expected_intent": "compliance_audit",
+      "expected_agent": "compliance_audit",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Summarize exceptions and evidence with clear distinction from confirmed wrongdoing.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q037",
+      "category": "financial_report",
+      "user_query": "What was the revenue growth between FY2024 and FY2025?",
+      "expected_intent": "financial_report",
+      "expected_agent": "financial_report",
+      "required_tools": [
+        "retrieval",
+        "ratio_calculator"
+      ],
+      "expected_answer": "Revenue grew by 18% and operating expenses rose from Q1 to Q4 as noted in the annual report.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q038",
+      "category": "invoice_po",
+      "user_query": "Check for duplicate invoice risk in the supplier payment batch.",
+      "expected_intent": "invoice_po",
+      "expected_agent": "invoice_po",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Match the invoice, PO and receipt and identify manual review if discrepancies exist.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q039",
+      "category": "expense_policy",
+      "user_query": "Is a domestic hotel expense of INR 18,500 compliant for a G3 employee?",
+      "expected_intent": "expense_policy",
+      "expected_agent": "expense_policy",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "The claim exceeds grade limits and should be rejected or escalated for approval.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q040",
+      "category": "vendor_risk",
+      "user_query": "Review whether the vendor is missing compliance documents and payment anomalies.",
+      "expected_intent": "vendor_risk",
+      "expected_agent": "vendor_risk",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Vendor has moderate risk due to missing vendor documents and unusual weekend payments.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q041",
+      "category": "anomaly_detection",
+      "user_query": "Find unusual payment transactions from the last quarter.",
+      "expected_intent": "anomaly_detection",
+      "expected_agent": "anomaly_detection",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Flag unusual high-value weekend transactions and duplicate payment patterns.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q042",
+      "category": "compliance_audit",
+      "user_query": "Review exceptions and evidence across the AP policy controls.",
+      "expected_intent": "compliance_audit",
+      "expected_agent": "compliance_audit",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Summarize exceptions and evidence with clear distinction from confirmed wrongdoing.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q043",
+      "category": "financial_report",
+      "user_query": "What was the revenue growth between FY2024 and FY2025?",
+      "expected_intent": "financial_report",
+      "expected_agent": "financial_report",
+      "required_tools": [
+        "retrieval",
+        "ratio_calculator"
+      ],
+      "expected_answer": "Revenue grew by 18% and operating expenses rose from Q1 to Q4 as noted in the annual report.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q044",
+      "category": "invoice_po",
+      "user_query": "Check for duplicate invoice risk in the supplier payment batch.",
+      "expected_intent": "invoice_po",
+      "expected_agent": "invoice_po",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Match the invoice, PO and receipt and identify manual review if discrepancies exist.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q045",
+      "category": "expense_policy",
+      "user_query": "Is a domestic hotel expense of INR 18,500 compliant for a G3 employee?",
+      "expected_intent": "expense_policy",
+      "expected_agent": "expense_policy",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "The claim exceeds grade limits and should be rejected or escalated for approval.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q046",
+      "category": "vendor_risk",
+      "user_query": "Review whether the vendor is missing compliance documents and payment anomalies.",
+      "expected_intent": "vendor_risk",
+      "expected_agent": "vendor_risk",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Vendor has moderate risk due to missing vendor documents and unusual weekend payments.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q047",
+      "category": "anomaly_detection",
+      "user_query": "Find unusual payment transactions from the last quarter.",
+      "expected_intent": "anomaly_detection",
+      "expected_agent": "anomaly_detection",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Flag unusual high-value weekend transactions and duplicate payment patterns.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q048",
+      "category": "compliance_audit",
+      "user_query": "Review exceptions and evidence across the AP policy controls.",
+      "expected_intent": "compliance_audit",
+      "expected_agent": "compliance_audit",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Summarize exceptions and evidence with clear distinction from confirmed wrongdoing.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q049",
+      "category": "financial_report",
+      "user_query": "What was the revenue growth between FY2024 and FY2025?",
+      "expected_intent": "financial_report",
+      "expected_agent": "financial_report",
+      "required_tools": [
+        "retrieval",
+        "ratio_calculator"
+      ],
+      "expected_answer": "Revenue grew by 18% and operating expenses rose from Q1 to Q4 as noted in the annual report.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q050",
+      "category": "invoice_po",
+      "user_query": "Check for duplicate invoice risk in the supplier payment batch.",
+      "expected_intent": "invoice_po",
+      "expected_agent": "invoice_po",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Match the invoice, PO and receipt and identify manual review if discrepancies exist.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q051",
+      "category": "expense_policy",
+      "user_query": "Is a domestic hotel expense of INR 18,500 compliant for a G3 employee?",
+      "expected_intent": "expense_policy",
+      "expected_agent": "expense_policy",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "The claim exceeds grade limits and should be rejected or escalated for approval.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q052",
+      "category": "vendor_risk",
+      "user_query": "Review whether the vendor is missing compliance documents and payment anomalies.",
+      "expected_intent": "vendor_risk",
+      "expected_agent": "vendor_risk",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Vendor has moderate risk due to missing vendor documents and unusual weekend payments.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q053",
+      "category": "anomaly_detection",
+      "user_query": "Find unusual payment transactions from the last quarter.",
+      "expected_intent": "anomaly_detection",
+      "expected_agent": "anomaly_detection",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Flag unusual high-value weekend transactions and duplicate payment patterns.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q054",
+      "category": "compliance_audit",
+      "user_query": "Review exceptions and evidence across the AP policy controls.",
+      "expected_intent": "compliance_audit",
+      "expected_agent": "compliance_audit",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Summarize exceptions and evidence with clear distinction from confirmed wrongdoing.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q055",
+      "category": "financial_report",
+      "user_query": "What was the revenue growth between FY2024 and FY2025?",
+      "expected_intent": "financial_report",
+      "expected_agent": "financial_report",
+      "required_tools": [
+        "retrieval",
+        "ratio_calculator"
+      ],
+      "expected_answer": "Revenue grew by 18% and operating expenses rose from Q1 to Q4 as noted in the annual report.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q056",
+      "category": "invoice_po",
+      "user_query": "Check for duplicate invoice risk in the supplier payment batch.",
+      "expected_intent": "invoice_po",
+      "expected_agent": "invoice_po",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Match the invoice, PO and receipt and identify manual review if discrepancies exist.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q057",
+      "category": "expense_policy",
+      "user_query": "Is a domestic hotel expense of INR 18,500 compliant for a G3 employee?",
+      "expected_intent": "expense_policy",
+      "expected_agent": "expense_policy",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "The claim exceeds grade limits and should be rejected or escalated for approval.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q058",
+      "category": "vendor_risk",
+      "user_query": "Review whether the vendor is missing compliance documents and payment anomalies.",
+      "expected_intent": "vendor_risk",
+      "expected_agent": "vendor_risk",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Vendor has moderate risk due to missing vendor documents and unusual weekend payments.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q059",
+      "category": "anomaly_detection",
+      "user_query": "Find unusual payment transactions from the last quarter.",
+      "expected_intent": "anomaly_detection",
+      "expected_agent": "anomaly_detection",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Flag unusual high-value weekend transactions and duplicate payment patterns.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q060",
+      "category": "compliance_audit",
+      "user_query": "Review exceptions and evidence across the AP policy controls.",
+      "expected_intent": "compliance_audit",
+      "expected_agent": "compliance_audit",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Summarize exceptions and evidence with clear distinction from confirmed wrongdoing.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q061",
+      "category": "financial_report",
+      "user_query": "What was the revenue growth between FY2024 and FY2025?",
+      "expected_intent": "financial_report",
+      "expected_agent": "financial_report",
+      "required_tools": [
+        "retrieval",
+        "ratio_calculator"
+      ],
+      "expected_answer": "Revenue grew by 18% and operating expenses rose from Q1 to Q4 as noted in the annual report.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q062",
+      "category": "invoice_po",
+      "user_query": "Check for duplicate invoice risk in the supplier payment batch.",
+      "expected_intent": "invoice_po",
+      "expected_agent": "invoice_po",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Match the invoice, PO and receipt and identify manual review if discrepancies exist.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q063",
+      "category": "expense_policy",
+      "user_query": "Is a domestic hotel expense of INR 18,500 compliant for a G3 employee?",
+      "expected_intent": "expense_policy",
+      "expected_agent": "expense_policy",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "The claim exceeds grade limits and should be rejected or escalated for approval.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q064",
+      "category": "vendor_risk",
+      "user_query": "Review whether the vendor is missing compliance documents and payment anomalies.",
+      "expected_intent": "vendor_risk",
+      "expected_agent": "vendor_risk",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Vendor has moderate risk due to missing vendor documents and unusual weekend payments.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q065",
+      "category": "anomaly_detection",
+      "user_query": "Find unusual payment transactions from the last quarter.",
+      "expected_intent": "anomaly_detection",
+      "expected_agent": "anomaly_detection",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Flag unusual high-value weekend transactions and duplicate payment patterns.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q066",
+      "category": "compliance_audit",
+      "user_query": "Review exceptions and evidence across the AP policy controls.",
+      "expected_intent": "compliance_audit",
+      "expected_agent": "compliance_audit",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Summarize exceptions and evidence with clear distinction from confirmed wrongdoing.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q067",
+      "category": "financial_report",
+      "user_query": "What was the revenue growth between FY2024 and FY2025?",
+      "expected_intent": "financial_report",
+      "expected_agent": "financial_report",
+      "required_tools": [
+        "retrieval",
+        "ratio_calculator"
+      ],
+      "expected_answer": "Revenue grew by 18% and operating expenses rose from Q1 to Q4 as noted in the annual report.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q068",
+      "category": "invoice_po",
+      "user_query": "Check for duplicate invoice risk in the supplier payment batch.",
+      "expected_intent": "invoice_po",
+      "expected_agent": "invoice_po",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Match the invoice, PO and receipt and identify manual review if discrepancies exist.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q069",
+      "category": "expense_policy",
+      "user_query": "Is a domestic hotel expense of INR 18,500 compliant for a G3 employee?",
+      "expected_intent": "expense_policy",
+      "expected_agent": "expense_policy",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "The claim exceeds grade limits and should be rejected or escalated for approval.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q070",
+      "category": "vendor_risk",
+      "user_query": "Review whether the vendor is missing compliance documents and payment anomalies.",
+      "expected_intent": "vendor_risk",
+      "expected_agent": "vendor_risk",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Vendor has moderate risk due to missing vendor documents and unusual weekend payments.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q071",
+      "category": "anomaly_detection",
+      "user_query": "Find unusual payment transactions from the last quarter.",
+      "expected_intent": "anomaly_detection",
+      "expected_agent": "anomaly_detection",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Flag unusual high-value weekend transactions and duplicate payment patterns.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q072",
+      "category": "compliance_audit",
+      "user_query": "Review exceptions and evidence across the AP policy controls.",
+      "expected_intent": "compliance_audit",
+      "expected_agent": "compliance_audit",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Summarize exceptions and evidence with clear distinction from confirmed wrongdoing.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q073",
+      "category": "financial_report",
+      "user_query": "What was the revenue growth between FY2024 and FY2025?",
+      "expected_intent": "financial_report",
+      "expected_agent": "financial_report",
+      "required_tools": [
+        "retrieval",
+        "ratio_calculator"
+      ],
+      "expected_answer": "Revenue grew by 18% and operating expenses rose from Q1 to Q4 as noted in the annual report.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q074",
+      "category": "invoice_po",
+      "user_query": "Check for duplicate invoice risk in the supplier payment batch.",
+      "expected_intent": "invoice_po",
+      "expected_agent": "invoice_po",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Match the invoice, PO and receipt and identify manual review if discrepancies exist.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q075",
+      "category": "expense_policy",
+      "user_query": "Is a domestic hotel expense of INR 18,500 compliant for a G3 employee?",
+      "expected_intent": "expense_policy",
+      "expected_agent": "expense_policy",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "The claim exceeds grade limits and should be rejected or escalated for approval.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q076",
+      "category": "vendor_risk",
+      "user_query": "Review whether the vendor is missing compliance documents and payment anomalies.",
+      "expected_intent": "vendor_risk",
+      "expected_agent": "vendor_risk",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Vendor has moderate risk due to missing vendor documents and unusual weekend payments.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q077",
+      "category": "anomaly_detection",
+      "user_query": "Find unusual payment transactions from the last quarter.",
+      "expected_intent": "anomaly_detection",
+      "expected_agent": "anomaly_detection",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Flag unusual high-value weekend transactions and duplicate payment patterns.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q078",
+      "category": "compliance_audit",
+      "user_query": "Review exceptions and evidence across the AP policy controls.",
+      "expected_intent": "compliance_audit",
+      "expected_agent": "compliance_audit",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Summarize exceptions and evidence with clear distinction from confirmed wrongdoing.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q079",
+      "category": "financial_report",
+      "user_query": "What was the revenue growth between FY2024 and FY2025?",
+      "expected_intent": "financial_report",
+      "expected_agent": "financial_report",
+      "required_tools": [
+        "retrieval",
+        "ratio_calculator"
+      ],
+      "expected_answer": "Revenue grew by 18% and operating expenses rose from Q1 to Q4 as noted in the annual report.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q080",
+      "category": "invoice_po",
+      "user_query": "Check for duplicate invoice risk in the supplier payment batch.",
+      "expected_intent": "invoice_po",
+      "expected_agent": "invoice_po",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Match the invoice, PO and receipt and identify manual review if discrepancies exist.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q081",
+      "category": "expense_policy",
+      "user_query": "Is a domestic hotel expense of INR 18,500 compliant for a G3 employee?",
+      "expected_intent": "expense_policy",
+      "expected_agent": "expense_policy",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "The claim exceeds grade limits and should be rejected or escalated for approval.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q082",
+      "category": "vendor_risk",
+      "user_query": "Review whether the vendor is missing compliance documents and payment anomalies.",
+      "expected_intent": "vendor_risk",
+      "expected_agent": "vendor_risk",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Vendor has moderate risk due to missing vendor documents and unusual weekend payments.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q083",
+      "category": "anomaly_detection",
+      "user_query": "Find unusual payment transactions from the last quarter.",
+      "expected_intent": "anomaly_detection",
+      "expected_agent": "anomaly_detection",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Flag unusual high-value weekend transactions and duplicate payment patterns.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q084",
+      "category": "compliance_audit",
+      "user_query": "Review exceptions and evidence across the AP policy controls.",
+      "expected_intent": "compliance_audit",
+      "expected_agent": "compliance_audit",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Summarize exceptions and evidence with clear distinction from confirmed wrongdoing.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q085",
+      "category": "financial_report",
+      "user_query": "What was the revenue growth between FY2024 and FY2025?",
+      "expected_intent": "financial_report",
+      "expected_agent": "financial_report",
+      "required_tools": [
+        "retrieval",
+        "ratio_calculator"
+      ],
+      "expected_answer": "Revenue grew by 18% and operating expenses rose from Q1 to Q4 as noted in the annual report.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q086",
+      "category": "invoice_po",
+      "user_query": "Check for duplicate invoice risk in the supplier payment batch.",
+      "expected_intent": "invoice_po",
+      "expected_agent": "invoice_po",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Match the invoice, PO and receipt and identify manual review if discrepancies exist.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q087",
+      "category": "expense_policy",
+      "user_query": "Is a domestic hotel expense of INR 18,500 compliant for a G3 employee?",
+      "expected_intent": "expense_policy",
+      "expected_agent": "expense_policy",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "The claim exceeds grade limits and should be rejected or escalated for approval.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q088",
+      "category": "vendor_risk",
+      "user_query": "Review whether the vendor is missing compliance documents and payment anomalies.",
+      "expected_intent": "vendor_risk",
+      "expected_agent": "vendor_risk",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Vendor has moderate risk due to missing vendor documents and unusual weekend payments.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q089",
+      "category": "anomaly_detection",
+      "user_query": "Find unusual payment transactions from the last quarter.",
+      "expected_intent": "anomaly_detection",
+      "expected_agent": "anomaly_detection",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Flag unusual high-value weekend transactions and duplicate payment patterns.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q090",
+      "category": "compliance_audit",
+      "user_query": "Review exceptions and evidence across the AP policy controls.",
+      "expected_intent": "compliance_audit",
+      "expected_agent": "compliance_audit",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Summarize exceptions and evidence with clear distinction from confirmed wrongdoing.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q091",
+      "category": "financial_report",
+      "user_query": "What was the revenue growth between FY2024 and FY2025?",
+      "expected_intent": "financial_report",
+      "expected_agent": "financial_report",
+      "required_tools": [
+        "retrieval",
+        "ratio_calculator"
+      ],
+      "expected_answer": "Revenue grew by 18% and operating expenses rose from Q1 to Q4 as noted in the annual report.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q092",
+      "category": "invoice_po",
+      "user_query": "Check for duplicate invoice risk in the supplier payment batch.",
+      "expected_intent": "invoice_po",
+      "expected_agent": "invoice_po",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Match the invoice, PO and receipt and identify manual review if discrepancies exist.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q093",
+      "category": "expense_policy",
+      "user_query": "Is a domestic hotel expense of INR 18,500 compliant for a G3 employee?",
+      "expected_intent": "expense_policy",
+      "expected_agent": "expense_policy",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "The claim exceeds grade limits and should be rejected or escalated for approval.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q094",
+      "category": "vendor_risk",
+      "user_query": "Review whether the vendor is missing compliance documents and payment anomalies.",
+      "expected_intent": "vendor_risk",
+      "expected_agent": "vendor_risk",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Vendor has moderate risk due to missing vendor documents and unusual weekend payments.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q095",
+      "category": "anomaly_detection",
+      "user_query": "Find unusual payment transactions from the last quarter.",
+      "expected_intent": "anomaly_detection",
+      "expected_agent": "anomaly_detection",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Flag unusual high-value weekend transactions and duplicate payment patterns.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q096",
+      "category": "compliance_audit",
+      "user_query": "Review exceptions and evidence across the AP policy controls.",
+      "expected_intent": "compliance_audit",
+      "expected_agent": "compliance_audit",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Summarize exceptions and evidence with clear distinction from confirmed wrongdoing.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q097",
+      "category": "financial_report",
+      "user_query": "What was the revenue growth between FY2024 and FY2025?",
+      "expected_intent": "financial_report",
+      "expected_agent": "financial_report",
+      "required_tools": [
+        "retrieval",
+        "ratio_calculator"
+      ],
+      "expected_answer": "Revenue grew by 18% and operating expenses rose from Q1 to Q4 as noted in the annual report.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q098",
+      "category": "invoice_po",
+      "user_query": "Check for duplicate invoice risk in the supplier payment batch.",
+      "expected_intent": "invoice_po",
+      "expected_agent": "invoice_po",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Match the invoice, PO and receipt and identify manual review if discrepancies exist.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    },
+    {
+      "question_id": "Q099",
+      "category": "expense_policy",
+      "user_query": "Is a domestic hotel expense of INR 18,500 compliant for a G3 employee?",
+      "expected_intent": "expense_policy",
+      "expected_agent": "expense_policy",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "The claim exceeds grade limits and should be rejected or escalated for approval.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "easy"
+    },
+    {
+      "question_id": "Q100",
+      "category": "vendor_risk",
+      "user_query": "Review whether the vendor is missing compliance documents and payment anomalies.",
+      "expected_intent": "vendor_risk",
+      "expected_agent": "vendor_risk",
+      "required_tools": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "expected_answer": "Vendor has moderate risk due to missing vendor documents and unusual weekend payments.",
+      "expected_calculation": "Use strong evidence and rules when numeric answer is required.",
+      "expected_citations": [
+        "Annual Report FY2025",
+        "Expense Policy 2025"
+      ],
+      "expected_refusal": false,
+      "evaluation_rubric": "Score on precision, numerical correctness, citation support and refusal boundaries.",
+      "difficulty": "medium"
+    }
+  ]
+}
