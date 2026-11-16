@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -7,14 +9,22 @@ from app.api.routes.auth import router as auth_router
 from app.api.routes.copilot import router as copilot_router
 from app.api.routes.documents import router as documents_router
 from app.api.routes.evaluation import router as evaluation_router
-from app.api.routes.finance import router as finance_router
 from app.config import settings
+from app.services.runtime import ensure_runtime_ready
+
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    ensure_runtime_ready()
+    yield
+
 
 app = FastAPI(
     title=settings.app_name,
     version=settings.app_version,
     debug=settings.debug,
     openapi_url=settings.openapi_url,
+    lifespan=lifespan,
 )
 
 app.add_middleware(
@@ -29,7 +39,6 @@ app.include_router(auth_router, prefix="/api/v1")
 app.include_router(copilot_router, prefix="/api/v1")
 app.include_router(documents_router, prefix="/api/v1")
 app.include_router(evaluation_router, prefix="/api/v1")
-app.include_router(finance_router, prefix="")
 
 
 @app.get("/health")
@@ -39,4 +48,4 @@ async def health_check() -> dict:
 
 @app.get("/")
 async def root() -> dict:
-    return {"message": "FinanceOps AI API is running"}
+    return {"message": "Finsight Copilot API is running"}

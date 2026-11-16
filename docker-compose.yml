@@ -11,15 +11,24 @@ services:
     depends_on:
       - postgres
       - redis
-      - ollama
     environment:
-      LLM_API_BASE: ${LLM_API_BASE:-http://ollama:11434/v1}
-      LLM_MODEL: ${LLM_MODEL:-qwen2.5:3b}
-      EMBEDDINGS_API_BASE: http://ollama:11434/v1
-      EMBEDDINGS_MODEL: ${EMBEDDINGS_MODEL:-nomic-embed-text}
+      LLM_API_BASE: ${LLM_API_BASE:-https://103.42.50.41:1034/v1}
+      LLM_MODEL: ${LLM_MODEL:-Qwen/Qwen3-8B}
       LLM_CA_CERT: /app/certs/vm04-ca.crt
+      EMBEDDINGS_API_BASE: ${EMBEDDINGS_API_BASE:-https://103.42.50.41:1035/v1}
+      EMBEDDINGS_MODEL: ${EMBEDDINGS_MODEL:-bge-small-en-v1.5}
+      EMBEDDINGS_CA_CERT: /app/certs/vm02-ca.crt
+      EMBEDDINGS_DIM: ${EMBEDDINGS_DIM:-384}
+      USE_LLM: ${USE_LLM:-true}
+      DATABASE_URL: postgresql+psycopg://financeops:financeops@postgres:5432/financeops
+      REDIS_URL: redis://redis:6379/0
+      FINANCEBENCH_ROOT: /data/financebench
     volumes:
-      - ../../docs/vm04-ca.crt:/app/certs/vm04-ca.crt:ro
+      - ./data/reference/financebench:/data/financebench:ro
+      - ./llm/vm04-ca.crt:/app/certs/vm04-ca.crt:ro
+      - ./VM02_Embeddings_Access/vm02-ca.crt:/app/certs/vm02-ca.crt:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health').read()"]
       interval: 10s
@@ -55,6 +64,7 @@ services:
 
   ollama:
     image: ollama/ollama:latest
+    profiles: ["ollama"]
     ports:
       - "127.0.0.1:11434:11434"
     volumes:

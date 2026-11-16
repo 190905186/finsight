@@ -5,6 +5,7 @@ from typing import Any, Dict, Mapping, Sequence
 import httpx
 
 from app.config import settings
+from app.core.tls import resolve_ca_cert
 
 
 class LLMClient:
@@ -22,8 +23,9 @@ class LLMClient:
         self.base_url = (base_url or settings.llm_api_base).rstrip("/")
         self.api_key = settings.llm_api_key if api_key is None else api_key
         self.model = model or settings.llm_model
+        verify = resolve_ca_cert(ca_cert if ca_cert is not None else settings.llm_ca_cert)
         self._client = httpx.Client(
-            verify=ca_cert or settings.llm_ca_cert or True,
+            verify=verify,
             timeout=timeout,
             transport=transport,
         )
