@@ -34,6 +34,27 @@ class LLMChatCompletionTester:
         return answer
 
 
+class LLMEmbeddingsTester:
+    """Make one embeddings request and return its vector dimension."""
+
+    def run(self, text: str = "Connection test.") -> int:
+        with LLMClient() as client:
+            response: Dict[str, Any] = client.create_embeddings(text)
+
+        data = response.get("data")
+        if not isinstance(data, list) or not data or not isinstance(data[0], dict):
+            raise ValueError("Embeddings response contains no data")
+
+        embedding = data[0].get("embedding")
+        if (
+            not isinstance(embedding, list)
+            or not embedding
+            or not all(isinstance(value, (int, float)) for value in embedding)
+        ):
+            raise ValueError("Embeddings response contains no valid vector")
+        return len(embedding)
+
+
 if __name__ == "__main__":
-    answer = LLMChatCompletionTester().run()
-    print(f"Chat completion succeeded:\n{answer}")
+    dimension = LLMEmbeddingsTester().run()
+    print(f"Embeddings API connection succeeded (vector dimension: {dimension}).")

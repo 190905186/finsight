@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1860" viewBox="0 0 1500 1860" role="img" aria-labelledby="title description">
+  <title id="title">Finsight Ask RAG: frontend-to-answer flow</title>
+  <desc id="description">Implemented sequence from submitting a question in the React interface through authentication, FastAPI validation, hybrid retrieval, answer generation and citation validation, then returning the answer and source citations to the interface.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#081322"/>
+      <stop offset="1" stop-color="#10243a"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#78b8ff"/>
+    </marker>
+    <marker id="arrow-teal" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#55d6b0"/>
+    </marker>
+    <marker id="arrow-amber" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#e2b663"/>
+    </marker>
+    <style>
+      text { font-family: "Segoe UI", Arial, sans-serif; fill: #e8f1fb; }
+      .title { font-size: 30px; font-weight: 700; }
+      .subtitle { font-size: 15px; fill: #adc2d8; }
+      .section { font-size: 13px; font-weight: 700; letter-spacing: 1.2px; fill: #8eb6da; }
+      .box-title { font-size: 17px; font-weight: 700; }
+      .copy { font-size: 14px; fill: #c4d2e2; }
+      .small { font-size: 12px; fill: #b7c8da; }
+      .layer { fill: #0c1a2a; stroke: #28415c; stroke-width: 1.4; }
+      .ui { fill: #112941; stroke: #3895d5; stroke-width: 1.5; }
+      .api { fill: #132d47; stroke: #61a8ea; stroke-width: 1.5; }
+      .service { fill: #16384a; stroke: #3ab89f; stroke-width: 1.5; }
+      .data { fill: #173a35; stroke: #55c5a5; stroke-width: 1.5; }
+      .hosted { fill: #302748; stroke: #bf9bff; stroke-width: 1.5; }
+      .control { fill: #3a3022; stroke: #d3a85d; stroke-width: 1.5; }
+      .error { fill: #3a2431; stroke: #da8294; stroke-width: 1.5; }
+      .arrow { fill: none; stroke: #78b8ff; stroke-width: 2; marker-end: url(#arrow); }
+      .arrow-teal { fill: none; stroke: #55d6b0; stroke-width: 2; marker-end: url(#arrow-teal); }
+      .arrow-amber { fill: none; stroke: #e2b663; stroke-width: 2; marker-end: url(#arrow-amber); }
+      .dashed { stroke-dasharray: 7 6; }
+    </style>
+  </defs>
+  <rect width="1500" height="1860" fill="url(#background)"/>
+  <rect x="0" y="0" width="1500" height="110" fill="#102b45"/>
+  <text x="48" y="48" class="title">Finsight | Ask RAG: click to cited answer</text>
+  <text x="50" y="78" class="subtitle">Current implemented flow • React + TypeScript → FastAPI → hybrid retrieval → answer and citations</text>
+
+  <rect x="40" y="130" width="1420" height="225" rx="18" class="layer"/>
+  <text x="64" y="160" class="section">1  FRONTEND — QUESTION SUBMISSION</text>
+  <rect x="95" y="190" width="500" height="110" rx="14" class="ui"/>
+  <text x="120" y="222" class="box-title">Enter question and optional company</text>
+  <text x="120" y="250" class="copy">Question is trimmed, required, and limited to 4,000 characters.</text>
+  <text x="120" y="274" class="copy">Company filter is optional; the UI sets top_k = 5.</text>
+  <rect x="900" y="190" width="500" height="110" rx="14" class="ui"/>
+  <text x="925" y="222" class="box-title">Click “Ask RAG”</text>
+  <text x="925" y="250" class="copy">Clear prior result/error and show loading state.</text>
+  <text x="925" y="274" class="copy">On success, validate response shape and render answer + sources.</text>
+  <path d="M595 245 H900" class="arrow"/>
+  <path d="M1150 300 V390 H420 V420" class="arrow"/>
+
+  <rect x="40" y="380" width="1420" height="155" rx="18" class="layer"/>
+  <text x="64" y="410" class="section">2  AUTHENTICATION — TOKEN IS CACHED IN UI STATE</text>
+  <rect x="95" y="435" width="570" height="72" rx="12" class="api"/>
+  <text x="118" y="464" class="box-title">If no cached token: POST /api/v1/auth/login</text>
+  <text x="118" y="488" class="copy">Backend returns a bearer token; UI stores it in component state.</text>
+  <rect x="830" y="435" width="570" height="72" rx="12" class="control"/>
+  <text x="853" y="464" class="box-title">Current demo login</text>
+  <text x="853" y="488" class="copy">Issues a finance_manager token without a login payload.</text>
+  <path d="M665 471 H830" class="arrow-amber"/>
+  <path d="M420 507 V570" class="arrow"/>
+
+  <rect x="40" y="555" width="1420" height="185" rx="18" class="layer"/>
+  <text x="64" y="585" class="section">3  REQUEST — FRONTEND TO BACKEND</text>
+  <rect x="95" y="610" width="1305" height="96" rx="12" class="ui"/>
+  <text x="120" y="641" class="box-title">POST /api/v1/rag/query</text>
+  <text x="120" y="668" class="copy">Authorization: Bearer &lt;token&gt;  •  Content-Type: application/json</text>
+  <text x="120" y="691" class="copy">Body: { query, top_k: 5, company? } — blank company is omitted.</text>
+  <path d="M747 740 V775" class="arrow"/>
+
+  <rect x="40" y="760" width="1420" height="190" rx="18" class="layer"/>
+  <text x="64" y="790" class="section">4  FASTAPI — AUTHORIZATION, VALIDATION, ROUTING</text>
+  <rect x="95" y="815" width="560" height="100" rx="12" class="api"/>
+  <text x="120" y="846" class="box-title">Authenticate bearer token</text>
+  <text x="120" y="873" class="copy">require_auth rejects missing or invalid credentials (401).</text>
+  <text x="120" y="897" class="copy">Pydantic checks query, top_k (1–20), and company.</text>
+  <rect x="830" y="815" width="570" height="100" rx="12" class="service"/>
+  <text x="855" y="846" class="box-title">POST /rag/query route</text>
+  <text x="855" y="873" class="copy">Maps company to a retrieval filter, then calls RAGPipeline.answer.</text>
+  <text x="855" y="897" class="copy">Invalid request data returns 422.</text>
+  <path d="M655 865 H830" class="arrow"/>
+  <path d="M1115 915 V980 H747 V1005" class="arrow"/>
+
+  <rect x="40" y="990" width="1420" height="345" rx="18" class="layer"/>
+  <text x="64" y="1020" class="section">5  HYBRID RETRIEVAL — EMBEDDINGS + LEXICAL SEARCH</text>
+  <rect x="95" y="1045" width="390" height="105" rx="12" class="service"/>
+  <text x="118" y="1076" class="box-title">Embed the query</text>
+  <text x="118" y="1103" class="copy">Configured embeddings model</text>
+  <text x="118" y="1127" class="copy">Validates vector dimensions.</text>
+  <rect x="555" y="1045" width="390" height="105" rx="12" class="hosted"/>
+  <text x="578" y="1076" class="box-title">Embeddings API</text>
+  <text x="578" y="1103" class="copy">POST {EMBEDDINGS_API_BASE}/embeddings</text>
+  <text x="578" y="1127" class="copy">Model: EMBEDDINGS_MODEL • returns query vector.</text>
+  <rect x="1015" y="1045" width="390" height="105" rx="12" class="data"/>
+  <text x="1038" y="1076" class="box-title">PostgreSQL + pgvector</text>
+  <text x="1038" y="1103" class="copy">Stored chunks, metadata, vectors</text>
+  <text x="1038" y="1127" class="copy">Company filter applied when supplied.</text>
+  <path d="M485 1097 H555" class="arrow-teal"/>
+
+  <rect x="95" y="1180" width="630" height="105" rx="12" class="data"/>
+  <text x="118" y="1211" class="box-title">Dense search</text>
+  <text x="118" y="1238" class="copy">pgvector cosine-distance search over matching chunks.</text>
+  <text x="118" y="1262" class="copy">Returns up to max(top_k × 6, 30) candidates.</text>
+  <rect x="775" y="1180" width="630" height="105" rx="12" class="data"/>
+  <text x="798" y="1211" class="box-title">Lexical search</text>
+  <text x="798" y="1238" class="copy">BM25 over cached matching chunk text; tokenized query.</text>
+  <text x="798" y="1262" class="copy">Returns up to max(top_k × 6, 30) candidates.</text>
+  <path d="M750 1150 V1167 H700 V1180" class="arrow-teal"/>
+  <path d="M1210 1150 V1167 H700 V1180" class="arrow-teal"/>
+  <path d="M1210 1150 V1180" class="arrow-teal"/>
+  <text x="120" y="1315" class="small">Candidate ranks are fused with reciprocal-rank fusion, deterministically reranked, and trimmed to top_k.</text>
+  <path d="M410 1285 V1300 H750" class="arrow-teal"/>
+  <path d="M1090 1285 V1300 H750" class="arrow-teal"/>
+  <path d="M750 1335 V1360" class="arrow"/>
+
+  <rect x="40" y="1350" width="1420" height="220" rx="18" class="layer"/>
+  <text x="64" y="1380" class="section">6  ANSWER GENERATION AND CITATION VALIDATION</text>
+  <rect x="95" y="1405" width="580" height="100" rx="12" class="service"/>
+  <text x="118" y="1436" class="box-title">Build evidence context</text>
+  <text x="118" y="1463" class="copy">Label each retrieved excerpt [S1], [S2], …</text>
+  <text x="118" y="1487" class="copy">Include document name, PDF page, and snippet.</text>
+  <rect x="825" y="1405" width="580" height="100" rx="12" class="hosted"/>
+  <text x="848" y="1436" class="box-title">Chat-completions API</text>
+  <text x="848" y="1463" class="copy">POST {LLM_API_BASE}/chat/completions</text>
+  <text x="848" y="1487" class="copy">Model: LLM_MODEL • answer from excerpts, cite sources.</text>
+  <path d="M675 1455 H825" class="arrow"/>
+  <path d="M1115 1505 V1522 H750 V1535" class="arrow"/>
+  <rect x="260" y="1535" width="980" height="78" rx="12" class="control"/>
+  <text x="285" y="1567" class="box-title">Validate generated answer and citations</text>
+  <text x="285" y="1591" class="copy">Require non-empty answer; citation labels must refer to retrieved evidence.</text>
+  <path d="M750 1613 V1650" class="arrow"/>
+
+  <rect x="40" y="1650" width="1420" height="145" rx="18" class="layer"/>
+  <text x="64" y="1680" class="section">7  RESPONSE TO UI</text>
+  <text x="95" y="1712" class="copy">JSON: answer + citations (source label, document, PDF page, snippet) + retrieval metadata.</text>
+  <text x="95" y="1740" class="copy">UI validates response shape, displays answer and source cards, or shows an error; loading is cleared.</text>
+  <text x="95" y="1768" class="copy">No evidence: return “Insufficient evidence…” with no citations and skip the chat call.</text>
+
+  <text x="50" y="1835" class="small">Prerequisite, outside the click path: indexed document chunks and embeddings must already exist in PostgreSQL/pgvector.</text>
+</svg>

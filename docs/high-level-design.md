@@ -3,7 +3,12 @@
 **Status:** Target architecture for the financial-report question-answering capstone  
 **Primary requirement:** Use one shared hosted OpenAI-compatible chat-completions endpoint backed by a single instruct model with at most 8B parameters, plus the supplied embeddings endpoint. No model-weight changes, logit access, frontier-model fallback, or alternate chat model.  
 **Scope:** Evidence-grounded question answering over an explicitly indexed corpus of financial filings, earnings releases, investor presentations, and transcripts.  
-**Companion diagram:** [Target architecture](./architecture.svg)
+**Companion diagrams:** [Target architecture](./architecture.svg) · [Current Ask RAG request flow](./rag-ask-flow.svg)
+
+The target architecture below describes the intended system. The separate
+[current Ask RAG flow](./rag-ask-flow.svg) traces the implemented frontend-to-answer
+path, which currently uses a direct FastAPI `RAGPipeline` rather than the target
+LangGraph multi-agent workflow.
 
 ## 1. Goals and boundaries
 
@@ -83,12 +88,11 @@ development CA certificate is `docs/vm04-ca.crt`; Compose mounts it read-only
 inside the backend container. Never place the API key in this design document,
 source code, or logs.
 
-`app/services/llm_connection_tester.py` provides a one-request smoke test using
-the question “Explain RAG in three steps.” Run it from the backend directory
-with `python -m app.services.llm_connection_tester`. It checks that the
-provider returns non-empty answer text; use only non-sensitive prompts for
-this live test. The smoke test has succeeded against the configured endpoint.
-This verifies connectivity and basic response shape only, not the RAG workflow.
+`app/services/llm_connection_tester.py` provides a one-request embeddings smoke
+test using a non-sensitive sample string. Run it from the backend directory
+with `python -m app.services.llm_connection_tester`. It checks for a non-empty
+numeric vector and reports only its dimension. This verifies connectivity and
+basic response shape, not the RAG workflow.
 
 ## 3. Logical architecture
 
@@ -179,6 +183,22 @@ The identifier and values above are illustrative. A refusal should use `status: 
 ### Corpus and ingestion
 
 The target corpus contains public-company Form 10-K/10-Q/8-K filings, earnings releases, investor presentations, and earnings-call transcripts. The DOCX's Acme Corp FY2024–Q3 FY2025 reference pack is the source for its 75-query golden set. It is not evidence that these documents are currently present in the repository. Do not answer Acme-specific queries from parametric memory or the gold answers if the corresponding source document has not been ingested.
+
+The implemented FinanceBench path is exposed by `app.rag.cli`: it extracts
+page-level text with PyMuPDF, applies recursive character splitting, batches
+embeddings through the existing `LLMClient`, and writes versioned profile/model
+vectors to PostgreSQL/pgvector. The chunking experiment compares 512/30,
+1024/30 (the reference notebook baseline), and 1536/30 character/overlap
+profiles. FinanceBench evidence page labels are retained as zero-based indices;
+chunks that exceed 500 BGE tokenizer tokens are split further to stay within
+the embeddings service's 512-token input limit. The query endpoint displays
+one-based PDF pages in citations. Retrieval
+evaluation separately reports page-level `recall_at_k` and MRR for shared-corpus
+and per-question-document scopes. A distinct answer-evaluation command records
+generated answers and citations and reports normalized exact match and token
+F1; those text-overlap scores are baselines, not semantic or human judgments.
+The query endpoint is `POST /api/v1/rag/query`; generated claims are prompted
+to cite source labels and returned labels are validated against retrieved pages.
 
 Ingestion is an operator-controlled, auditable pipeline:
 
