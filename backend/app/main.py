@@ -8,6 +8,7 @@ from app.api.routes.copilot import router as copilot_router
 from app.api.routes.documents import router as documents_router
 from app.api.routes.evaluation import router as evaluation_router
 from app.api.routes.finance import router as finance_router
+from app.api.routes.rag import router as rag_router
 from app.config import settings
 
 app = FastAPI(
@@ -29,6 +30,7 @@ app.include_router(auth_router, prefix="/api/v1")
 app.include_router(copilot_router, prefix="/api/v1")
 app.include_router(documents_router, prefix="/api/v1")
 app.include_router(evaluation_router, prefix="/api/v1")
+app.include_router(rag_router, prefix="/api/v1")
 app.include_router(finance_router, prefix="")
 
 

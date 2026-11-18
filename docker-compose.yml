@@ -11,15 +11,18 @@ services:
     depends_on:
       - postgres
       - redis
-      - ollama
     environment:
-      LLM_API_BASE: ${LLM_API_BASE:-http://ollama:11434/v1}
-      LLM_MODEL: ${LLM_MODEL:-qwen2.5:3b}
-      EMBEDDINGS_API_BASE: http://ollama:11434/v1
-      EMBEDDINGS_MODEL: ${EMBEDDINGS_MODEL:-nomic-embed-text}
+      LLM_API_BASE: ${LLM_API_BASE:?Set LLM_API_BASE in .env}
+      LLM_MODEL: ${LLM_MODEL:?Set LLM_MODEL in .env}
+      EMBEDDINGS_API_BASE: ${EMBEDDINGS_API_BASE:?Set EMBEDDINGS_API_BASE in .env}
+      EMBEDDINGS_API_KEY: ${EMBEDDINGS_API_KEY:-}
+      EMBEDDINGS_CA_CERT: /app/certs/vm02-ca.crt
+      EMBEDDINGS_MODEL: ${EMBEDDINGS_MODEL:?Set EMBEDDINGS_MODEL in .env}
+      EMBEDDINGS_DIMENSIONS: ${EMBEDDINGS_DIMENSIONS:-768}
       LLM_CA_CERT: /app/certs/vm04-ca.crt
     volumes:
-      - ../../docs/vm04-ca.crt:/app/certs/vm04-ca.crt:ro
+      - ./certs/vm04-ca.crt:/app/certs/vm04-ca.crt:ro
+      - ./certs/vm02-ca.crt:/app/certs/vm02-ca.crt:ro
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health').read()"]
       interval: 10s
@@ -35,7 +38,7 @@ services:
     depends_on:
       - backend
     environment:
-      VITE_API_BASE: http://localhost:8000
+      VITE_API_PROXY_TARGET: http://backend:8000
 
   postgres:
     image: pgvector/pgvector:pg16
@@ -53,13 +56,5 @@ services:
     ports:
       - "127.0.0.1:6379:6379"
 
-  ollama:
-    image: ollama/ollama:latest
-    ports:
-      - "127.0.0.1:11434:11434"
-    volumes:
-      - ollama_data:/root/.ollama
-
 volumes:
   postgres_data:
-  ollama_data:
