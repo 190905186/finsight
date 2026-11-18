@@ -12,7 +12,9 @@ Design choices for a small (<=8B) model:
 from __future__ import annotations
 
 import json
-from typing import Any, Iterable, Mapping
+import re
+from dataclasses import dataclass
+from typing import Any, Iterable, List, Mapping
 
 GROUNDING_RULES = """\
 Rules that always apply:
@@ -65,3 +67,61 @@ def format_tool_results(results: Iterable[Mapping[str, Any]]) -> str:
 
 def _attr(value: Any) -> str:
     return str(value).replace('"', "'").replace("\n", " ")
+
+
+# --------------------------------------------------------------------------- citations
+
+_MARKER = re.compile(r"\[(S\d+|C\d+)\]")
+
+
+def citation_label(chunk: Mapping[str, Any]) -> str:
+    """Spec format: [Doc_Name | Section/Page | Period], e.g. [FY24 10-K | Item 8, p. 54 | FY2024]."""
+    loc = ", ".join(
+        p for p in (str(chunk.get("section") or "").strip(), f"p. {chunk['page']}" if chunk.get("page") not in (None, "") else "") if p
+    )
+    parts = [str(chunk.get("document_name") or chunk["source_id"]), loc, str(chunk.get("period") or "")]
+    return "[" + " | ".join(p for p in parts if p) + "]"
+
+
+@dataclass
+class RenderedAnswer:
+    text: str
+    unknown_ids: List[str]  # markers the model wrote that were never supplied -> fail verification
+    cited_source_ids: List[str]
+
+
+def render_citations(
+    answer: str,
+    evidence: Iterable[Mapping[str, Any]],
+    tool_results: Iterable[Mapping[str, Any]] = (),
+) -> RenderedAnswer:
+    """Replace [S#]/[C#] markers with spec-format citations; report unknown IDs.
+
+    A [C#] marker is rendered as the citations of the sources its calculation used.
+    """
+    by_id = {str(c["source_id"]): c for c in evidence}
+    calc_sources = {str(r["calc_id"]): [str(s) for s in r.get("source_ids", [])] for r in tool_results}
+    unknown: List[str] = []
+    cited: List[str] = []
+
+    def label_for(sid: str) -> str:
+        if sid in by_id:
+            if sid not in cited:
+                cited.append(sid)
+            return citation_label(by_id[sid])
+        unknown.append(sid)
+        return ""
+
+    def sub(m: "re.Match[str]") -> str:
+        mid = m.group(1)
+        if mid.startswith("S"):
+            return label_for(mid)
+        if mid not in calc_sources:
+            unknown.append(mid)
+            return ""
+        return "".join(label_for(s) for s in calc_sources[mid])
+
+    text = _MARKER.sub(sub, answer)
+    text = re.sub(r"(\[[^\[\]]+\])(\s*\1)+", r"\1", text)  # collapse repeated identical citations
+    text = re.sub(r"\]\[", "] [", text)
+    return RenderedAnswer(text=text, unknown_ids=sorted(set(unknown)), cited_source_ids=cited)

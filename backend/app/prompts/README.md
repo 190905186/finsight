@@ -21,12 +21,12 @@ Prompts for every LLM node in the LangGraph workflow. Each node has **zero-shot*
 
 | Node | zero_shot | few_shot | cot | **Default** | Why |
 |---|:-:|:-:|:-:|---|---|
-| `pre_guardrail` | ✓ | ✓ (6 ex.) | ✓ | few_shot | Refusal edges (guidance vs prediction, injection) are learned best from examples |
+| `pre_guardrail` | ✓ | ✓ (9 ex.) | ✓ | few_shot | Refusal edges (guidance vs prediction, missing data vs refusal, injection) are learned best from examples |
 | `classify_and_plan` | ✓ | ✓ (4 ex.) | ✓ | few_shot | Examples teach period pairs (Q3 FY25 + Q3 FY24) and tool choice |
 | `query_rewrite` | ✓ | ✓ (1 ex.) | – | few_shot | Teaches filing vocabulary ("purchases of property and equipment") |
 | `extract_financial_fact` | ✓ | ✓ (2 ex.) | ✓ | few_shot | Column/period alignment, parentheses = negative, "missing" handling |
 | `analyze_financial_report` | ✓ | ✓ (1 ex.) | ✓ | cot | Multi-hop needs decomposition into sub-facts |
-| `synthesize_answer` | ✓ | ✓ (3 ex.) | ✓ | few_shot | Shows citation markers, formula display, GAAP/Non-GAAP refusal, insufficient evidence |
+| `synthesize_answer` | ✓ | ✓ (5 ex.) | ✓ | few_shot | Shows the five gold answer types: answer with formula, GAAP/Non-GAAP correction, not disclosed, refusal with facts, false-premise correction |
 | `verify_answer` | ✓ | ✓ (1 ex.) | ✓ | cot | Claim-by-claim checking catches more errors |
 | `repair_once` | ✓ | – | – | zero_shot | Tightly scoped; examples add cost with little gain |
 
@@ -42,6 +42,44 @@ These defaults are **starting hypotheses**. Change them in `DEFAULT_TECHNIQUE` (
 6. **Refusals are deterministic text.** The guardrail prompt *classifies*, and `refusal_message(category)` *speaks*.
 7. **Fail closed.** A missing template variable raises an error. A bad JSON reply gets one repair call, and after that the node should route to `degraded`.
 
+## Alignment with the specification (v2026.11.1)
+
+Checked against *Financial Report RAG Specification and Eval Set* (rubric + 75 queries):
+
+| Spec requirement | How the prompts meet it |
+|---|---|
+| Six refusal cases | Guardrail refuses advice, prediction/hypotheticals, live data, legal/tax/audit, plus subjective judgments and injection. Out-of-corpus, undisclosed KPI and false premise are **allowed through**, and the answer writer handles them with evidence (gold answers Q48, Q49, Q53, Q54, Q56, Q59, Q61, Q62, Q64 cite what IS disclosed). Mixed GAAP/Non-GAAP is handled in synthesis (`status: corrected`). |
+| Gold refusals start "REFUSAL:" and usually add cited facts | Refusal flow below: fixed sentence + facts answering the guardrail's `alternative_question`. |
+| "REFUSAL / CORRECTION" answers | `status: corrected`, answer starts "CORRECTION:". The verifier flags `false_premise_accepted`. |
+| Citation `[Doc_Name \| Section/Page \| Period]` | Model writes `[S1]`/`[C1]`; `render_citations()` converts them and returns any unknown IDs. |
+| Transparent math | Formula + inputs + signed result copied from the tool result (`+14.17%`). |
+| GAAP vs Non-GAAP hygiene | Every metric is labelled; Non-GAAP figures name the main adjustments listed in the evidence. |
+| Structured scannability | Bottom line in 1–2 sentences, then bullets, or a small table for multi-period/segment data. |
+| Units and sign convention | Values copied with scale and sign; parentheses mean outflows/losses. |
+
+### Refusal flow (gold answers Q46–Q65)
+
+1. `pre_guardrail` → `decision: "refuse"`, `category`, `alternative_question`.
+2. If `alternative_question` is set, run classify → retrieve → extract on **it** as normal.
+3. `synthesize_answer` with `question` = the original question, `policy_note = refusal_sentence(category)`, `alternative_question` = the alternative. Output: `"REFUSAL: <fixed sentence> <cited facts>"`, `status: "refused"`.
+4. No alternative question or no evidence → return `refusal_message(category)` (fixed text, no LLM).
+
+For non-refused questions pass `policy_note="none"` and `alternative_question="none"`.
+
+### Rendering citations
+
+```python
+from app.prompts import render_citations
+out = render_citations(draft["answer"], state.evidence, state.calcs)
+if out.unknown_ids:            # model cited something we never gave it
+    return route_to("repair_once")
+final_text = out.text           # "... [Q3 FY25 10-Q | Statements of Operations, p. 3 | Q3 FY2025]"
+```
+
+### Golden set
+
+`data/evaluation/golden_75.jsonl` holds all 75 queries in the harness schema (`category`, `expected_behavior`, `required_citations`, `key_numbers`) plus our guardrail labels. It is marked `held_out`, and the experiment script refuses it without `--final-run`. Known issues in the spec's gold data are listed in `data/evaluation/README.md`.
+
 ## Using it in a graph node
 
 ```python
@@ -55,6 +93,7 @@ with LLMClient() as llm:
         plan=json.dumps(state.plan),
         evidence=format_evidence(state.evidence),        # dicts with source_id, text, document_name, section, page, period, unit, basis
         tool_results=format_tool_results(state.calcs),   # dicts with calc_id, tool, formula, inputs, result, unit, source_ids, status
+        policy_note="none", alternative_question="none",  # see "Refusal flow"
     )
     if not res.ok:
         return route_to("degraded")
@@ -71,7 +110,7 @@ Template variables per node:
 | rewrite | `question`, `plan` |
 | extract | `metrics`, `periods`, `evidence` |
 | analyze | `question`, `plan`, `evidence` |
-| synthesize | `question`, `plan`, `evidence`, `tool_results` |
+| synthesize | `question`, `policy_note`, `alternative_question`, `plan`, `evidence`, `tool_results` |
 | verify | `question`, `evidence`, `tool_results`, `draft` |
 | repair | `question`, `evidence`, `tool_results`, `draft`, `issues` |
 
@@ -101,7 +140,7 @@ Synthesis, verify and extract need retrieved evidence, so evaluate them end to e
 cd backend && python -m pytest -q tests/test_prompts.py
 ```
 
-52 offline tests. They check that every prompt renders, every few-shot answer parses against its own schema, there's no Acme leakage, the Qwen3 switch works, the parser handles `<think>`, fences and prose, the single repair works, and experiment scoring works with a fake LLM.
+56 offline tests. They check that every prompt renders, every few-shot answer parses against its own schema, there's no Acme leakage, the Qwen3 switch works, the parser handles `<think>`, fences and prose, the single repair works, and experiment scoring works with a fake LLM.
 
 ## Optional upgrades
 

@@ -121,11 +121,18 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     p.add_argument("--repeats", type=int, default=1, help="repeat each item to measure stability")
     p.add_argument("--limit", type=int, default=None)
     p.add_argument("--out", type=Path, default=None, help="write full JSON results here")
+    p.add_argument("--final-run", action="store_true",
+                   help="allow held-out records (the 75-query golden set). Use ONCE, after prompts are frozen.")
     args = p.parse_args(argv)
 
     node = Node(args.node)
     techs = [Technique(t) for t in args.techniques] if args.techniques else available(node)
     items = load_jsonl(args.dev)
+    if any(i.get("split") == "held_out" for i in items) and not args.final_run:
+        sys.exit(
+            "This file contains held-out (golden) questions. Tuning prompts on them would inflate the final score.\n"
+            "Use a dev file, or pass --final-run once prompts are frozen."
+        )
     items = [i for i in items if (i.get("expected_decision") if node is Node.GUARDRAIL else i.get("expected_intent"))]
     if args.limit:
         items = items[: args.limit]

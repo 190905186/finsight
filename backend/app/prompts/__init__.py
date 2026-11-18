@@ -28,9 +28,9 @@ from .base import (
     get_prompt,
 )
 from .parsing import ParseResult, json_fix_message, message_text, parse_output
-from .refusals import refusal_message
+from .refusals import refusal_message, refusal_sentence
 from .runner import run_prompt
-from .shared import format_evidence, format_tool_results
+from .shared import RenderedAnswer, citation_label, format_evidence, format_tool_results, render_citations
 
 __all__ = [
     "DEFAULT_TECHNIQUE",
@@ -48,6 +48,10 @@ __all__ = [
     "json_fix_message",
     "message_text",
     "parse_output",
+    "RenderedAnswer",
+    "citation_label",
     "refusal_message",
+    "refusal_sentence",
+    "render_citations",
     "run_prompt",
 ]

@@ -16,6 +16,7 @@ from app.prompts import (
     get_prompt,
     parse_output,
     refusal_message,
+    render_citations,
     run_prompt,
 )
 from app.prompts.experiment import DEFAULT_DEV, evaluate, load_jsonl, to_markdown
@@ -31,6 +32,8 @@ DUMMY = {
     "tool_results": format_tool_results([]),
     "draft": "{}",
     "issues": "[]",
+    "policy_note": "none",
+    "alternative_question": "none",
 }
 
 
@@ -119,8 +122,56 @@ def test_evidence_formatting_escapes_and_handles_empty():
 
 
 def test_refusal_messages():
-    assert "buy, sell or hold" in refusal_message("investment_advice")
-    assert refusal_message("unknown_cat").startswith("That question is outside")
+    msg = refusal_message("investment_advice")
+    assert msg.startswith("REFUSAL: ") and "buy, sell, or hold" in msg
+    assert "outside" in refusal_message("unknown_cat")
+    # every guardrail refusal category has fixed text
+    from app.prompts.routing import GUARD_CATEGORIES
+    from app.prompts.refusals import REFUSAL_TEXT
+    assert set(GUARD_CATEGORIES) - {"none"} <= set(REFUSAL_TEXT)
+
+
+def test_render_citations_spec_format_and_unknown_ids():
+    evidence = [
+        {"source_id": "S1", "document_name": "Q2 FY25 10-Q", "section": "Statements of Operations", "page": 4, "period": "Q2 FY2025", "text": "x"},
+        {"source_id": "S2", "document_name": "FY24 10-K", "page": 54, "text": "y"},
+    ]
+    calcs = [{"calc_id": "C1", "source_ids": ["S1"]}]
+    out = render_citations("Sales grew 11.65% [S1][C1]. Other [S2]. Bad [S9][C7].", evidence, calcs)
+    assert "[Q2 FY25 10-Q | Statements of Operations, p. 4 | Q2 FY2025]" in out.text
+    assert out.text.count("Q2 FY25 10-Q") == 1  # S1 and C1 collapse to one citation
+    assert "[FY24 10-K | p. 54]" in out.text
+    assert out.unknown_ids == ["C7", "S9"] and out.cited_source_ids == ["S1", "S2"]
+
+
+def test_synthesis_examples_cover_spec_answer_types():
+    spec = get_prompt(Node.SYNTHESIZE, "few_shot")
+    statuses = {json.loads(ex.assistant)["status"] for ex in spec.examples}
+    assert {"answered", "corrected", "insufficient_evidence", "refused"} <= statuses
+    refused = [json.loads(ex.assistant) for ex in spec.examples if json.loads(ex.assistant)["status"] == "refused"]
+    assert all(r["answer"].startswith("REFUSAL: ") for r in refused)
+
+
+def test_golden_set_is_held_out_and_complete():
+    from pathlib import Path
+    path = Path(__file__).resolve().parents[2] / "data" / "evaluation" / "golden_75.jsonl"
+    if not path.exists():
+        pytest.skip("golden set not present")
+    rows = load_jsonl(path)
+    assert [r["question_id"] for r in rows] == [f"Q{i:03d}" for i in range(1, 76)]
+    assert all(r["split"] == "held_out" for r in rows)
+    assert {r["category"] for r in rows} == {"extraction", "calculation", "multi_hop", "refusal", "edge_case"}
+    # no golden question text appears in any prompt
+    blob = " ".join(s.system + s.user_template + " ".join(e.user + e.assistant for e in s.examples) for s in all_prompts()).lower()
+    assert not any(r["question"].lower()[:60] in blob for r in rows)
+
+
+def test_experiment_refuses_held_out(tmp_path):
+    from app.prompts.experiment import main
+    f = tmp_path / "h.jsonl"
+    f.write_text(json.dumps({"question_id": "Q1", "question": "x", "expected_decision": "allow", "split": "held_out"}) + "\n")
+    with pytest.raises(SystemExit):
+        main(["--node", "pre_guardrail", "--dev", str(f)])
 
 
 def test_experiment_scoring_with_fake_llm():

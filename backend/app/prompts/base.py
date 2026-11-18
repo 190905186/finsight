@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
-PROMPT_SET_VERSION = "2026.11.0"
+PROMPT_SET_VERSION = "2026.11.1"  # .1: aligned to the Financial Report RAG Specification & 75-query set
 
 _PLACEHOLDER = re.compile(r"\{\{\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\}\}")
 

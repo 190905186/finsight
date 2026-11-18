@@ -12,9 +12,9 @@ import json
 from .base import FewShotExample, Node, PromptSpec, Technique, register
 from .shared import format_evidence, format_tool_results, system_prompt
 
-V = "1.0"
+V = "1.1"  # 1.1: refusal-with-facts, false-premise correction, tables, Non-GAAP adjustments (spec rubric)
 
-SYNTH_STATUSES = ("answered", "partially_answered", "insufficient_evidence")
+SYNTH_STATUSES = ("answered", "partially_answered", "insufficient_evidence", "refused", "corrected")
 VERDICTS = ("pass", "fail")
 ISSUE_TYPES = (
     "unsupported_claim",
@@ -24,6 +24,7 @@ ISSUE_TYPES = (
     "unit_or_scale_mismatch",
     "missing_basis_label",
     "model_arithmetic",
+    "false_premise_accepted",
     "policy_violation",
     "incomplete",
 )
@@ -37,19 +38,28 @@ def _j(obj: dict) -> str:
 
 _SY_TASK = """write the final answer from the evidence and calculator results.
 Format of "answer":
-- First sentence answers the question directly.
-- Then, only if useful, 1-4 short supporting sentences or "- " bullets.
-- Every sentence with a fact or number ends with its markers, e.g. [S1] or [S1][C1].
-- For a derived figure, show the formula and inputs exactly as given in the tool_result, e.g. "($1,284M - $1,150M) / $1,150M = 11.65% [C1]".
-- Label Non-GAAP/adjusted figures as such. Never blend GAAP and Non-GAAP figures in one calculation.
+- The first 1-2 sentences give the bottom-line answer directly.
+- Then, only if useful, short "- " bullets; for figures across several periods or segments use a small markdown table instead.
+- Every sentence, bullet or table row with a fact or number ends with its markers, e.g. [S1] or [S1][C1].
+- Copy numbers with their unit scale (thousands/millions/billions) and sign exactly as the source shows; parentheses mean outflows or losses.
+- For a derived figure, show the formula and intermediate inputs from the tool_result, then the result with its sign, e.g. "($1,284M - $1,150M) / $1,150M = +11.65% [C1]".
+- Say whether each metric is GAAP or Non-GAAP. For Non-GAAP, name the main adjustments the evidence lists (e.g. stock-based compensation, amortization of acquired intangibles).
 - Quote guidance as management's ("Management guided ..."), never as your own forecast.
-"claims" lists each factual sentence of the answer with the IDs it relies on.
-Use status "insufficient_evidence" (and say what is missing) if the evidence cannot answer; "partially_answered" if only part can be answered."""
+Special cases (set status accordingly):
+- Policy note is not "none" (the question was refused): start the answer with "REFUSAL: " followed by the policy note word for word, then give only facts from the evidence that answer the Alternative question, with markers. status = "refused".
+- The question assumes something the evidence contradicts (an event, statement, asset, opinion or figure that is not as the user says): start with "CORRECTION: " and state what the evidence shows instead, with markers. If the evidence simply does not mention it, say it is not mentioned in the retrieved documents; do not claim more. status = "corrected".
+- The question asks to combine GAAP and Non-GAAP figures in one ratio without a reconciliation: do not combine them; start with "CORRECTION: ", explain the mismatch and give like-for-like figures if the tool_results have them. status = "corrected".
+- The requested item, period, company or region is not in the evidence: say it is not disclosed in the indexed documents and, if the evidence holds the closest disclosed figure, give it with its marker. status = "insufficient_evidence".
+- Only part of the question can be answered: answer that part and say what is missing. status = "partially_answered".
+"claims" lists each factual sentence or row of the answer with the IDs it relies on."""
 
-_SY_SCHEMA = '{"status": "answered|partially_answered|insufficient_evidence", "answer": "...", "claims": [{"text": "...", "source_ids": ["S#"], "calc_ids": ["C#"]}]}'
-_SY_COT_SCHEMA = '{"reasoning": ["<at most 4 short steps>"], "status": "answered|partially_answered|insufficient_evidence", "answer": "...", "claims": [{"text": "...", "source_ids": ["S#"], "calc_ids": ["C#"]}]}'
+_SY_STATUS_TEXT = "answered|partially_answered|insufficient_evidence|refused|corrected"
+_SY_SCHEMA = '{"status": "' + _SY_STATUS_TEXT + '", "answer": "...", "claims": [{"text": "...", "source_ids": ["S#"], "calc_ids": ["C#"]}]}'
+_SY_COT_SCHEMA = '{"reasoning": ["<at most 4 short steps>"], "status": "' + _SY_STATUS_TEXT + '", "answer": "...", "claims": [{"text": "...", "source_ids": ["S#"], "calc_ids": ["C#"]}]}'
 
 _SY_USER = """Question: {{question}}
+Policy note: {{policy_note}}
+Alternative question: {{alternative_question}}
 Plan: {{plan}}
 
 {{evidence}}
@@ -57,6 +67,13 @@ Plan: {{plan}}
 {{tool_results}}
 
 Return JSON: """
+
+
+def _sq(question: str, plan: str, evidence: str, tools: str, policy_note: str = "none", alt: str = "none") -> str:
+    return (
+        f"Question: {question}\nPolicy note: {policy_note}\nAlternative question: {alt}\nPlan: {plan}\n\n"
+        f"{evidence}\n\n{tools}\n\nReturn JSON: {_SY_SCHEMA}"
+    )
 
 _SY_EX1_EVID = format_evidence([
     {"source_id": "S1", "document_name": "Q2 FY25 10-Q", "section": "Condensed Consolidated Statements of Operations", "page": 4, "period": "Q2 FY2025",
@@ -73,24 +90,38 @@ _SY_EX2_EVID = format_evidence([
      "text": "Adjusted EBITDA for fiscal 2024 was $655 million. See reconciliation tables."},
 ])
 
+_SY_EX4_EVID = format_evidence([
+    {"source_id": "S1", "document_name": "FY24 10-K", "section": "Consolidated Statements of Operations", "page": 47, "period": "FY2024", "basis": "GAAP",
+     "text": "(in millions) Year Ended December 31, 2024 2023\nRevenue $ 5,960 $ 5,410\nOperating income 655 590"},
+    {"source_id": "S2", "document_name": "FY24 10-K", "section": "Item 1A Risk Factors", "page": 15, "period": "FY2024",
+     "text": "Fuel price volatility and driver shortages could materially increase our operating costs."},
+])
+
+_SY_EX5_EVID = format_evidence([
+    {"source_id": "S1", "document_name": "Q2 FY25 Earnings Release", "page": 2, "period": "Q2 FY2025",
+     "text": "The Board declared a quarterly dividend of $0.24 per share, an increase from $0.21 per share in the prior quarter."},
+    {"source_id": "S2", "document_name": "Q2 FY25 Earnings Call Transcript", "section": "CFO Prepared Remarks", "page": 5, "period": "Q2 FY2025",
+     "text": "CFO: We raised the dividend by about 14%, reflecting our confidence in free cash flow."},
+])
+
 _SY_EXAMPLES = (
     FewShotExample(
-        'Question: What was Northwind\'s year-over-year net sales growth in Q2 FY2025?\nPlan: {"intent": "calculation"}\n\n' + _SY_EX1_EVID + "\n\n" + _SY_EX1_TOOLS + "\n\nReturn JSON: " + _SY_SCHEMA,
+        _sq("What was Northwind's year-over-year net sales growth in Q2 FY2025?", '{"intent": "calculation"}', _SY_EX1_EVID, _SY_EX1_TOOLS),
         _j({
             "status": "answered",
-            "answer": "Northwind's net sales grew 11.65% year over year in Q2 FY2025 [S1][C1].\n- Q2 FY2025 net sales were $1,284M versus $1,150M in Q2 FY2024 [S1].\n- Calculation: ($1,284M - $1,150M) / $1,150M = 11.65% [C1].",
+            "answer": "Northwind's GAAP net sales grew 11.65% year over year in Q2 FY2025 [S1][C1].\n- Q2 FY2025 net sales were $1,284M versus $1,150M in Q2 FY2024 [S1].\n- Calculation: ($1,284M - $1,150M) / $1,150M = +11.65% [C1].",
             "claims": [
-                {"text": "Northwind's net sales grew 11.65% year over year in Q2 FY2025.", "source_ids": ["S1"], "calc_ids": ["C1"]},
+                {"text": "Northwind's GAAP net sales grew 11.65% year over year in Q2 FY2025.", "source_ids": ["S1"], "calc_ids": ["C1"]},
                 {"text": "Q2 FY2025 net sales were $1,284M versus $1,150M in Q2 FY2024.", "source_ids": ["S1"], "calc_ids": []},
-                {"text": "Calculation: ($1,284M - $1,150M) / $1,150M = 11.65%.", "source_ids": [], "calc_ids": ["C1"]},
+                {"text": "Calculation: ($1,284M - $1,150M) / $1,150M = +11.65%.", "source_ids": [], "calc_ids": ["C1"]},
             ],
         }),
     ),
     FewShotExample(
-        'Question: What was Bluefin\'s FY2024 adjusted EBITDA margin using operating income as the base?\nPlan: {"intent": "calculation", "basis": "both"}\n\n' + _SY_EX2_EVID + "\n\n" + format_tool_results([]) + "\n\nReturn JSON: " + _SY_SCHEMA,
+        _sq("What was Bluefin's FY2024 adjusted EBITDA margin using GAAP operating income as the base?", '{"intent": "calculation", "basis": "both"}', _SY_EX2_EVID, format_tool_results([])),
         _j({
-            "status": "partially_answered",
-            "answer": "I can't compute that ratio because it mixes a Non-GAAP figure (adjusted EBITDA) with a GAAP figure (operating income), and no bridge between them was retrieved.\n- FY2024 GAAP operating income was $412M [S1].\n- FY2024 adjusted EBITDA (Non-GAAP) was $655M [S2].\nI can compute a like-for-like margin if FY2024 revenue is provided in the same basis.",
+            "status": "corrected",
+            "answer": "CORRECTION: That ratio would divide a Non-GAAP figure (adjusted EBITDA) by a GAAP figure (operating income), and no reconciliation bridge was retrieved, so I have not combined them.\n- FY2024 GAAP operating income was $412M [S1].\n- FY2024 adjusted EBITDA (Non-GAAP) was $655M [S2].",
             "claims": [
                 {"text": "FY2024 GAAP operating income was $412M.", "source_ids": ["S1"], "calc_ids": []},
                 {"text": "FY2024 adjusted EBITDA (Non-GAAP) was $655M.", "source_ids": ["S2"], "calc_ids": []},
@@ -98,11 +129,41 @@ _SY_EXAMPLES = (
         }),
     ),
     FewShotExample(
-        'Question: What was Northwind\'s Q4 FY2025 revenue?\nPlan: {"intent": "extraction", "periods": ["Q4 FY2025"]}\n\n' + _SY_EX1_EVID + "\n\n" + format_tool_results([]) + "\n\nReturn JSON: " + _SY_SCHEMA,
+        _sq("What was Northwind's Q4 FY2025 revenue?", '{"intent": "extraction", "periods": ["Q4 FY2025"]}', _SY_EX1_EVID, format_tool_results([])),
         _j({
             "status": "insufficient_evidence",
-            "answer": "The indexed documents do not contain Northwind's Q4 FY2025 revenue; the latest retrieved figures are for Q2 FY2025 [S1].",
-            "claims": [{"text": "The latest retrieved figures are for Q2 FY2025.", "source_ids": ["S1"], "calc_ids": []}],
+            "answer": "Northwind's Q4 FY2025 revenue is not disclosed in the indexed documents. The latest figure available is Q2 FY2025 net sales of $1,284M [S1].",
+            "claims": [{"text": "The latest figure available is Q2 FY2025 net sales of $1,284M.", "source_ids": ["S1"], "calc_ids": []}],
+        }),
+    ),
+    FewShotExample(
+        _sq(
+            "Should I buy Bluefin stock before its next earnings report?",
+            '{"intent": "extraction", "periods": ["FY2024"]}',
+            _SY_EX4_EVID,
+            format_tool_results([]),
+            policy_note="I cannot provide investment advice or recommend whether to buy, sell, or hold any security, and I cannot write promotional investment pitches.",
+            alt="What were Bluefin's reported FY2024 revenue, operating income and main disclosed risks?",
+        ),
+        _j({
+            "status": "refused",
+            "answer": "REFUSAL: I cannot provide investment advice or recommend whether to buy, sell, or hold any security, and I cannot write promotional investment pitches. For your own analysis, here is what Bluefin reported:\n- FY2024 GAAP revenue was $5,960M, up from $5,410M in FY2023 [S1].\n- FY2024 GAAP operating income was $655M, up from $590M [S1].\n- Bluefin lists fuel price volatility and driver shortages as risks to operating costs [S2].",
+            "claims": [
+                {"text": "FY2024 GAAP revenue was $5,960M, up from $5,410M in FY2023.", "source_ids": ["S1"], "calc_ids": []},
+                {"text": "FY2024 GAAP operating income was $655M, up from $590M.", "source_ids": ["S1"], "calc_ids": []},
+                {"text": "Bluefin lists fuel price volatility and driver shortages as risks to operating costs.", "source_ids": ["S2"], "calc_ids": []},
+            ],
+        }),
+    ),
+    FewShotExample(
+        _sq("What did Northwind's CFO say about the dividend cut on the Q2 FY2025 call?", '{"intent": "multi_hop", "periods": ["Q2 FY2025"]}', _SY_EX5_EVID, format_tool_results([])),
+        _j({
+            "status": "corrected",
+            "answer": "CORRECTION: Northwind did not cut its dividend in Q2 FY2025; it raised the quarterly dividend to $0.24 per share from $0.21 [S1].\n- On the Q2 FY2025 call, the CFO attributed the roughly 14% increase to confidence in free cash flow [S2].",
+            "claims": [
+                {"text": "Northwind raised the quarterly dividend to $0.24 per share from $0.21 in Q2 FY2025.", "source_ids": ["S1"], "calc_ids": []},
+                {"text": "The CFO attributed the roughly 14% increase to confidence in free cash flow.", "source_ids": ["S2"], "calc_ids": []},
+            ],
         }),
     ),
 )
@@ -139,7 +200,8 @@ Check each claim:
 - Do numbers, periods, units and scale match the source or tool_result exactly? (number_mismatch / period_mismatch / unit_or_scale_mismatch)
 - Is every derived number taken from a tool_result rather than computed in the text? (model_arithmetic)
 - Are Non-GAAP figures labelled and never mixed with GAAP in one calculation? (missing_basis_label)
-- Does it avoid advice, price targets, unattributed forecasts and legal/tax/audit opinions? (policy_violation)
+- Does it repeat or build on a premise in the question that the evidence contradicts or never mentions, instead of correcting it? (false_premise_accepted)
+- Does it avoid advice, price targets, unattributed forecasts, subjective judgments and legal/tax/audit opinions? Does a refused answer start with "REFUSAL:"? (policy_violation)
 - Does it answer every part of the question it claims to answer? (incomplete)
 Issue types: {", ".join(ISSUE_TYPES)}.
 verdict is "pass" only if issues is empty."""
