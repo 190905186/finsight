@@ -115,6 +115,40 @@ def test_run_prompt_does_one_format_repair():
     assert "could not be used" in llm.calls[1][-1]["content"]
 
 
+def test_all_prompts_fit_track_b_output_cap():
+    assert all(s.max_tokens <= 1024 for s in all_prompts())
+
+
+def test_retry_on_429_then_success():
+    from app.prompts.runner import call_with_retry
+
+    class Err(Exception):
+        def __init__(self, code):
+            self.response = type("R", (), {"status_code": code})()
+
+    class Flaky(FakeLLM):
+        def __init__(self):
+            super().__init__(['{"ok": 1}'])
+            self.fails = [429, 503]
+
+        def create_chat_completion(self, messages, max_tokens=256, temperature=None):
+            if self.fails:
+                raise Err(self.fails.pop(0))
+            assert max_tokens <= 1024
+            return super().create_chat_completion(messages, max_tokens, temperature)
+
+    slept = []
+    resp, retries = call_with_retry(Flaky(), [{"role": "user", "content": "x"}], 5000, 0.0, sleep=slept.append)
+    assert retries == 2 and slept == [2, 4]
+
+    class Always401(FakeLLM):
+        def create_chat_completion(self, *a, **k):
+            raise Err(401)
+
+    with pytest.raises(Err):
+        call_with_retry(Always401([]), [], 10, 0.0, sleep=slept.append)
+
+
 def test_evidence_formatting_escapes_and_handles_empty():
     out = format_evidence([{"source_id": "S1", "document_name": 'X "10-K"', "page": 3, "text": "a"}])
     assert 'source_id="S1"' in out and "X '10-K'" in out and 'page="3"' in out

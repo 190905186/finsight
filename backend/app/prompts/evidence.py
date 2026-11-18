@@ -128,6 +128,6 @@ register(
             + "\n\nReason step by step in the \"reasoning\" list: (1) split the question into the sub-facts it needs, (2) find each sub-fact and its source, (3) check periods and basis match, (4) note what is missing or conflicting, (5) write findings."
         ),
         user_template=_AN_USER + _AN_COT_SCHEMA,
-        **{**_AN_COMMON, "max_tokens": 1100},
+        **{**_AN_COMMON, "max_tokens": 1024},  # Track B endpoint caps output at 1024 tokens per call
     ),
 )
