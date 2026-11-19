@@ -23,6 +23,7 @@ services:
     volumes:
       - ./certs/vm04-ca.crt:/app/certs/vm04-ca.crt:ro
       - ./certs/vm02-ca.crt:/app/certs/vm02-ca.crt:ro
+      - ./data:/data
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health').read()"]
       interval: 10s

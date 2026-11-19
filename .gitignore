@@ -5,3 +5,4 @@ node_modules
 certs/
 __pycache__/
 *.pyc
+data/ingest_subset/
