@@ -1,0 +1,18 @@
+# Team notes: prompts branch (Mayank)
+
+Running log of changes and findings from integrating the prompt library with the RAG pipeline.
+Each item says what changed, which files are (or should be) updated, and who needs to know.
+
+Status key: DONE = committed on `prompts` · TODO = still to update · INFO = team should know.
+
+| # | Date | Change / finding | Files | Status | Who to inform |
+|---|---|---|---|---|---|
+| 1 | 2026-11-16 | Prompts aligned with the *Financial Report RAG Specification*: refusal + cited facts, CORRECTION for false premises, citation format, tables, Non-GAAP adjustments | `backend/app/prompts/*` | DONE | All |
+| 2 | 2026-11-16 | 75-query golden set added as data file, locked (held-out) | `data/evaluation/golden_75.jsonl`, `data/evaluation/README.md` | DONE | Evaluation owner |
+| 3 | 2026-11-16 | Errors found in spec gold answers: Q74 (2,000 − 615 = 1,385 not 1,105), Q45 (drivers sum to 377 not 370), Q22 (52.85 not 52.86), Q65 cites a Proxy Statement not in the corpus; Q19/Q24/Q52/Q58 cite FY24/Q4 FY24 releases & presentation not in the listed pack | `data/evaluation/README.md` | INFO | Spec owner, ingestion owner |
+| 4 | 2026-11-18 | Prompts fitted to Track B endpoint limits: max_tokens ≤ 1024 per call, retry on 429/503 with 2/4/8 s back-off (1 active request per group key, 60 req/min, 8,192 tokens in+out) | `backend/app/prompts/runner.py`, `evidence.py` | DONE | Anyone calling the LLM (check `llm_client.py` / `rag/pipeline.py` respect the same limits) |
+| 5 | 2026-11-18 | `main` (RAG approach, dc35d8c) merged into `prompts` | merge commit e9029b7 | DONE | All |
+| 6 | 2026-11-18 | `.gitignore` entries lost during merge restored: `__pycache__/`, `*.pyc` (ours) and `certs/` (main) | `.gitignore` | DONE | All |
+| 7 | 2026-11-18 | `main` commits compiled Python files (`__pycache__/*.cpython-313.pyc`) into the repo. They should be removed from Git tracking (`git rm -r --cached` on the `__pycache__` folders) now that `.gitignore` covers them | `backend/**/__pycache__/` | TODO | RAG owner (ratnakar-patra) |
+| 8 | 2026-11-19 | **Python version:** `requirements.txt` on `main` only installs on **Python 3.12+** (numpy==2.1.1 vs langchain 0.3.13, which needs numpy<2 on Python 3.11). Team standard should be **Python 3.13** (what `main` was built with). README still says 3.11 | `README.md` (Prerequisites + `py -3.11` commands), `docs/high-level-design.md` if it states a version | TODO | All |
+| 9 | 2026-11-19 | Local setup: `.env` needs the new RAG keys from `.env.example`: `EMBEDDINGS_CA_CERT`, `EMBEDDINGS_DIMENSIONS=768`, `RAG_EMBEDDING_BATCH_SIZE=16`. Group 046-065 uses `https://103.42.50.41:1034/v1`, `Qwen/Qwen3-8B`, `vm04-ca.crt` | `.env` (local only, never committed) | INFO | All |
