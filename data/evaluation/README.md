@@ -31,3 +31,14 @@ Corpus coverage is inconsistent. Part 2 lists the reference pack as the FY2024 1
 - **Q48** says the corpus covers "FY2022 through Q3 FY2025". This holds only because the FY2024 10-K includes FY2022–FY2023 comparatives.
 
 Minor: Q3 (Q3 FY25 cash $2,415M, marketable securities $610M) and Q19 (FY24 cash $1,805M + marketable securities $610M = $2,415M) produce the same 2,415 and 610 at two different dates. That's possible, but worth checking it isn't a copy error.
+
+## FinanceBench split (for testing the answer-side prompts)
+
+The RAG corpus is FinanceBench (84 public filings in `data/reference/financebench/`). Its 150 open-source questions come with annotated evidence passages and gold answers. They are split once, deterministically, by `backend/app/prompts/build_financebench_split.py`:
+
+| File | Questions | Use |
+|---|---|---|
+| `financebench_dev.jsonl` | 99 (33 per question type) | Prompt development and tuning |
+| `financebench_holdout.jsonl` | 51 (17 per type) | **Held out**: confirm scores once, after prompts are frozen. Includes the question used by the RAG tests (`financebench_id_03029`) |
+
+Both are separate from the 75-query Acme golden set above. FinanceBench questions are about real companies and none overlaps with the Acme questions.
