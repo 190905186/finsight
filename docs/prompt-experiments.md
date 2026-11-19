@@ -95,3 +95,34 @@ Both defaults already match `DEFAULT_TECHNIQUE` in `backend/app/prompts/base.py`
 
 1. Extend the dev set with 20-30 new questions (fresh, never copied from the golden 75) and re-run both nodes to confirm the scores hold.
 2. Test the evidence-side prompts (extract, synthesize, verify) using hand-picked evidence passages, then end-to-end through the RAG pipeline from `main`.
+
+---
+
+# Answer-side prompts (FinanceBench dev split, oracle evidence)
+
+Questions come from `data/evaluation/financebench_dev.jsonl` (99 questions; never the 51 held-out ones or the Acme golden 75). Each prompt receives FinanceBench's annotated evidence passages directly as S1, S2, … so prompt quality is tested apart from retrieval. Harness: `python -m app.prompts.answer_eval --node <node>`.
+
+## FB run 1: 2026-11-19, prompt set 2026.11.3
+
+| Node | Technique | Valid | Key metrics | p50 latency |
+|---|---|---|---|---|
+| synthesize | zero / few / cot | 100% all | answered 68 / 84 / 84%; citations ok 80 / 72 / 80% | 3.8 / 6.1 / 6.5 s |
+| extract | zero / few / cot | 100 / 94 / 89% | gold figure 56 / 65 / 63%; citations ok ~100% | 2.9 / 3.1 / 5.5 s |
+| verify | zero / few / cot | 100% all | catches planted error 94 / 100 / 75%; passes correct draft 50 / 33 / 61% | 1.7 / 1.5 / 2.1 s |
+| repair | zero | 100% | fixed 50%; planted removed 81% | 1.5 s |
+| analyze | zero / few / cot | 100% all | citations ok 100 / 88 / 88%; has findings 100 / 88 / 88% | 3.4 / 2.3 / 6.1 s |
+
+### What the outputs showed (read per question, not just the scores)
+
+**Harness problems (fixed before run 2):**
+- The sample was the first 25 questions by ID, and only 1 of them had a numeric answer, so synthesize/analyze "gold figure" (0%) was meaningless.
+- Number matching was too loose: rescaling let small ratios (0.83) "match" 830 in the evidence, so calculation questions were wrongly treated as figures printed in the evidence. That caused most of the verify "false alarms" (the checker correctly flagged an uncited computed number), the extract "misses" (the model extracted the right inputs, e.g. Adobe's cash flow and liabilities for a 0.83 ratio) and the repair failures.
+
+**Real prompt problems:**
+1. synthesize invented `[C1]` calculation markers with no calculator result supplied, and did the arithmetic itself (rule broken; fails citation check).
+2. synthesize declined judgment questions ("Is gross margin a relevant metric for JPM?") as "not disclosed", although the reference answer uses general finance knowledge ("not relevant for a bank").
+
+### Changes for FB run 2 (prompt set 2026.11.4)
+
+- Prompts: `[C#]` only for supplied calc IDs; if a calculation is needed and missing, give the inputs and mark `partially_answered`; answer judgment questions with a conclusion plus cited figures. Shared rule 1 now allows general financial-analysis knowledge to interpret evidence (company facts still evidence-only).
+- Harness: balanced sample across question types; strict number matching (no rescaling for figures under 100); calculation questions get a **reference calculator result** (C1 = correct answer), standing in for the `calculate_*` tools that are not built yet; an **AI judge** (same Qwen3-8B, as design §5 allows) grades synthesize answers against FinanceBench's reference answers.

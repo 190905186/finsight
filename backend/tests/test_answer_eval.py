@@ -83,3 +83,27 @@ def test_harness_survives_endpoint_errors():
         raise RuntimeError("boom")
     s = ae.evaluate(FakeLLM(reply), Node.SYNTHESIZE, items, [Technique.ZERO_SHOT])
     assert s["techniques"]["zero_shot"]["valid"] == 0.0 and all("boom" in r["error"] for r in s["rows"])
+
+
+def test_balanced_selection_and_reference_calc():
+    items = _items()
+    pick = ae.select(items, 9)
+    assert {i["question_type"] for i in pick} == {"domain-relevant", "metrics-generated", "novel-generated"}
+    for i in items:
+        calc = ae.reference_calc(i)
+        assert bool(calc) == ae.needs_calc(i)
+        if calc:
+            assert calc[0]["calc_id"] == "C1" and calc[0]["result"] == i["gold_answer"]
+    assert not ae.matches(0.83, [830.0])  # small ratios never rescale
+
+
+def test_synthesis_prompt_forbids_invented_calc_markers():
+    from app.prompts import get_prompt
+    for t in ("zero_shot", "few_shot", "cot"):
+        assert "ONLY for a calc_id that appears" in get_prompt(Node.SYNTHESIZE, t).system
+
+
+def test_judge_parses_verdicts():
+    llm = FakeLLM(lambda m: '<think>x</think>{"verdict": "partially_correct", "reason": "r"}')
+    assert ae.judge(llm, "q", "ref", "cand") == "partially_correct"
+    assert ae.judge(FakeLLM(lambda m: "nonsense"), "q", "ref", "cand") is None

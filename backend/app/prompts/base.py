@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence, Tuple
 
-PROMPT_SET_VERSION = "2026.11.3"  # .3: guardrail allow-by-default + balanced examples (dev run 2)
+PROMPT_SET_VERSION = "2026.11.4"  # .4: answer-side fixes from FinanceBench dev run 1
 
 _PLACEHOLDER = re.compile(r"\{\{\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\}\}")
 

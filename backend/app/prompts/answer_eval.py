@@ -17,19 +17,20 @@ the project's 75-query golden set are refused unless --final-run is passed.
 
 What is scored per node
 -----------------------
-extract   : valid JSON; gold number found among extracted facts (questions whose
-            answer is a figure printed in the evidence).
+Sample: --limit questions (default 24), taken round-robin across FinanceBench question types.
+Calculation questions (gold figure not printed in the evidence) get a "reference_calculation"
+tool_result C1 holding the correct result: a stand-in for the calculate_* tools that are not
+built yet, so the prompts are tested on USING calculator output, as the design intends.
+
+extract   : questions whose answer figure is printed in the evidence; gold figure among the facts.
 analyze   : valid JSON; findings cite only supplied IDs; gold figure in findings.
-synthesize: valid JSON; citations resolve; answered vs refused/insufficient;
-            gold figure in the answer. For "numerical reasoning" questions no
-            calculator results are supplied yet (the calculate_* tools are not
-            built), so the ideal answer gives the cited inputs and status
-            partially_answered; a correct computed figure there is reported
-            separately as model arithmetic.
-verify    : gold-based drafts, half correct and half with a planted wrong number;
-            scores detection of the planted error and false alarms on correct drafts.
-repair    : planted-error drafts plus a number_mismatch issue; scores whether the
-            repaired answer has the gold figure and drops the planted one.
+synthesize: valid JSON; citations resolve (including C1); answered vs declined; gold figure in
+            the answer; uses C1 when supplied; and an AI judge (same Qwen model) comparing the
+            answer with FinanceBench's reference answer (correct / partially correct / incorrect).
+verify    : gold-based drafts, one correct and one with a planted wrong number per question;
+            scores catching the planted error and passing the correct draft.
+repair    : planted-error drafts plus a number_mismatch issue; scores whether the repaired
+            answer has the gold figure and drops the planted one.
 """
 from __future__ import annotations
 
@@ -75,11 +76,13 @@ def numbers_in(text: str) -> List[float]:
     return out
 
 
-def matches(gold: float, candidates: Iterable[float]) -> bool:
-    """Same figure allowing rounding and a millions/billions/thousands change of scale."""
+def matches(gold: float, candidates: Iterable[float], allow_scale: bool = True) -> bool:
+    """Same figure allowing rounding; a thousands/millions/billions change of scale only for
+    figures of 100 or more (small ratios like 0.83 must not match 830 by accident)."""
+    scales = (1, 1000, 1 / 1000, 1_000_000, 1 / 1_000_000) if allow_scale and abs(gold) >= 100 else (1,)
     for c in candidates:
-        for scaled in (c, c * 1000, c / 1000, c * 1_000_000, c / 1_000_000):
-            if abs(abs(scaled) - abs(gold)) <= max(0.006 * abs(gold), 0.011):
+        for k in scales:
+            if abs(abs(c * k) - abs(gold)) <= max(0.006 * abs(gold), 0.011):
                 return True
     return False
 
@@ -91,7 +94,38 @@ def gold_hit(item: Dict[str, Any], text: str) -> bool:
 
 
 def gold_in_evidence(item: Dict[str, Any]) -> bool:
-    return gold_hit(item, " ".join(e["text"] for e in item["evidence"]))
+    """The gold figure is printed in the evidence as-is (no rescaling): an extraction question."""
+    golds = item.get("numeric_gold") or []
+    nums = numbers_in(" ".join(e["text"] for e in item["evidence"]))
+    return bool(golds) and all(matches(g, nums, allow_scale=False) for g in golds)
+
+
+def needs_calc(item: Dict[str, Any]) -> bool:
+    return bool(item.get("numeric_gold")) and not gold_in_evidence(item)
+
+
+def reference_calc(item: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Stand-in for the not-yet-built calculator: the correct result as a tool_result (dev data only).
+    Tests whether the prompts USE calculator output correctly, assuming the calculator is right."""
+    if not needs_calc(item):
+        return []
+    return [{"calc_id": "C1", "tool": "reference_calculation", "formula": (item.get("justification") or "")[:400],
+             "result": item["gold_answer"], "source_ids": [e["source_id"] for e in item["evidence"]], "status": "valid"}]
+
+
+def select(pool: Sequence[Dict[str, Any]], limit: int) -> List[Dict[str, Any]]:
+    """Balanced sample: take questions round-robin across question types (deterministic)."""
+    if not limit or limit >= len(pool):
+        return list(pool)
+    groups: Dict[str, List[Dict[str, Any]]] = {}
+    for i in pool:
+        groups.setdefault(i["question_type"], []).append(i)
+    out: List[Dict[str, Any]] = []
+    while len(out) < limit:
+        for g in sorted(groups):
+            if groups[g] and len(out) < limit:
+                out.append(groups[g].pop(0))
+    return out
 
 
 def is_numerical_reasoning(item: Dict[str, Any]) -> bool:
@@ -123,9 +157,32 @@ def plant_error(answer: str) -> Optional[str]:
     return answer[: m.start()] + new_txt + answer[m.end():]
 
 
-def draft_json(answer_text: str) -> str:
-    return json.dumps({"status": "answered", "answer": f"{answer_text} [S1]",
-                       "claims": [{"text": answer_text, "source_ids": ["S1"], "calc_ids": []}]})
+def draft_json(answer_text: str, with_calc: bool = False) -> str:
+    marker = " [S1][C1]" if with_calc else " [S1]"
+    return json.dumps({"status": "answered", "answer": f"{answer_text}{marker}",
+                       "claims": [{"text": answer_text, "source_ids": ["S1"], "calc_ids": ["C1"] if with_calc else []}]})
+
+
+JUDGE_SYSTEM = """You grade answers to financial questions against a reference answer written by an analyst.
+Grade the CANDIDATE only on whether it reaches the same conclusion and the same key figures as the REFERENCE (small rounding differences and different wording are fine; extra correct detail is fine).
+- "correct": same conclusion and key figures.
+- "partially_correct": some key facts right but the conclusion or a key figure is missing or different.
+- "incorrect": wrong conclusion or figures, or it declines to answer.
+Reply with a single JSON object: {"verdict": "correct|partially_correct|incorrect", "reason": "<one sentence>"}"""
+
+
+def judge(llm: Any, question: str, reference: str, candidate: str) -> Optional[str]:
+    from .parsing import extract_json_object, strip_reasoning
+    from .runner import call_with_retry
+    msgs = [{"role": "system", "content": JUDGE_SYSTEM},
+            {"role": "user", "content": f"QUESTION: {question}\nREFERENCE: {reference}\nCANDIDATE: {candidate}\n\nReturn JSON. /no_think"}]
+    try:
+        resp, _ = call_with_retry(llm, msgs, 150, 0.0)
+        span = extract_json_object(strip_reasoning(resp["choices"][0]["message"]["content"] or ""))
+        verdict = json.loads(span).get("verdict") if span else None
+        return verdict if verdict in ("correct", "partially_correct", "incorrect") else None
+    except Exception:
+        return None
 
 
 def _mean(vals: Iterable[Any]) -> Optional[float]:
@@ -137,8 +194,10 @@ def _mean(vals: Iterable[Any]) -> Optional[float]:
 # Each returns (variables for the prompt, scorer(parsed_data) -> metrics dict, extra context for the record)
 
 def eligible(node: Node, item: Dict[str, Any]) -> bool:
-    if node in (Node.VERIFY, Node.REPAIR, Node.EXTRACT):
-        return bool(item.get("numeric_gold")) and gold_in_evidence(item)
+    if node is Node.EXTRACT:
+        return gold_in_evidence(item)
+    if node in (Node.VERIFY, Node.REPAIR):
+        return bool(item.get("numeric_gold"))
     if node is Node.ANALYZE:
         return len(item["evidence"]) >= 2 or item["question_type"] != "metrics-generated"
     return True
@@ -166,22 +225,23 @@ def build_cases(node: Node, item: Dict[str, Any]) -> List[Dict[str, Any]]:
         return [{"case": "analyze", "vars": {"question": q, "plan": NO_PLAN, "evidence": evidence}, "score": score}]
 
     if node is Node.SYNTHESIZE:
+        calcs = reference_calc(item)
         def score(d):
-            rendered = render_citations(str(d.get("answer", "")), ev)
+            answer = str(d.get("answer", ""))
+            rendered = render_citations(answer, ev, calcs)
             status = d.get("status")
             answered = status in ("answered", "partially_answered", "corrected")
-            cited = bool(rendered.cited_source_ids)
-            hit = gold_hit(item, str(d.get("answer", ""))) if item.get("numeric_gold") else None
-            needs_calc = is_numerical_reasoning(item) and bool(item.get("numeric_gold")) and not gold_in_evidence(item)
             return {"status": status, "answered": answered,
-                    "cites_ok": not rendered.unknown_ids and (cited or not answered),
-                    "gold_hit": None if needs_calc else hit,
-                    "model_arithmetic": bool(hit) if needs_calc else None}
+                    "cites_ok": not rendered.unknown_ids and (bool(rendered.cited_source_ids) or not answered),
+                    "gold_hit": gold_hit(item, answer) if item.get("numeric_gold") else None,
+                    "uses_calc": ("[C1]" in answer) if calcs else None,
+                    "_candidate": answer}
         return [{"case": "synthesize", "vars": {"question": q, "policy_note": "none", "alternative_question": "none",
-                                                 "plan": NO_PLAN, "evidence": evidence, "tool_results": format_tool_results([])}, "score": score}]
+                                                 "plan": NO_PLAN, "evidence": evidence, "tool_results": format_tool_results(calcs)}, "score": score}]
 
     if node is Node.VERIFY:
         cases = []
+        calcs = reference_calc(item)
         good = item["gold_answer"].strip()
         bad = plant_error(good)
         for label, text in (("correct", good), ("planted", bad)):
@@ -193,10 +253,11 @@ def build_cases(node: Node, item: Dict[str, Any]) -> List[Dict[str, Any]]:
                 return {"draft": label, "verdict": verdict,
                         "right": (verdict == "pass") if label == "correct" else (verdict == "fail"),
                         "number_issue": bool(types & {"number_mismatch", "unsupported_claim", "wrong_citation"}) if label == "planted" else None}
-            cases.append({"case": f"verify_{label}", "vars": {"question": q, "evidence": evidence, "tool_results": format_tool_results([]), "draft": draft_json(text)}, "score": score})
+            cases.append({"case": f"verify_{label}", "vars": {"question": q, "evidence": evidence, "tool_results": format_tool_results(calcs), "draft": draft_json(text, bool(calcs))}, "score": score})
         return cases
 
     if node is Node.REPAIR:
+        calcs = reference_calc(item)
         good = item["gold_answer"].strip()
         bad = plant_error(good)
         if bad is None:
@@ -206,16 +267,16 @@ def build_cases(node: Node, item: Dict[str, Any]) -> List[Dict[str, Any]]:
         def score(d):
             ans = str(d.get("answer", ""))
             return {"fixed": gold_hit(item, ans), "planted_removed": not any(matches(p, numbers_in(ans)) for p in planted_nums),
-                    "cites_ok": not render_citations(ans, ev).unknown_ids}
-        return [{"case": "repair", "vars": {"question": q, "evidence": evidence, "tool_results": format_tool_results([]),
-                                             "draft": draft_json(bad), "issues": issues}, "score": score}]
+                    "cites_ok": not render_citations(ans, ev, calcs).unknown_ids}
+        return [{"case": "repair", "vars": {"question": q, "evidence": evidence, "tool_results": format_tool_results(calcs),
+                                             "draft": draft_json(bad, bool(calcs)), "issues": issues}, "score": score}]
     raise ValueError(f"{node.value} is not an answer-side node")
 
 
 # --------------------------------------------------------------------------- run + report
 
 def evaluate(llm: Any, node: Node, items: Sequence[Dict[str, Any]], techniques: Iterable[Technique],
-             progress: Callable[[str], None] = lambda _m: None) -> Dict[str, Any]:
+             progress: Callable[[str], None] = lambda _m: None, use_judge: bool = False) -> Dict[str, Any]:
     summary: Dict[str, Any] = {"prompt_set": PROMPT_SET_VERSION, "node": node.value, "techniques": {}, "rows": []}
     pool = [i for i in items if eligible(node, i)]
     summary["n_items"] = len(pool)
@@ -227,6 +288,9 @@ def evaluate(llm: Any, node: Node, items: Sequence[Dict[str, Any]], techniques: 
                 try:
                     res = run_prompt(llm, spec, **case["vars"])
                     metrics = case["score"](res.parsed.data) if res.ok else {}
+                    candidate = metrics.pop("_candidate", None)
+                    if use_judge and candidate is not None:
+                        metrics["judge"] = judge(llm, item["question"], item["gold_answer"], candidate)
                     rec = {"question_id": item["question_id"], "case": case["case"], "prompt_id": spec.prompt_id,
                            "valid": res.ok, "json_first_try": res.ok and res.calls == 1, "calls": res.calls,
                            "latency_s": round(res.latency_s, 3), "retries": res.retries,
@@ -258,8 +322,11 @@ def _summarize(node: Node, recs: List[Dict[str, Any]]) -> Dict[str, Any]:
         s.update(cites_ok=_mean(r.get("cites_ok") for r in ok), gold_hit=_mean(r.get("gold_hit") for r in ok),
                  has_findings=_mean((r.get("findings") or 0) > 0 for r in ok))
     elif node is Node.SYNTHESIZE:
+        judged = [r.get("judge") for r in ok if r.get("judge")]
         s.update(answered=_mean(r.get("answered") for r in ok), cites_ok=_mean(r.get("cites_ok") for r in ok),
-                 gold_hit=_mean(r.get("gold_hit") for r in ok), model_arithmetic=_mean(r.get("model_arithmetic") for r in ok))
+                 gold_hit=_mean(r.get("gold_hit") for r in ok), uses_calc=_mean(r.get("uses_calc") for r in ok),
+                 judge_correct=_mean(j == "correct" for j in judged),
+                 judge_correct_or_partial=_mean(j != "incorrect" for j in judged))
     elif node is Node.VERIFY:
         s.update(accuracy=_mean(r.get("right") for r in ok),
                  catches_planted=_mean(r.get("right") for r in ok if r["case"] == "verify_planted"),
@@ -272,7 +339,8 @@ def _summarize(node: Node, recs: List[Dict[str, Any]]) -> Dict[str, Any]:
 
 _LABELS = {
     "valid": "valid", "json_first_try": "JSON 1st try", "gold_hit": "gold figure", "cites_ok": "citations ok",
-    "answered": "answered", "model_arithmetic": "model arithmetic", "has_findings": "has findings",
+    "answered": "answered", "uses_calc": "uses calc result", "has_findings": "has findings",
+    "judge_correct": "judge: correct", "judge_correct_or_partial": "judge: correct+partial",
     "accuracy": "accuracy", "catches_planted": "catches planted error", "passes_correct": "passes correct draft",
     "fixed": "fixed", "planted_removed": "planted removed", "p50_latency_s": "p50 latency s", "avg_tokens": "avg tokens",
 }
@@ -310,23 +378,23 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     p.add_argument("--node", required=True, choices=[n.value for n in ANSWER_NODES])
     p.add_argument("--techniques", nargs="*", choices=[t.value for t in Technique])
     p.add_argument("--data", type=Path, default=DEFAULT_DATA)
-    p.add_argument("--limit", type=int, default=25, help="questions per technique (default 25; 0 = all eligible)")
+    p.add_argument("--limit", type=int, default=24, help="questions per technique, balanced across question types (default 24; 0 = all eligible)")
     p.add_argument("--out", type=Path, default=None)
     p.add_argument("--final-run", action="store_true", help="allow held-out data (once, after prompts are frozen)")
+    p.add_argument("--no-judge", action="store_true", help="synthesize only: skip the AI judge (halves the calls)")
     args = p.parse_args(argv)
 
     node = Node(args.node)
     techs = [Technique(t) for t in args.techniques] if args.techniques else available(node)
     items = load_items(args.data, args.final_run)
-    pool = [i for i in items if eligible(node, i)]
-    if args.limit:
-        pool = pool[: args.limit]
+    pool = select([i for i in items if eligible(node, i)], args.limit)
     print(f"{node.value}: {len(pool)} questions x {len(techs)} technique(s). This calls the model one request at a time.", flush=True)
 
     from app.services.llm_client import LLMClient  # lazy: tests run without config
 
     with LLMClient() as llm:
-        summary = evaluate(llm, node, pool, techs, progress=lambda m: print("  " + m, end="\r", flush=True))
+        summary = evaluate(llm, node, pool, techs, progress=lambda m: print("  " + m, end="\r", flush=True),
+                           use_judge=(node is Node.SYNTHESIZE and not args.no_judge))
     print(" " * 40)
     print(to_markdown(summary))
     if args.out:

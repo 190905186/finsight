@@ -1,0 +1,2739 @@
+{
+  "prompt_set": "2026.11.3",
+  "node": "analyze_financial_report",
+  "techniques": {
+    "zero_shot": {
+      "cases": 25,
+      "valid": 1.0,
+      "json_first_try": 0.96,
+      "p50_latency_s": 3.433,
+      "avg_tokens": 1084.76,
+      "cites_ok": 1.0,
+      "gold_hit": 0.0,
+      "has_findings": 1.0
+    },
+    "few_shot": {
+      "cases": 25,
+      "valid": 1.0,
+      "json_first_try": 1.0,
+      "p50_latency_s": 2.256,
+      "avg_tokens": 1301.76,
+      "cites_ok": 0.88,
+      "gold_hit": 0.0,
+      "has_findings": 0.88
+    },
+    "cot": {
+      "cases": 25,
+      "valid": 1.0,
+      "json_first_try": 1.0,
+      "p50_latency_s": 6.144,
+      "avg_tokens": 1229.64,
+      "cites_ok": 0.88,
+      "gold_hit": 0.0,
+      "has_findings": 0.88
+    }
+  },
+  "rows": [
+    {
+      "question_id": "financebench_id_00070",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/zero_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 3.435,
+      "retries": 0,
+      "tokens": 1333,
+      "findings": 2,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "American Water Works Company, Inc. had total current assets of $1,250 million as of December 31, 2022.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "American Water Works Company, Inc. had total current liabilities of $2,811 million as of December 31, 2022.",
+            "source_ids": [
+              "S2"
+            ]
+          }
+        ],
+        "gaps": [
+          "The working capital calculation requires the difference between current assets and current liabilities, which is not explicitly provided in the evidence."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00080",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/zero_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 3.187,
+      "retries": 0,
+      "tokens": 1336,
+      "findings": 2,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "PayPal's current assets for FY2022 were $57,517 million, and current liabilities were $45,101 million.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "PayPal's working capital for FY2022 is calculated as current assets minus current liabilities, which is $57,517 million - $45,101 million = $12,416 million.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00206",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/zero_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.781,
+      "retries": 0,
+      "tokens": 741,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "The provided evidence does not include historical data on JPM's gross margins or any information about their consistency over time."
+          }
+        ],
+        "gaps": [
+          "There is no historical data on JPM's gross margins or their consistency over time in the provided evidence."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00216",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/zero_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 3.818,
+      "retries": 0,
+      "tokens": 1141,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "Verizon's quick ratio for FY 2022 is not directly provided in the evidence, but the quick ratio can be calculated using the formula: (Cash and cash equivalents + Accounts receivable, net) / Current liabilities. The cash and cash equivalents for FY 2022 are $2,605 million, and the accounts receivable, net are $24,506 million. The total current liabilities for FY 2022 are $50,171 million.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The actual quick ratio value is not provided in the evidence, so it cannot be directly assessed for liquidity."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00222",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/zero_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.807,
+      "retries": 0,
+      "tokens": 1241,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "AMD's quick ratio for FY22 is not directly provided in the evidence, but the current assets and current liabilities can be used to calculate it. The current assets for FY22 are $15,019 million, and the current liabilities are $6,369 million.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The quick ratio is not directly provided in the evidence, so it cannot be determined without further calculation."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00283",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/zero_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.355,
+      "retries": 0,
+      "tokens": 625,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": false,
+      "output": {
+        "findings": [
+          {
+            "statement": "Pfizer expects to incur costs of approximately $700 million in connection with separating Upjohn.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The question asks about the amount Pfizer expects to pay to spin off Upjohn in the future, but the evidence only provides the total expected costs of $700 million without specifying the future payment amount."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00299",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/zero_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 6.219,
+      "retries": 0,
+      "tokens": 1468,
+      "findings": 5,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "In 2021 Q1, the Consumer & Community Banking segment had a total net revenue of $12,517 million.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "In 2021 Q1, the Corporate & Investment Bank segment had a total net revenue of $14,605 million.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "In 2021 Q1, the Commercial Banking segment had a total net revenue of $2,393 million.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "In 2021 Q1, the Asset & Wealth Management segment had a total net revenue of $4,077 million.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "In 2021 Q1, the Corporate segment had a total net revenue of $33,119 million.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The total net revenue for the Total segment in 2021 Q1 is not explicitly stated."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00302",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/zero_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.153,
+      "retries": 0,
+      "tokens": 780,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "Pfizer's total current assets grew from $35,067 million in FY20 to $59,693 million in FY21.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The question refers to 'PPNE,' which is not defined in the provided evidence."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00382",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/zero_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 8.8,
+      "retries": 0,
+      "tokens": 1227,
+      "findings": 7,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "For FY2022, the Las Vegas Strip Resorts had the highest EBITDAR contribution of $3,142,308 (in thousands).",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "For FY2022, Regional Operations had an EBITDAR contribution of $1,294,630 (in thousands).",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "For FY2022, MGM China had an EBITDAR contribution of $(203,136) (in thousands).",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "For FY2022, Unconsolidated affiliates had an EBITDAR contribution of $(222,079) (in thousands).",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "For FY2022, Management and other operations had an EBITDAR contribution of $(11,934) (in thousands).",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "For FY2022, Stock compensation had an EBITDAR contribution of $(71,297) (in thousands).",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "For FY2022, Corporate had an EBITDAR contribution of $(431,238) (in thousands).",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The question does not specify whether the EBITDAR contribution is reported on a GAAP or non-GAAP basis."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00394",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/zero_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 7.07,
+      "retries": 0,
+      "tokens": 1529,
+      "findings": 6,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "In 2022 Q2, the Commercial Banking segment had the highest net income of $994 million.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "In 2022 Q2, the Consumer & Community Banking segment had a net income of $3,100 million.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "In 2022 Q2, the Corporate & Investment Bank segment had a net income of $3,725 million.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "In 2022 Q2, the Asset & Wealth Management segment had a net income of $1,004 million.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "In 2022 Q2, the Corporate segment had a net income of $(174) million.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "In 2022 Q2, the Total segment (which includes all segments) had a net income of $8,649 million.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The question does not specify whether the net income should be considered on a GAAP basis or adjusted basis."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00460",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/zero_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 6.37,
+      "retries": 0,
+      "tokens": 1149,
+      "findings": 4,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "The number of Best Buy stores increased from 907 at the end of the second quarter of FY2023 to 969 at the end of the second quarter of FY2024.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "The number of Outlet Centers increased from 18 at the end of the second quarter of FY2023 to 20 at the end of the second quarter of FY2024.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "The number of Pacific Sales stores remained at 20 at the end of the second quarter of both FY2023 and FY2024.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "The number of Yardbird stores decreased from 13 at the end of the second quarter of FY2023 to 12 at the end of the second quarter of FY2024.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The exact number of stores opened and closed during the second quarter of FY2024 and FY2023 is not explicitly stated for all categories."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00464",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/zero_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.53,
+      "retries": 0,
+      "tokens": 545,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "Historically, the airline industry has been cyclical and very competitive and has experienced significant profit swings and constant challenges to be more cost competitive.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00476",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/zero_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.921,
+      "retries": 0,
+      "tokens": 643,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "As of 2022, American Express has registered common shares under the trading symbol AXP on the New York Stock Exchange.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The question asks about debt securities, but the evidence only mentions common shares."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00499",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/zero_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 5.608,
+      "retries": 0,
+      "tokens": 1628,
+      "findings": 4,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "3M's total assets for FY2022 were $46,455 million, with property, plant, and equipment (net) amounting to $9,178 million.",
+            "source_ids": [
+              "S2"
+            ]
+          },
+          {
+            "statement": "3M's net sales for FY2022 were $34,229 million.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "3M's cash flows from operating activities for FY2022 were $5,591 million.",
+            "source_ids": [
+              "S3"
+            ]
+          },
+          {
+            "statement": "3M's purchases of property, plant, and equipment (PP&E) for FY2022 were $1,749 million.",
+            "source_ids": [
+              "S3"
+            ]
+          }
+        ],
+        "gaps": [
+          "The question requires an analysis of whether 3M is capital-intensive, but the evidence does not include information on the proportion of assets or capital expenditures relative to sales or other metrics."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00517",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/zero_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 4.672,
+      "retries": 0,
+      "tokens": 877,
+      "findings": 3,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "Defense, Space & Security represented $23,162 million in revenue for Boeing in FY2022, which is more than 20% of the total revenue of $66,608 million.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "Commercial Airplanes represented $25,867 million in revenue for Boeing in FY2022, which is more than 20% of the total revenue of $66,608 million.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "Global Services represented $17,611 million in revenue for Boeing in FY2022, which is more than 20% of the total revenue of $66,608 million.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00540",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/zero_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.889,
+      "retries": 0,
+      "tokens": 996,
+      "findings": 2,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "AES Corporation's inventory for FY2022 was $1,055 million.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "AES Corporation's cost of sales for FY2022 was $10,069 million.",
+            "source_ids": [
+              "S2"
+            ]
+          }
+        ],
+        "gaps": [
+          "The revenue figures for FY2022 are not provided in the evidence, which is necessary to calculate the inventory turnover ratio."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00563",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/zero_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 5.407,
+      "retries": 0,
+      "tokens": 905,
+      "findings": 4,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "From FY21 to FY22, the Data Center segment sales increased from $3,694 million to $6,043 million.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "From FY21 to FY22, the Client segment sales decreased from $6,887 million to $6,201 million.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "From FY21 to FY22, the Gaming segment sales increased from $5,607 million to $6,805 million.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "From FY21 to FY22, the Embedded segment sales increased from $246 million to $4,552 million.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The question asks for the segment with the most proportional increase, but the evidence does not provide the percentage increase for each segment."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00566",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/zero_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.124,
+      "retries": 0,
+      "tokens": 1159,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "Verizon's total debt as of December 31, 2022, was $150,639 million, compared to $150,868 million as of December 31, 2021.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00585",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/zero_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.369,
+      "retries": 0,
+      "tokens": 1022,
+      "findings": 2,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "Boeing's effective tax rate for FY2022 was -31% (income tax benefit).",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "Boeing's effective tax rate for FY2021 was 743% (income tax expense).",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00601",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/zero_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 3.66,
+      "retries": 0,
+      "tokens": 986,
+      "findings": 2,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "The reduction in SG&A expense as a percent of net sales in FY2023 was primarily due to lower marketing expenses and leverage of incentive compensation due to higher sales.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "The reduction in SG&A expense as a percent of net sales in FY2023 was partially offset by deleverage of corporate overhead due to strategic investments and deleverage of store payroll and benefits due to wage investments.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The specific SG&A expense as a percent of net sales for FY2023 is not provided in the evidence."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00605",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/zero_shot@1.0",
+      "valid": true,
+      "json_first_try": false,
+      "calls": 2,
+      "latency_s": 9.515,
+      "retries": 0,
+      "tokens": 1885,
+      "findings": 3,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "Ulta Beauty repurchased 722,457 shares of its common stock at a cost of $328.1 million during the fourth quarter of fiscal 2022.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "Ulta Beauty repurchased 2.2 million shares of its common stock at a cost of $900.0 million during fiscal 2022.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "As of January 28, 2023, $1.1 billion remained available under the $2.0 billion share repurchase program announced in March 2022.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The total spend on stock repurchases for FY 2023 is not provided in the evidence."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00606",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/zero_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.355,
+      "retries": 0,
+      "tokens": 928,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "SG&A expenses as a percentage of net sales decreased to 23.5% compared to 23.9% in fiscal 2021.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The question asks about wages expense as a percent of net sales, but the evidence only mentions SG&A expenses as a percentage of net sales."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00678",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/zero_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 3.433,
+      "retries": 0,
+      "tokens": 877,
+      "findings": 2,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "Boeing's gross margin for FY2022 was 3,502 million dollars, compared to 3,017 million dollars in FY2021.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "Boeing's gross margin for FY2022 was 5.25% of total revenues, compared to 4.85% in FY2021.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The document does not provide information on Boeing's gross margin for FY2020."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00685",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/zero_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 5.476,
+      "retries": 0,
+      "tokens": 1110,
+      "findings": 3,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "Best Buy's gross margin for FY2023 was 21.4% (calculated as gross profit of $9,912 million divided by revenue of $46,298 million).",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "Best Buy's gross margin for FY2022 was 22.5% (calculated as gross profit of $11,640 million divided by revenue of $51,761 million).",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "Best Buy's gross margin for FY2021 was 22.3% (calculated as gross profit of $10,573 million divided by revenue of $47,262 million).",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The question requires historical data for more than three fiscal years to determine if gross margins have fluctuated more than roughly 2% each year."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00702",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/zero_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.147,
+      "retries": 0,
+      "tokens": 988,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "In 2019, Pfizer reported a net income attributable to Pfizer Inc. common shareholders of $16,026 million."
+          }
+        ],
+        "gaps": [
+          "There is no evidence in the provided documents indicating any potential events outside of Pfizer's standard business operations that substantially increased net income in 2019."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00070",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/few_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 3.352,
+      "retries": 0,
+      "tokens": 1657,
+      "findings": 2,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "American Water Works had total current assets of $1,250 million and total current liabilities of $2,811 million for FY2022.",
+            "source_ids": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "statement": "Working capital is calculated as current assets minus current liabilities, which would be $1,250 million minus $2,811 million, resulting in a negative working capital of $1,561 million.",
+            "source_ids": [
+              "S1",
+              "S2"
+            ]
+          }
+        ],
+        "gaps": [
+          "The question requires the calculation of working capital, which is not directly provided in the evidence."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00080",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/few_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.7,
+      "retries": 0,
+      "tokens": 1639,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "PayPal's working capital for FY2022 is calculated as current assets minus current liabilities, which is $57,517 million minus $45,101 million, resulting in $12,416 million.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The question asks whether PayPal has positive working capital based on FY2022 data, but the evidence does not explicitly state whether working capital is a useful or relevant metric for this company."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00206",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/few_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.028,
+      "retries": 0,
+      "tokens": 1032,
+      "findings": 0,
+      "cites_ok": false,
+      "gold_hit": null,
+      "output": {
+        "findings": [],
+        "gaps": [
+          "The evidence does not provide historical gross margin data for JPM or any information indicating whether gross margins are a relevant metric for the company."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00216",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/few_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.714,
+      "retries": 0,
+      "tokens": 1370,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "Verizon's quick ratio for FY 2022 is not directly provided in the evidence.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The quick ratio is not directly provided in the evidence, making it impossible to assess Verizon's liquidity profile based on this metric."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00222",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/few_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.857,
+      "retries": 0,
+      "tokens": 1523,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "The quick ratio for AMD in FY2022 is not directly provided in the evidence.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The quick ratio for AMD in FY2022 is not directly provided in the evidence, making it impossible to assess its liquidity profile based on this metric."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00283",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/few_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.065,
+      "retries": 0,
+      "tokens": 937,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": false,
+      "output": {
+        "findings": [
+          {
+            "statement": "Pfizer expects to incur costs of approximately $700 million in connection with separating Upjohn.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The question asks for the amount Pfizer expects to pay to spin off Upjohn in the future, but the evidence only mentions the total expected costs of $700 million, without specifying the future payment amount."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00299",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/few_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.103,
+      "retries": 0,
+      "tokens": 1605,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "In Q1 2021, the Corporate business segment had the lowest net revenue of $473 million.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The evidence does not provide net revenue figures for all business segments in Q1 2021, making it difficult to definitively determine the lowest net revenue segment without additional data."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00302",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/few_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.862,
+      "retries": 0,
+      "tokens": 1138,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "Pfizer's total current assets increased from $35,067 million in FY20 to $59,693 million in FY21.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The question refers to PPNE (probably a typo or misreference for a specific financial metric like Property, Plant, and Equipment or another term), but the evidence provided does not include specific data on PPNE.",
+          "The evidence does not provide a direct measure of PPNE growth between FY20 and FY21."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00382",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/few_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.777,
+      "retries": 0,
+      "tokens": 1230,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "Las Vegas Strip Resorts had the highest EBITDAR contribution for MGM during FY2022 with $3,142,308.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The term 'EBITDAR' is not explicitly defined in the provided evidence."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00394",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/few_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.345,
+      "retries": 0,
+      "tokens": 1638,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "In 2022 Q2, the Consumer & Community Banking segment had a net income of $3,100 million, which was the highest among the segments listed.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The evidence does not provide net income figures for all business segments in 2022 Q2, making it difficult to confirm if there are other segments with higher net income."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00460",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/few_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 3.599,
+      "retries": 0,
+      "tokens": 1347,
+      "findings": 2,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "The number of Best Buy stores increased from 966 at the beginning of Q2 FY2024 to 969 at the end of Q2 FY2024.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "The number of Best Buy stores decreased from 977 at the beginning of Q2 FY2023 to 982 at the end of Q2 FY2023.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The number of Best Buy stores between Q2 FY2024 and FY2023 is not directly stated, but the changes in the number of stores for each period are provided."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00464",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/few_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.713,
+      "retries": 0,
+      "tokens": 879,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "Historically, the airline industry has been cyclical and very competitive, experiencing significant profit swings and constant challenges to be more cost competitive.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The question asks about Boeing's business specifically, but the evidence refers to the airline industry in general."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00476",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/few_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.716,
+      "retries": 0,
+      "tokens": 959,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "As of FY2022, American Express has common shares registered to trade on the New York Stock Exchange under the trading symbol AXP.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The question asks about debt securities, but the evidence only mentions equity securities (common shares)."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00499",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/few_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 4.782,
+      "retries": 0,
+      "tokens": 1916,
+      "findings": 3,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "3M's property, plant, and equipment (PP&E) net was $9,178 million in FY2022, indicating significant capital investment in physical assets.",
+            "source_ids": [
+              "S2"
+            ]
+          },
+          {
+            "statement": "3M spent $1,749 million on purchases of property, plant, and equipment (PP&E) in FY2022, reflecting ongoing capital expenditures.",
+            "source_ids": [
+              "S3"
+            ]
+          },
+          {
+            "statement": "3M's total assets in FY2022 were $46,455 million, with a substantial portion allocated to long-term assets such as property, plant, and equipment, goodwill, and intangible assets.",
+            "source_ids": [
+              "S2"
+            ]
+          }
+        ],
+        "gaps": [
+          "The question asks whether 3M is a capital-intensive business, but the evidence does not explicitly state this or provide a direct definition of capital-intensive in the context of 3M's operations."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00517",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/few_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.794,
+      "retries": 0,
+      "tokens": 1116,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "In FY2022, Commercial Airplanes represented $25,867 million in revenue, Defense, Space & Security represented $23,162 million in revenue, and Global Services represented $17,611 million in revenue.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The question asks for product categories or service categories that represent more than 20% of Boeing's revenue for FY2022, but the evidence does not provide the percentage of revenue for each category."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00540",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/few_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 3.514,
+      "retries": 0,
+      "tokens": 1350,
+      "findings": 2,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "AES Corporation's inventory at the end of FY2022 was $1,055 million, compared to $604 million at the end of FY2021.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "AES Corporation's cost of sales for FY2022 was $10,069 million, compared to $8,430 million for FY2021.",
+            "source_ids": [
+              "S2"
+            ]
+          }
+        ],
+        "gaps": [
+          "The inventory turnover ratio for FY2022 is not directly provided in the evidence."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00563",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/few_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.552,
+      "retries": 0,
+      "tokens": 1053,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "In FY22, excluding Embedded, the Data Center segment had the highest proportional increase in sales compared to FY21.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The exact proportional increase for each segment is not provided in the evidence."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00566",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/few_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.506,
+      "retries": 0,
+      "tokens": 1502,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "Verizon's total debt at December 31, 2022, was $150,639, compared to $150,868 at December 31, 2021.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The evidence does not provide information about the exact debt levels for the 2021 fiscal period in relation to the 2022 fiscal period."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00585",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/few_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.418,
+      "retries": 0,
+      "tokens": 1304,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "Boeing's effective tax rate in FY2022 was -0.9% compared to 12.1% in FY2021.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00601",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/few_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.457,
+      "retries": 0,
+      "tokens": 1256,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "SG&A expenses as a percentage of net sales decreased to 23.5% in FY2023 compared to 23.9% in FY2022, primarily due to lower marketing expenses and leverage of incentive compensation due to higher sales.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The question asks about FY2023, but the evidence discusses FY2022 and FY2021."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00605",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/few_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.286,
+      "retries": 0,
+      "tokens": 978,
+      "findings": 0,
+      "cites_ok": false,
+      "gold_hit": null,
+      "output": {
+        "findings": [],
+        "gaps": [
+          "The evidence does not provide information about Ulta Beauty's total spend on stock repurchases for FY 2023 or the amount spent in Q4 of FY 2023."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00606",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/few_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.256,
+      "retries": 0,
+      "tokens": 1249,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "In FY2023, Ulta Beauty's SG&A expenses as a percentage of net sales decreased to 23.5% compared to 23.9% in FY2022.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The question asks about wages expense as a percent of net sales, but the evidence only mentions SG&A expenses as a percent of net sales."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00678",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/few_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 3.036,
+      "retries": 0,
+      "tokens": 1184,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "Boeing's gross margin for FY2022 was 3,502 million, compared to 3,017 million in FY2021 and (5,685) million in FY2020.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The question asks whether Boeing has an improving gross margin profile as of FY2022, but the evidence does not provide a clear trend or analysis of the gross margin profile over time.",
+          "The evidence does not explain whether gross margin is a useful metric for Boeing or not."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00685",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/few_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 5.108,
+      "retries": 0,
+      "tokens": 1418,
+      "findings": 3,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "findings": [
+          {
+            "statement": "In FY2023, Best Buy's gross margin was 21.4% (calculated as gross profit of $9,912 million divided by revenue of $46,298 million).",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "In FY2022, Best Buy's gross margin was 22.5% (calculated as gross profit of $11,640 million divided by revenue of $51,761 million).",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "In FY2021, Best Buy's gross margin was 22.3% (calculated as gross profit of $10,573 million divided by revenue of $47,262 million).",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The question requires historical data for more than three fiscal years to determine if gross margins are historically consistent (not fluctuating more than roughly 2% each year)."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00702",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/few_shot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.07,
+      "retries": 0,
+      "tokens": 1264,
+      "findings": 0,
+      "cites_ok": false,
+      "gold_hit": null,
+      "output": {
+        "findings": [],
+        "gaps": [
+          "The evidence does not provide information about potential events outside of Pfizer's standard business operations that substantially increased net income in 2019."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00070",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/cot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 7.214,
+      "retries": 0,
+      "tokens": 1585,
+      "findings": 2,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "reasoning": [
+          "The question asks whether American Water Works has positive working capital based on FY2022 data.",
+          "Working capital is calculated as current assets minus current liabilities. The evidence provides current assets and current liabilities for FY2022.",
+          "The current assets for FY2022 are listed as $1,250 million, and the current liabilities are listed as $2,811 million.",
+          "The difference between current assets and current liabilities is $1,250 million - $2,811 million = -$1,561 million, which is negative.",
+          "The evidence does not provide any information about the relevance or usefulness of the working capital metric for American Water Works."
+        ],
+        "findings": [
+          {
+            "statement": "American Water Works had current assets of $1,250 million and current liabilities of $2,811 million for FY2022.",
+            "source_ids": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "statement": "The working capital for American Water Works for FY2022 is negative, calculated as $1,250 million - $2,811 million = -$1,561 million.",
+            "source_ids": [
+              "S1",
+              "S2"
+            ]
+          }
+        ],
+        "gaps": [
+          "The evidence does not provide any information about the relevance or usefulness of the working capital metric for American Water Works."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00080",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/cot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 5.023,
+      "retries": 0,
+      "tokens": 1497,
+      "findings": 2,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "reasoning": [
+          "The question asks whether PayPal has positive working capital based on FY2022 data.",
+          "Working capital is calculated as current assets minus current liabilities.",
+          "The evidence provides current assets and current liabilities for FY2022.",
+          "The current assets for FY2022 are $57,517 million, and the current liabilities are $45,101 million.",
+          "The calculation of working capital is needed to determine if it is positive."
+        ],
+        "findings": [
+          {
+            "statement": "PayPal's current assets for FY2022 are $57,517 million.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "PayPal's current liabilities for FY2022 are $45,101 million.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The calculation of working capital is not provided in the evidence."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00206",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/cot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 4.501,
+      "retries": 0,
+      "tokens": 943,
+      "findings": 0,
+      "cites_ok": false,
+      "gold_hit": null,
+      "output": {
+        "reasoning": [
+          "The question asks whether JPM's gross margins have historically been consistent, fluctuating no more than roughly 2% each year.",
+          "The provided evidence does not include any data on JPM's gross margins or historical fluctuations in this metric.",
+          "The evidence provided is an overview of JPM's operations and financial standing as of December 31, 2022, but it does not contain any specific information about gross margins or their historical trends.",
+          "Since the question requires data on gross margins and their historical consistency, and the evidence does not provide this information, it is not possible to answer the question based on the given evidence.",
+          "The evidence does not indicate whether gross margins are a relevant metric for JPM or not."
+        ],
+        "findings": [],
+        "gaps": [
+          "The evidence does not provide any data on JPM's gross margins or their historical fluctuations."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00216",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/cot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 6.178,
+      "retries": 0,
+      "tokens": 1326,
+      "findings": 3,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "reasoning": [
+          "The question asks about Verizon's liquidity profile based on its quick ratio for FY 2022.",
+          "The quick ratio is calculated as (Cash and Cash Equivalents + Accounts Receivable) / Current Liabilities.",
+          "The evidence provides the values for Cash and Cash Equivalents and Accounts Receivable for FY 2022.",
+          "The evidence also provides the value for Current Liabilities for FY 2022.",
+          "The quick ratio can be calculated using the provided values."
+        ],
+        "findings": [
+          {
+            "statement": "Verizon's Cash and Cash Equivalents for FY 2022 were $2,605 million.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "Verizon's Accounts Receivable, net for FY 2022 were $24,506 million.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "Verizon's Current Liabilities for FY 2022 were $50,171 million.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The quick ratio is not explicitly calculated in the evidence."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00222",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/cot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 5.649,
+      "retries": 0,
+      "tokens": 1448,
+      "findings": 3,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "reasoning": [
+          "The question asks about AMD's liquidity profile based on its quick ratio for FY22.",
+          "The quick ratio is calculated as (Cash and Cash Equivalents + Short-term Investments) / Current Liabilities.",
+          "The evidence provides the values for Cash and Cash Equivalents and Short-term Investments for FY22.",
+          "The evidence also provides the value for Current Liabilities for FY22.",
+          "The quick ratio can be calculated using the provided values."
+        ],
+        "findings": [
+          {
+            "statement": "AMD's Cash and Cash Equivalents for FY22 were $4,835 million.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "AMD's Short-term Investments for FY22 were $1,020 million.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "AMD's Current Liabilities for FY22 were $6,369 million.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The quick ratio is not explicitly calculated in the evidence."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00283",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/cot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 4.916,
+      "retries": 0,
+      "tokens": 820,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": false,
+      "output": {
+        "reasoning": [
+          "The question asks about the expected amount Pfizer will pay to spin off Upjohn in the future in USD million.",
+          "The evidence from source S1 mentions that Pfizer expects to incur costs of approximately $700 million in connection with separating Upjohn.",
+          "The source indicates that these costs include expenses related to the separation of legal entities and transaction costs.",
+          "The evidence does not specify the exact future payment amount, only the total expected costs.",
+          "The source does not provide a breakdown of the $700 million into future payments, so the exact amount for future payments cannot be determined."
+        ],
+        "findings": [
+          {
+            "statement": "Pfizer expects to incur costs of approximately $700 million in connection with separating Upjohn.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The evidence does not specify the exact amount Pfizer expects to pay to spin off Upjohn in the future, only the total expected costs."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00299",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/cot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 8.677,
+      "retries": 0,
+      "tokens": 1657,
+      "findings": 5,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "reasoning": [
+          "The question asks for the business segment with the lowest net revenue in 2021 Q1 for JPM.",
+          "The evidence provided includes a table with net revenue figures for different segments for 2021 Q1.",
+          "The segments listed are Consumer & Community Banking, Corporate & Investment Bank, Commercial Banking, Asset & Wealth Management, and Corporate.",
+          "The net revenue for each segment in 2021 Q1 is provided in the table.",
+          "The segment with the lowest net revenue is identified by comparing the figures."
+        ],
+        "findings": [
+          {
+            "statement": "The Consumer & Community Banking segment had a net revenue of $12,517 million in 2021 Q1.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "The Corporate & Investment Bank segment had a net revenue of $14,605 million in 2021 Q1.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "The Commercial Banking segment had a net revenue of $2,393 million in 2021 Q1.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "The Asset & Wealth Management segment had a net revenue of $4,077 million in 2021 Q1.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "The Corporate segment had a net revenue of $33,119 million in 2021 Q1.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The evidence does not provide the net revenue for all segments in 2021 Q1."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00302",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/cot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 4.657,
+      "retries": 0,
+      "tokens": 972,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "reasoning": [
+          "The question asks whether Pfizer grew its PPNE (Property, Plant, and Equipment) between FY20 and FY21.",
+          "The evidence provides data for Property, Plant, and Equipment (PPNE) for FY20 and FY21.",
+          "The PPNE value for FY20 is $13,745 million, and for FY21 it is $14,882 million.",
+          "The PPNE increased from FY20 to FY21, indicating growth.",
+          "No conflicting data or gaps are identified in the evidence."
+        ],
+        "findings": [
+          {
+            "statement": "Pfizer's Property, Plant, and Equipment (PPNE) increased from $13,745 million in FY20 to $14,882 million in FY21.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00382",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/cot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 6.767,
+      "retries": 0,
+      "tokens": 1210,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "reasoning": [
+          "The question asks for the region with the highest EBITDAR contribution for MGM during FY2022.",
+          "The evidence provided includes EBITDAR figures for different regions for FY2022.",
+          "The EBITDAR figures for the regions are: Las Vegas Strip Resorts ($877,052), Regional Operations ($319,517), MGM China ($-54,979), Unconsolidated affiliates ($-43,029), Management and other operations ($-3,037), Stock compensation ($-25,159), and Corporate ($-113,058).",
+          "Las Vegas Strip Resorts has the highest EBITDAR contribution among the listed regions.",
+          "The evidence does not provide EBITDAR figures for all regions, so it is not possible to confirm if there are other regions with higher contributions."
+        ],
+        "findings": [
+          {
+            "statement": "Las Vegas Strip Resorts had the highest EBITDAR contribution for MGM during FY2022 with $877,052.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The evidence does not provide EBITDAR figures for all regions, so it is not possible to confirm if there are other regions with higher contributions."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00394",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/cot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 5.154,
+      "retries": 0,
+      "tokens": 1518,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "reasoning": [
+          "The question asks for the business segment with the highest net income in 2022 Q2 for JPM.",
+          "The evidence provides net income figures for each segment in 2022 Q2.",
+          "The net income for each segment is listed as follows: Consumer & Community Banking: $3,100 million, Corporate & Investment Bank: $3,725 million, Commercial Banking: $994 million, Asset & Wealth Management: $1,004 million, and Corporate: $(174) million.",
+          "The highest net income among these segments is $3,725 million for the Corporate & Investment Bank.",
+          "No conflicting figures or gaps are identified in the evidence."
+        ],
+        "findings": [
+          {
+            "statement": "In 2022 Q2, the Corporate & Investment Bank segment had the highest net income of $3,725 million.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00460",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/cot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 6.355,
+      "retries": 0,
+      "tokens": 1225,
+      "findings": 2,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "reasoning": [
+          "The question asks about the change in the number of Best Buy stores between Q2 of FY2024 and FY2023.",
+          "The evidence from source S1 provides the number of stores at the beginning and end of the second quarter for both FY2024 and FY2023.",
+          "The total number of stores at the end of the second quarter for FY2024 is 969, and for FY2023 it is 982.",
+          "The difference between these numbers indicates a change in the number of stores.",
+          "The evidence does not provide any other information about store changes or additional details."
+        ],
+        "findings": [
+          {
+            "statement": "The total number of Best Buy stores at the end of the second quarter of FY2024 was 969.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "The total number of Best Buy stores at the end of the second quarter of FY2023 was 982.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The evidence does not provide the exact number of stores opened or closed during the period, which could help understand the change in detail."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00464",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/cot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 5.022,
+      "retries": 0,
+      "tokens": 783,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "reasoning": [
+          "The question asks whether Boeing's business is subject to cyclicality.",
+          "The evidence from S1 mentions that the airline industry has been cyclical and very competitive, experiencing significant profit swings and constant challenges to be more cost competitive.",
+          "The statement from S1 directly addresses the cyclical nature of the airline industry, which is a key part of Boeing's business.",
+          "There is no conflicting information or other evidence provided to challenge this statement.",
+          "The evidence does not provide any additional information about Boeing's business specifically, only the general nature of the airline industry."
+        ],
+        "findings": [
+          {
+            "statement": "The airline industry, which is a key part of Boeing's business, has historically been cyclical and very competitive, experiencing significant profit swings and constant challenges to be more cost competitive.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The evidence does not specifically address whether Boeing's business is subject to cyclicality beyond the general nature of the airline industry."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00476",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/cot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 4.877,
+      "retries": 0,
+      "tokens": 856,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "reasoning": [
+          "The question asks about debt securities registered under American Express' name as of 2022.",
+          "The provided evidence from the 10-K filing for FY2022 lists common shares registered under the name 'Common Shares (par value $0.20 per Share)' with the trading symbol 'AXP' on the New York Stock Exchange.",
+          "The evidence does not mention any debt securities specifically.",
+          "The evidence only includes equity securities (common shares) and not debt securities.",
+          "There is no information about debt securities registered under American Express' name in the provided evidence."
+        ],
+        "findings": [
+          {
+            "statement": "The evidence does not mention any debt securities registered under American Express' name as of 2022.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The evidence does not provide information about debt securities registered under American Express' name as of 2022."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00499",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/cot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 8.733,
+      "retries": 0,
+      "tokens": 1848,
+      "findings": 4,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "reasoning": [
+          "The question asks whether 3M is a capital-intensive business based on FY2022 data. To determine this, we need to analyze the company's capital structure and investment in assets.",
+          "We examine the balance sheet to identify the proportion of assets that are fixed, such as property, plant, and equipment (PP&E), and operating lease right of use assets.",
+          "We also look at the cash flows from investing activities to assess the company's investment in PP&E, which is a key indicator of capital intensity.",
+          "We check the income statement for depreciation and amortization, which can indicate the level of capital investment.",
+          "We ensure that the data is from the correct period (FY2022) and that we are using GAAP figures."
+        ],
+        "findings": [
+          {
+            "statement": "3M's property, plant, and equipment (PP&E) net was $9,178 million in FY2022.",
+            "source_ids": [
+              "S2"
+            ]
+          },
+          {
+            "statement": "3M's operating lease right of use assets were $829 million in FY2022.",
+            "source_ids": [
+              "S2"
+            ]
+          },
+          {
+            "statement": "3M's purchases of property, plant, and equipment (PP&E) were $1,749 million in FY2022.",
+            "source_ids": [
+              "S3"
+            ]
+          },
+          {
+            "statement": "3M's depreciation and amortization expense was $1,831 million in FY2022.",
+            "source_ids": [
+              "S3"
+            ]
+          }
+        ],
+        "gaps": [
+          "The question requires an analysis of the proportion of fixed assets to total assets, which is not directly provided in the evidence."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00517",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/cot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 8.265,
+      "retries": 0,
+      "tokens": 1119,
+      "findings": 5,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "reasoning": [
+          "The question asks about product or service categories that represent more than 20% of Boeing's revenue for FY2022.",
+          "The evidence provides revenue data for Boeing's business segments for FY2022.",
+          "The total revenue for FY2022 is $66,608 million.",
+          "The revenue for each segment is calculated as a percentage of total revenue to determine if it exceeds 20%.",
+          "The findings are based on the provided revenue data and the total revenue for FY2022."
+        ],
+        "findings": [
+          {
+            "statement": "The Commercial Airplanes segment represented 38.8% of Boeing's revenue for FY2022.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "The Defense, Space & Security segment represented 34.8% of Boeing's revenue for FY2022.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "The Global Services segment represented 26.4% of Boeing's revenue for FY2022.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "The Boeing Capital segment represented 0.3% of Boeing's revenue for FY2022.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "The Unallocated items, eliminations and other segment represented -0.3% of Boeing's revenue for FY2022.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The evidence does not provide any additional details about the specific product or service categories within each segment."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00540",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/cot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 6.144,
+      "retries": 0,
+      "tokens": 1222,
+      "findings": 2,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "reasoning": [
+          "The question asks for the inventory turnover ratio for FY2022, which is calculated as the cost of goods sold (COGS) divided by the average inventory.",
+          "The COGS for FY2022 is provided in the Consolidated Statements of Operations as $10,069 million.",
+          "The inventory for FY2022 is provided in the Consolidated Balance Sheets as $1,055 million.",
+          "The inventory turnover ratio is calculated using the COGS and the inventory for FY2022.",
+          "The evidence does not provide the inventory for FY2021, which is needed to calculate the average inventory."
+        ],
+        "findings": [
+          {
+            "statement": "The cost of goods sold (COGS) for FY2022 is $10,069 million.",
+            "source_ids": [
+              "S2"
+            ]
+          },
+          {
+            "statement": "The inventory for FY2022 is $1,055 million.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The inventory for FY2021 is not provided, which is needed to calculate the average inventory for the inventory turnover ratio."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00563",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/cot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 7.724,
+      "retries": 0,
+      "tokens": 1088,
+      "findings": 3,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "reasoning": [
+          "The question asks for the segment in AMD's reporting where sales proportionally increased the most from FY21 to FY22, excluding Embedded.",
+          "The evidence provides net revenue figures for FY21 and FY22 for the Data Center, Client, Gaming, and Embedded segments.",
+          "The Embedded segment is excluded as per the question, so we focus on Data Center, Client, and Gaming.",
+          "We calculate the percentage change in sales for each of these segments from FY21 to FY22.",
+          "We identify the segment with the highest proportional increase."
+        ],
+        "findings": [
+          {
+            "statement": "From FY21 to FY22, the Data Center segment's sales increased by 63.5% (from $3,694 million to $6,043 million).",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "From FY21 to FY22, the Client segment's sales decreased by 10.0% (from $6,887 million to $6,201 million).",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "From FY21 to FY22, the Gaming segment's sales increased by 21.4% (from $5,607 million to $6,805 million).",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The question requires the proportional increase in sales for each segment, which is calculated based on the provided figures."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00566",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/cot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 5.515,
+      "retries": 0,
+      "tokens": 1391,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "reasoning": [
+          "The question asks whether Verizon increased its debt on balance sheet between 2022 and the 2021 fiscal period.",
+          "The evidence provides total debt figures for FY2022 and FY2021, which are $150,639 and $150,868 respectively.",
+          "The total debt for FY2022 is less than the total debt for FY2021, indicating a decrease in debt.",
+          "The evidence does not provide any other relevant information about debt changes between these periods.",
+          "The question is about whether debt increased, but the evidence shows a decrease."
+        ],
+        "findings": [
+          {
+            "statement": "Verizon's total debt decreased from $150,868 in FY2021 to $150,639 in FY2022.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The evidence does not provide any additional details about the composition of the debt or the reasons for the change in debt."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00585",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/cot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 8.145,
+      "retries": 0,
+      "tokens": 1364,
+      "findings": 4,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "reasoning": [
+          "The question asks for a comparison of Boeing's effective tax rate in FY2022 and FY2021.",
+          "The effective tax rate is calculated as the income tax (expense)/benefit divided by the loss before income taxes.",
+          "From the evidence, the income tax (expense)/benefit for FY2022 is $-31 million and for FY2021 is $743 million.",
+          "The loss before income taxes for FY2022 is $-5,022 million and for FY2021 is $-5,033 million.",
+          "The effective tax rate for each year can be calculated using the provided figures."
+        ],
+        "findings": [
+          {
+            "statement": "Boeing's income tax (expense)/benefit for FY2022 was $-31 million.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "Boeing's loss before income taxes for FY2022 was $-5,022 million.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "Boeing's income tax (expense)/benefit for FY2021 was $743 million.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "Boeing's loss before income taxes for FY2021 was $-5,033 million.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The effective tax rate for FY2022 and FY2021 is not explicitly stated in the evidence."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00601",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/cot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 9.059,
+      "retries": 0,
+      "tokens": 1310,
+      "findings": 2,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "reasoning": [
+          "The question asks about the factors that drove the reduction in SG&A expense as a percentage of net sales in FY2023.",
+          "The evidence provided is for FY2022, not FY2023, so it does not directly answer the question.",
+          "The evidence mentions that SG&A expenses as a percentage of net sales decreased to 23.5% in FY2022 compared to 23.9% in FY2021, primarily due to lower marketing expenses and leverage of incentive compensation due to higher sales.",
+          "The evidence also notes that this decrease was partially offset by deleverage of corporate overhead due to strategic investments and deleverage of store payroll and benefits due to wage investments.",
+          "Since the evidence is for FY2022 and not FY2023, there is no direct information about the factors that drove the reduction in SG&A expense as a percentage of net sales in FY2023."
+        ],
+        "findings": [
+          {
+            "statement": "SG&A expenses as a percentage of net sales decreased to 23.5% in FY2022 compared to 23.9% in FY2021, primarily due to lower marketing expenses and leverage of incentive compensation due to higher sales.",
+            "source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "statement": "The decrease in SG&A expenses as a percentage of net sales was partially offset by deleverage of corporate overhead due to strategic investments and deleverage of store payroll and benefits due to wage investments.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The evidence provided is for FY2022, not FY2023, so there is no direct information about the factors that drove the reduction in SG&A expense as a percentage of net sales in FY2023."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00605",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/cot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 4.996,
+      "retries": 0,
+      "tokens": 900,
+      "findings": 0,
+      "cites_ok": false,
+      "gold_hit": null,
+      "output": {
+        "reasoning": [
+          "The question asks for the percentage of Ulta Beauty's total stock repurchase spend in FY 2023 that occurred in Q4 of FY 2023.",
+          "The provided evidence (S1) discusses stock repurchase activity in fiscal 2022 and mentions the remaining balance under the share repurchase program as of January 28, 2023.",
+          "However, the evidence does not provide any information about stock repurchase activity in FY 2023 or the total spend for that fiscal year.",
+          "Therefore, the question cannot be answered with the given evidence.",
+          "The evidence is focused on fiscal 2022 and does not include any data for FY 2023."
+        ],
+        "findings": [],
+        "gaps": [
+          "The evidence does not provide any data about Ulta Beauty's total stock repurchase spend for FY 2023 or the amount spent in Q4 of FY 2023."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00606",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/cot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 4.504,
+      "retries": 0,
+      "tokens": 1103,
+      "findings": 0,
+      "cites_ok": false,
+      "gold_hit": null,
+      "output": {
+        "reasoning": [
+          "The question asks about the change in Ulta Beauty's wages expense as a percentage of net sales in FY2023.",
+          "The provided evidence discusses SG&A expenses as a percentage of net sales for FY2023, but it does not specifically mention wages expense.",
+          "The evidence states that SG&A expenses as a percentage of net sales decreased to 23.5% compared to 23.9% in fiscal 2021, but this is not directly related to wages expense.",
+          "There is no specific information about wages expense as a percentage of net sales for FY2023 in the provided evidence.",
+          "The evidence does not provide the required data to answer the question."
+        ],
+        "findings": [],
+        "gaps": [
+          "The evidence does not provide the wages expense as a percentage of net sales for FY2023."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00678",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/cot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 6.378,
+      "retries": 0,
+      "tokens": 1089,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "reasoning": [
+          "The question asks whether Boeing has an improving gross margin profile as of FY2022 and whether gross margin is a useful metric for the company.",
+          "The evidence provided includes Boeing's Consolidated Statements of Operations for FY2022, FY2021, and FY2020, which include total revenues and total costs and expenses.",
+          "Gross margin is calculated as (Total Revenues - Cost of Products - Cost of Services) / Total Revenues. The evidence provides the necessary data to calculate gross margin for each year.",
+          "The evidence does not provide any direct commentary from management on the usefulness of gross margin as a metric for Boeing.",
+          "The evidence does not provide any forward-looking guidance or analysis on the company's gross margin profile."
+        ],
+        "findings": [
+          {
+            "statement": "Boeing's gross margin for FY2022 was 3,502 million, which is higher than the 3,017 million in FY2021 and higher than the -5,685 million in FY2020.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The evidence does not provide any direct commentary from management on the usefulness of gross margin as a metric for Boeing."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00685",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/cot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 6.659,
+      "retries": 0,
+      "tokens": 1241,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "reasoning": [
+          "The question asks whether Best Buy's gross margins have been historically consistent, fluctuating no more than roughly 2% each year.",
+          "The provided evidence includes Best Buy's consolidated statements of earnings for FY2023, FY2022, and FY2021, which include revenue, cost of sales, and gross profit figures.",
+          "To calculate gross margin, we need to divide gross profit by revenue and express it as a percentage.",
+          "The evidence provides the necessary figures for FY2023, FY2022, and FY2021, but does not provide the gross margin percentages for these periods.",
+          "The evidence does not provide a historical trend of gross margins, so we cannot determine if they have been consistent or fluctuated more than 2% annually."
+        ],
+        "findings": [
+          {
+            "statement": "The evidence provides gross profit and revenue figures for FY2023, FY2022, and FY2021, but does not include the gross margin percentages for these periods.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The evidence does not provide the gross margin percentages for FY2023, FY2022, and FY2021, which are necessary to determine if they have been historically consistent."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00702",
+      "case": "analyze",
+      "prompt_id": "analyze_financial_report/cot@1.0",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 5.657,
+      "retries": 0,
+      "tokens": 1226,
+      "findings": 1,
+      "cites_ok": true,
+      "gold_hit": null,
+      "output": {
+        "reasoning": [
+          "The question asks if there were any potential events not in Pfizer's standard business operations that substantially increased net income in 2019.",
+          "The provided evidence includes financial data for 2019, 2020, and 2021, including net income and various expenses.",
+          "The data shows a significant drop in net income from 2019 to 2020, but no specific information about non-standard events is provided.",
+          "The evidence does not include details about one-time events or extraordinary items that could have affected net income in 2019.",
+          "Therefore, the findings are based on the available data, which does not provide sufficient information to answer the question."
+        ],
+        "findings": [
+          {
+            "statement": "Net income attributable to Pfizer Inc. common shareholders in 2019 was $16,026 million.",
+            "source_ids": [
+              "S1"
+            ]
+          }
+        ],
+        "gaps": [
+          "The evidence does not provide information about any non-standard events or extraordinary items that may have affected net income in 2019."
+        ],
+        "conflicts": []
+      },
+      "error": null
+    }
+  ],
+  "n_items": 25
+}

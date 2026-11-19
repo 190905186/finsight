@@ -1,0 +1,2617 @@
+{
+  "prompt_set": "2026.11.3",
+  "node": "verify_answer",
+  "techniques": {
+    "zero_shot": {
+      "cases": 34,
+      "valid": 1.0,
+      "json_first_try": 1.0,
+      "p50_latency_s": 1.716,
+      "avg_tokens": 1866.2941176470588,
+      "accuracy": 0.7058823529411765,
+      "catches_planted": 0.9375,
+      "passes_correct": 0.5
+    },
+    "few_shot": {
+      "cases": 34,
+      "valid": 1.0,
+      "json_first_try": 1.0,
+      "p50_latency_s": 1.4625,
+      "avg_tokens": 2276.794117647059,
+      "accuracy": 0.6470588235294118,
+      "catches_planted": 1.0,
+      "passes_correct": 0.3333333333333333
+    },
+    "cot": {
+      "cases": 34,
+      "valid": 1.0,
+      "json_first_try": 1.0,
+      "p50_latency_s": 2.0905,
+      "avg_tokens": 1914.0,
+      "accuracy": 0.6764705882352942,
+      "catches_planted": 0.75,
+      "passes_correct": 0.6111111111111112
+    }
+  },
+  "rows": [
+    {
+      "question_id": "financebench_id_01319",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.453,
+      "retries": 0,
+      "tokens": 1346,
+      "draft": "correct",
+      "verdict": "pass",
+      "right": true,
+      "number_issue": null,
+      "output": {
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_02119",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.383,
+      "retries": 0,
+      "tokens": 855,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "unsupported_claim",
+            "detail": "The evidence does not support the claim that shareholders would receive $66.56 per share in the event of bankruptcy. The cited evidence only mentions TBVPS (tangible book value per share) at the end of 2021 Q1, which is not indicative of shareholder payout in a bankruptcy scenario."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_02119",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.903,
+      "retries": 0,
+      "tokens": 833,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "unsupported_claim",
+            "detail": "The evidence does not support the claim that shareholders could receive $71.22 per share. The evidence only mentions TBVPS ending at $66.56, but does not provide any information about liquidation proceeds or shareholder distributions in the event of bankruptcy."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03531",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.424,
+      "retries": 0,
+      "tokens": 1276,
+      "draft": "correct",
+      "verdict": "pass",
+      "right": true,
+      "number_issue": null,
+      "output": {
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03531",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.785,
+      "retries": 0,
+      "tokens": 1340,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "The total current assets for FY2019 according to the evidence is $16,525 million, not $17,681.75."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03620",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.82,
+      "retries": 0,
+      "tokens": 2173,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "unsupported_claim",
+            "detail": "The value $9068.00 is not supported by the evidence. The evidence does not provide the necessary data to calculate the FY2022 unadjusted EBITDA less capex for PepsiCo."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03620",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.714,
+      "retries": 0,
+      "tokens": 2173,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "unsupported_claim",
+            "detail": "The value $9702.76 is not supported by the evidence. The evidence does not provide the necessary data to calculate the FY2022 unadjusted EBITDA less capex for PepsiCo."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03856",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 4.397,
+      "retries": 0,
+      "tokens": 3165,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "unsupported_claim",
+            "detail": "The evidence does not provide the operating cash flow ratio. The operating cash flow ratio requires cash from operations (from the cash flow statement) and total current liabilities (from the balance sheet). The evidence provides cash from operations as $2,912,853 (in thousands) and total current liabilities as $3,527,457 (in thousands). The correct calculation is 2,912,853 / 3,527,457 = 0.8253, which rounds to 0.83. However, the claim is unsupported as it does not explicitly cite the correct source for the cash from operations and total current liabilities."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03856",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.505,
+      "retries": 0,
+      "tokens": 3088,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "unsupported_claim",
+            "detail": "The evidence does not provide the operating cash flow ratio. The operating cash flow ratio requires cash from operations (from the cash flow statement) and total current liabilities (from the balance sheet). The evidence provides total current liabilities ($3,527,457) but does not provide cash from operations for FY2017."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03882",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.458,
+      "retries": 0,
+      "tokens": 1591,
+      "draft": "correct",
+      "verdict": "pass",
+      "right": true,
+      "number_issue": null,
+      "output": {
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03882",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.921,
+      "retries": 0,
+      "tokens": 1661,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "The value $1729.12 is not present in the evidence. The correct value for FY2020 net trade receivables is $1,615.9 million."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04103",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.882,
+      "retries": 0,
+      "tokens": 2364,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "unsupported_claim",
+            "detail": "The evidence does not provide the necessary data to calculate the cash conversion cycle (CCC). The required line items such as average inventory, average accounts receivable, average accounts payable, COGS, and revenue are not provided in the evidence."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04103",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.767,
+      "retries": 0,
+      "tokens": 2364,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": false,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "incomplete",
+            "detail": "The answer does not provide the calculation steps or explanation for the cash conversion cycle (CCC) based on the given formula and the required line items from the financial statements. The answer only provides a numerical value without supporting evidence or calculation details."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04171",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.645,
+      "retries": 0,
+      "tokens": 1695,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "The value in the evidence is $302,578 (in thousands), which is $302.58 million, not $303.00."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04171",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.675,
+      "retries": 0,
+      "tokens": 1699,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "The value $324.21 does not match the reported accounts payable of $302,578 (in thousands). The correct value is $302.58 million."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04209",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.371,
+      "retries": 0,
+      "tokens": 1424,
+      "draft": "correct",
+      "verdict": "pass",
+      "right": true,
+      "number_issue": null,
+      "output": {
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04209",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.94,
+      "retries": 0,
+      "tokens": 1498,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "The total assets at the end of FY2021 are $59,268 million, not $63,416.76. The correct value is found in the evidence."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04254",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 3.501,
+      "retries": 0,
+      "tokens": 2446,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "The value $1832.00 is not supported by the evidence. The correct value for FY2021 unadjusted operating income + depreciation and amortization from the cash flow statement (unadjusted EBITDA) is not directly provided in the evidence. The operating income from the income statement is $1,196 million, and depreciation and amortization is $636 million. Adding these together gives $1,832 million, which matches the draft answer, but the source citation is incorrect as the cash flow statement does not provide this figure directly."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04254",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.652,
+      "retries": 0,
+      "tokens": 2368,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "The value $1960.24 is not present in the evidence. The correct value from the income statement for FY2021 operating income is $1,196 million."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04672",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.392,
+      "retries": 0,
+      "tokens": 1572,
+      "draft": "correct",
+      "verdict": "pass",
+      "right": true,
+      "number_issue": null,
+      "output": {
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04672",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.325,
+      "retries": 0,
+      "tokens": 1572,
+      "draft": "planted",
+      "verdict": "pass",
+      "right": false,
+      "number_issue": false,
+      "output": {
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04700",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.364,
+      "retries": 0,
+      "tokens": 1354,
+      "draft": "correct",
+      "verdict": "pass",
+      "right": true,
+      "number_issue": null,
+      "output": {
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04700",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.704,
+      "retries": 0,
+      "tokens": 1417,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "The value $35074.60 does not match the reported COGS of $32,780 million in the evidence. The correct value is $32,780 million."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04980",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.381,
+      "retries": 0,
+      "tokens": 1450,
+      "draft": "correct",
+      "verdict": "pass",
+      "right": true,
+      "number_issue": null,
+      "output": {
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04980",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.661,
+      "retries": 0,
+      "tokens": 1511,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "The capital expenditure amount for FY2021 is listed as $4,625 million in the evidence, which is $4.625 billion, not $4.92 billion."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_05718",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.844,
+      "retries": 0,
+      "tokens": 1776,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "unsupported_claim",
+            "detail": "The evidence does not provide the exact amount of cash dividends paid out in FY2020. The value of $0.40 is not supported by the provided evidence."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_05718",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.033,
+      "retries": 0,
+      "tokens": 1788,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "unsupported_claim",
+            "detail": "The evidence does not support the claim of $0.43. The dividends paid in the statement of cash flows for FY2020 are listed as $389 million, which is $0.389 billion."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_06741",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.741,
+      "retries": 0,
+      "tokens": 2493,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "unsupported_claim",
+            "detail": "The answer '6.2%' is not supported by the evidence provided. The evidence does not contain the necessary data to calculate the 3-year average unadjusted EBITDA % margin for Walmart."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_06741",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.592,
+      "retries": 0,
+      "tokens": 2492,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "unsupported_claim",
+            "detail": "The answer '6.6%' is not supported by the evidence. The evidence does not provide the necessary data to calculate the 3-year average unadjusted EBITDA % margin for Walmart."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_07661",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.442,
+      "retries": 0,
+      "tokens": 2249,
+      "draft": "correct",
+      "verdict": "pass",
+      "right": true,
+      "number_issue": null,
+      "output": {
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_07661",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.718,
+      "retries": 0,
+      "tokens": 2312,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "The cash flow from operating activities for FY2020 is $381,603 thousand, which is $381.60 million, not $408.74 million."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_10285",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.378,
+      "retries": 0,
+      "tokens": 1498,
+      "draft": "correct",
+      "verdict": "pass",
+      "right": true,
+      "number_issue": null,
+      "output": {
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_10285",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.811,
+      "retries": 0,
+      "tokens": 1566,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "The value provided in the answer ($13530.15) does not match the value in the evidence ($12,645). The correct value is $12,645 as stated in the evidence."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_10420",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.999,
+      "retries": 0,
+      "tokens": 3045,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "unsupported_claim",
+            "detail": "The ROA calculation requires net income and average total assets, which are not provided in the evidence. The answer cites S1 but does not provide the necessary data to compute ROA."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_01319",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.403,
+      "retries": 0,
+      "tokens": 1766,
+      "draft": "correct",
+      "verdict": "pass",
+      "right": true,
+      "number_issue": null,
+      "output": {
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_02119",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.221,
+      "retries": 0,
+      "tokens": 1221,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "policy_violation",
+            "detail": "The draft answer provides a speculative scenario and assumes a value without any evidence or tool result to support it."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_02119",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.567,
+      "retries": 0,
+      "tokens": 1237,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "unsupported_claim",
+            "detail": "The evidence does not support a calculation of shareholder payout in the event of bankruptcy. The provided information only mentions TBVPS growth and does not provide any data on liquidation values or shareholder payouts."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03531",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.368,
+      "retries": 0,
+      "tokens": 1693,
+      "draft": "correct",
+      "verdict": "pass",
+      "right": true,
+      "number_issue": null,
+      "output": {
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03531",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.555,
+      "retries": 0,
+      "tokens": 1749,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "The total current assets for Nike at the end of FY2019 were $16,525 million, not $17,681.75."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03620",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.346,
+      "retries": 0,
+      "tokens": 2571,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "incomplete",
+            "detail": "The answer does not provide the calculation or explanation of how the value was derived from the given definition and the evidence."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03620",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.437,
+      "retries": 0,
+      "tokens": 2580,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "unsupported_claim",
+            "detail": "The value $9702.76 is not supported by the evidence provided. The evidence does not contain the necessary data to calculate the requested figure."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03856",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.48,
+      "retries": 0,
+      "tokens": 3453,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "incomplete",
+            "detail": "The answer does not include the calculation or the definition of the operating cash flow ratio, which is required for a complete answer."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03856",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.295,
+      "retries": 0,
+      "tokens": 3453,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": false,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "incomplete",
+            "detail": "The answer does not include the calculation or the definition of the operating cash flow ratio, which is required for a complete answer."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03882",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.398,
+      "retries": 0,
+      "tokens": 2008,
+      "draft": "correct",
+      "verdict": "pass",
+      "right": true,
+      "number_issue": null,
+      "output": {
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03882",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.492,
+      "retries": 0,
+      "tokens": 2061,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "The correct value for net AR in FY2020 is $1,615.9 million, not $1,729.12."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04103",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.587,
+      "retries": 0,
+      "tokens": 2770,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "incomplete",
+            "detail": "The answer does not provide the calculation steps or explanation for the CCC, and the source_id 'S1' does not contain the necessary data to calculate the CCC."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04103",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.597,
+      "retries": 0,
+      "tokens": 2776,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": false,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "incomplete",
+            "detail": "The answer does not provide the calculation steps or explanation for the CCC value of -4.0, and the source_id 'S1' does not contain the necessary data to calculate the CCC."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04171",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.697,
+      "retries": 0,
+      "tokens": 2117,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "The accounts payable for FY2018 is $302,578 thousand, which is $302.58 million, not $303.00."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04171",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.407,
+      "retries": 0,
+      "tokens": 2107,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "The accounts payable for FY2018 is $302,578 thousand, not $324.21 million."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04209",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.38,
+      "retries": 0,
+      "tokens": 1844,
+      "draft": "correct",
+      "verdict": "pass",
+      "right": true,
+      "number_issue": null,
+      "output": {
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04209",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.445,
+      "retries": 0,
+      "tokens": 1895,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "Total assets at the end of FY2021 were $59,268 million, not $63416.76."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04254",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.741,
+      "retries": 0,
+      "tokens": 2786,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "unsupported_claim",
+            "detail": "The evidence does not support the claim of $1832.00. The unadjusted EBITDA is not directly provided in the evidence, and no calculation was performed using the tool."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04254",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.614,
+      "retries": 0,
+      "tokens": 2786,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "unsupported_claim",
+            "detail": "The evidence does not support the value of $1960.24. The unadjusted EBITDA is not directly provided in the evidence, and no calculation was performed using the tool."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04672",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.737,
+      "retries": 0,
+      "tokens": 2053,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "The value for net PPNE is not provided in the evidence. The evidence shows Property, plant and equipment net as $8,738 million, but this is not the same as net PPNE."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04672",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.385,
+      "retries": 0,
+      "tokens": 2040,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "The value $9.31 is not supported by the evidence. The correct value for net PPNE is not directly provided in the evidence."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04700",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.374,
+      "retries": 0,
+      "tokens": 1774,
+      "draft": "correct",
+      "verdict": "pass",
+      "right": true,
+      "number_issue": null,
+      "output": {
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04700",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.422,
+      "retries": 0,
+      "tokens": 1824,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "The COGS for FY2016 is $32,780 million, not $35,074.60."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04980",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.679,
+      "retries": 0,
+      "tokens": 1929,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "unit_or_scale_mismatch",
+            "detail": "The capital expenditure amount is listed as $4,625 million in the evidence, not $4.60 billion. The correct value is $4.625 billion."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04980",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.34,
+      "retries": 0,
+      "tokens": 1916,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "The capital expenditure amount for FY2021 is $4,625 million, not $4.92 billion."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_05718",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.014,
+      "retries": 0,
+      "tokens": 2203,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "incomplete",
+            "detail": "The answer does not provide a complete explanation of how the value was derived from the evidence. The evidence shows that dividends paid were $389 million in FY2020, which is $0.389 billion, not $0.40 billion."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_05718",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.937,
+      "retries": 0,
+      "tokens": 2203,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": false,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "incomplete",
+            "detail": "The answer does not provide a complete explanation of how the value was derived from the evidence. The evidence shows that dividends paid in FY2020 were $389 million, which is $0.389 billion, not $0.43 billion."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_06741",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.398,
+      "retries": 0,
+      "tokens": 2897,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "incomplete",
+            "detail": "The answer does not provide the calculation process or reference the correct source for the unadjusted EBITDA % margin calculation."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_06741",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.267,
+      "retries": 0,
+      "tokens": 2897,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": false,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "incomplete",
+            "detail": "The answer does not provide the calculation process or reference the correct source for the unadjusted EBITDA % margin calculation."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_07661",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.618,
+      "retries": 0,
+      "tokens": 2722,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "The correct value is $381,603 thousand, which is $381.60 million, not $382.00."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_07661",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.525,
+      "retries": 0,
+      "tokens": 2723,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "The correct value is $381,603 thousand, which is $381.603 million, not $408.74."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_10285",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.386,
+      "retries": 0,
+      "tokens": 1918,
+      "draft": "correct",
+      "verdict": "pass",
+      "right": true,
+      "number_issue": null,
+      "output": {
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_10285",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.734,
+      "retries": 0,
+      "tokens": 1982,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "unsupported_claim",
+            "detail": "The value $13530.15 is not supported by the evidence. The evidence shows 'Property, plant and equipment, net' as $12,645 million for FY2018."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_10420",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.843,
+      "retries": 0,
+      "tokens": 3457,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "incomplete",
+            "detail": "The answer does not provide the ROA calculation or reference the necessary data from the evidence. ROA requires net income and average total assets, which are provided in the evidence but not used in the answer."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_01319",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.885,
+      "retries": 0,
+      "tokens": 1400,
+      "draft": "correct",
+      "verdict": "pass",
+      "right": true,
+      "number_issue": null,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> ok"
+        ],
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_02119",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 3.412,
+      "retries": 0,
+      "tokens": 934,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1: The text states TBVPS ended Q1 2021 at $66.56, but it does not indicate this is the amount shareholders would receive in a bankruptcy liquidation. The claim assumes TBVPS equals liquidation value, which is not supported by the evidence."
+        ],
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "unsupported_claim",
+            "detail": "The evidence does not support the claim that shareholders would receive $66.56 per share in a bankruptcy liquidation. TBVPS is not equivalent to liquidation value."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_02119",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.535,
+      "retries": 0,
+      "tokens": 894,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1: unsupported_claim"
+        ],
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "unsupported_claim",
+            "detail": "The evidence does not support the claim that shareholders could receive $71.22 per share. The cited evidence only mentions TBVPS of $66.56, but does not provide any information about bankruptcy, liquidation, or shareholder payouts."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03531",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.847,
+      "retries": 0,
+      "tokens": 1327,
+      "draft": "correct",
+      "verdict": "pass",
+      "right": true,
+      "number_issue": null,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> ok"
+        ],
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03531",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.684,
+      "retries": 0,
+      "tokens": 1413,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> wrong_citation (the total current assets in S1 is $16,525, not $17,681.75)"
+        ],
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "wrong_citation",
+            "detail": "The total current assets in the evidence is $16,525, not $17,681.75."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03620",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.088,
+      "retries": 0,
+      "tokens": 2217,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> ok"
+        ],
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "incomplete",
+            "detail": "The answer does not show the calculation steps or explain how $9068.00 was derived from the provided data."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03620",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.202,
+      "retries": 0,
+      "tokens": 2227,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> ok"
+        ],
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "unsupported_claim",
+            "detail": "The value $9702.76 is not supported by the evidence. The evidence does not provide the necessary data to calculate unadjusted EBITDA less capex."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03856",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 4.937,
+      "retries": 0,
+      "tokens": 3192,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "reasoning": [
+          "0: The claim '0.83' is derived from the operating cash flow ratio calculation, which is not directly provided in the evidence. The evidence provides cash from operations (2,912,853) and total current liabilities (3,527,457), but the calculation is not explicitly stated in the evidence. The answer is based on the assumption that the operating cash flow ratio is calculated as cash from operations / total current liabilities, which is not explicitly stated in the evidence."
+        ],
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "unsupported_claim",
+            "detail": "The operating cash flow ratio is not explicitly stated in the evidence. The calculation is assumed but not supported by the provided data."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03856",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 3.565,
+      "retries": 0,
+      "tokens": 3167,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "reasoning": [
+          "0: The claim '0.89' is derived from the operating cash flow ratio calculation, but the evidence does not provide the necessary data to compute this ratio. The cash from operations is not explicitly stated in the evidence, and the total current liabilities are provided but not sufficient to calculate the ratio as required."
+        ],
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "unsupported_claim",
+            "detail": "The claim '0.89' is not supported by the evidence provided. The cash from operations is not explicitly stated in the evidence, and the necessary data to compute the operating cash flow ratio is missing."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03882",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.878,
+      "retries": 0,
+      "tokens": 1642,
+      "draft": "correct",
+      "verdict": "pass",
+      "right": true,
+      "number_issue": null,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> ok"
+        ],
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03882",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.534,
+      "retries": 0,
+      "tokens": 1721,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> ok"
+        ],
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "The value $1729.12 is not present in the evidence. The correct value for trade receivables, net as of June 30, 2020, is $1,615.9 million."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04103",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.175,
+      "retries": 0,
+      "tokens": 2409,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> ok"
+        ],
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "incomplete",
+            "detail": "The answer does not provide the calculation steps or justification for the CCC value of -3.7, which is required to address the question fully."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04103",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.816,
+      "retries": 0,
+      "tokens": 2353,
+      "draft": "planted",
+      "verdict": "pass",
+      "right": false,
+      "number_issue": false,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> ok"
+        ],
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04171",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.876,
+      "retries": 0,
+      "tokens": 1692,
+      "draft": "correct",
+      "verdict": "pass",
+      "right": true,
+      "number_issue": null,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> ok"
+        ],
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04171",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.275,
+      "retries": 0,
+      "tokens": 1759,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> ok"
+        ],
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "The value in the evidence is $302,578 (in thousands), which is $302.58 million, not $324.21 million."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04209",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.857,
+      "retries": 0,
+      "tokens": 1478,
+      "draft": "correct",
+      "verdict": "pass",
+      "right": true,
+      "number_issue": null,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> ok"
+        ],
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04209",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.987,
+      "retries": 0,
+      "tokens": 1567,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> number_mismatch (the total assets in S1 is $59,268 million, not $63,416.76)"
+        ],
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "The total assets in the evidence is $59,268 million, but the answer states $63,416.76."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04254",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.385,
+      "retries": 0,
+      "tokens": 2362,
+      "draft": "correct",
+      "verdict": "pass",
+      "right": true,
+      "number_issue": null,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> ok"
+        ],
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04254",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 3.079,
+      "retries": 0,
+      "tokens": 2464,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> ok"
+        ],
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "unsupported_claim",
+            "detail": "The evidence does not support the value $1960.24 for FY2021 unadjusted operating income + depreciation and amortization. The operating income is $1,196 million and depreciation and amortization is $636 million, which sum to $1,832 million, not $1960.24."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04672",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.877,
+      "retries": 0,
+      "tokens": 1626,
+      "draft": "correct",
+      "verdict": "pass",
+      "right": true,
+      "number_issue": null,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> ok"
+        ],
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04672",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.807,
+      "retries": 0,
+      "tokens": 1626,
+      "draft": "planted",
+      "verdict": "pass",
+      "right": false,
+      "number_issue": false,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> ok"
+        ],
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04700",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.842,
+      "retries": 0,
+      "tokens": 1408,
+      "draft": "correct",
+      "verdict": "pass",
+      "right": true,
+      "number_issue": null,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> ok"
+        ],
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04700",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.093,
+      "retries": 0,
+      "tokens": 1467,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> ok"
+        ],
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "The COGS for FY2016 is $32,780 million, not $35,074.60."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04980",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.858,
+      "retries": 0,
+      "tokens": 1504,
+      "draft": "correct",
+      "verdict": "pass",
+      "right": true,
+      "number_issue": null,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> ok"
+        ],
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04980",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.806,
+      "retries": 0,
+      "tokens": 1504,
+      "draft": "planted",
+      "verdict": "pass",
+      "right": false,
+      "number_issue": false,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> ok"
+        ],
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_05718",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.259,
+      "retries": 0,
+      "tokens": 1827,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> ok"
+        ],
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "unsupported_claim",
+            "detail": "The evidence does not provide the exact amount of cash dividends paid out in FY2020. The value of $0.40 is not supported by the provided data."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_05718",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.812,
+      "retries": 0,
+      "tokens": 1764,
+      "draft": "planted",
+      "verdict": "pass",
+      "right": false,
+      "number_issue": false,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> ok"
+        ],
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_06741",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 3.067,
+      "retries": 0,
+      "tokens": 2585,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> ok"
+        ],
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "incomplete",
+            "detail": "The answer does not show the calculation process or reference the specific line items used to compute the unadjusted EBITDA % margin."
+          },
+          {
+            "claim_index": 0,
+            "type": "unsupported_claim",
+            "detail": "The answer provides a percentage without showing the calculation steps or referencing the specific data points used."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_06741",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.941,
+      "retries": 0,
+      "tokens": 2585,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> ok"
+        ],
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "incomplete",
+            "detail": "The answer does not show the calculation process or reference the specific line items used to compute the unadjusted EBITDA % margin."
+          },
+          {
+            "claim_index": 0,
+            "type": "unsupported_claim",
+            "detail": "The answer provides a percentage without showing the calculation steps or referencing the specific data points used."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_07661",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.929,
+      "retries": 0,
+      "tokens": 2303,
+      "draft": "correct",
+      "verdict": "pass",
+      "right": true,
+      "number_issue": null,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> ok"
+        ],
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_07661",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.516,
+      "retries": 0,
+      "tokens": 2380,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> ok"
+        ],
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "The cash flow from operating activities in FY2020 is listed as $381,603 thousand in the evidence, which is $381.60 million, not $408.74 million."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_10285",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 0.858,
+      "retries": 0,
+      "tokens": 1552,
+      "draft": "correct",
+      "verdict": "pass",
+      "right": true,
+      "number_issue": null,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> ok"
+        ],
+        "verdict": "pass",
+        "issues": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_10285",
+      "case": "verify_planted",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.062,
+      "retries": 0,
+      "tokens": 1609,
+      "draft": "planted",
+      "verdict": "fail",
+      "right": true,
+      "number_issue": true,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> ok"
+        ],
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "number_mismatch",
+            "detail": "The value in the evidence is $12,645 million, but the answer states $13530.15."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_10420",
+      "case": "verify_correct",
+      "prompt_id": "verify_answer/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.913,
+      "retries": 0,
+      "tokens": 3118,
+      "draft": "correct",
+      "verdict": "fail",
+      "right": false,
+      "number_issue": null,
+      "output": {
+        "reasoning": [
+          "0 -> checked against S1 -> wrong_citation"
+        ],
+        "verdict": "fail",
+        "issues": [
+          {
+            "claim_index": 0,
+            "type": "wrong_citation",
+            "detail": "The answer cites S1 but does not provide the necessary financial figures to calculate ROA. The ROA calculation requires FY2022 net income and average total assets between FY2021 and FY2022, which are not provided in the cited evidence."
+          }
+        ]
+      },
+      "error": null
+    }
+  ],
+  "n_items": 18
+}

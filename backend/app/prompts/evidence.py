@@ -11,7 +11,7 @@ import json
 from .base import FewShotExample, Node, PromptSpec, Technique, register
 from .shared import format_evidence, system_prompt
 
-V = "1.0"
+V = "1.1"  # 1.1: shared rule allows general financial knowledge for interpretation
 
 
 def _j(obj: dict) -> str:
