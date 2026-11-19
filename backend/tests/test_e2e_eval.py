@@ -67,3 +67,9 @@ def test_page_miss_is_reported():
     item = ae.load_items(ae.DEFAULT_DATA, False)[0]
     rec = e2e.run_question(ScriptedLLM(item["gold_answer"]), FakeRetriever(item, hit=False), item, use_judge=False)
     assert rec["hit_raw"] is False and rec["hit_merged"] is False and "judge" not in rec
+
+
+def test_merge_puts_rewritten_results_first():
+    raw = [{"chunk_id": "r1"}, {"chunk_id": "r2"}]
+    rw = [{"chunk_id": "w1"}, {"chunk_id": "r1"}]
+    assert [c["chunk_id"] for c in e2e._merge([rw, raw], 3)] == ["w1", "r1", "r2"]

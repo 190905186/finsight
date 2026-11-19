@@ -194,3 +194,40 @@ These are now the defaults in `backend/app/prompts/base.py` (`DEFAULT_TECHNIQUE`
 1. `query_rewrite` and the full chain (retrieve → answer) need the RAG database: next stage, Postgres in Docker.
 2. Confirm on the 51 held-out FinanceBench questions once, after freezing (`--data ../data/evaluation/financebench_holdout.jsonl --final-run --limit 0`).
 3. The Acme golden 75 remain blocked on missing Acme documents (team-notes item 15).
+
+---
+
+# End-to-end (real retrieval in Docker, FinanceBench dev, 22 ingested filings)
+
+Chain: guardrail → classify → query_rewrite → HybridRetriever (pgvector + BM25, `medium` profile, filtered to the question's filing) → synthesize → `render_citations` → verify → repair (at most once) → AI judge. Defaults from `DEFAULT_TECHNIQUE`. Runner: `docker compose run --rm backend python -m app.prompts.e2e_eval`.
+
+## E2E run 1: 2026-11-20, prompt set 2026.11.4 (24 questions)
+
+| metric | value |
+|---|---|
+| guardrail allowed | 95.8% |
+| page hit, raw question | 41.7% |
+| **page hit, rewritten queries** | **79.2%** |
+| page hit, merged evidence given to the model | 66.7% |
+| answered | 62.5% |
+| citations ok (after repair) | 100% |
+| verify failed → repaired | 13.0% |
+| gold figure | 88.9% |
+| judge correct / correct-or-partial | 41.7% / 50.0% |
+| avg LLM calls per question (excl. judge) | 5.04 |
+| p50 latency per question | 13.3 s |
+
+### Findings
+
+- **query_rewrite works:** rewriting the question into filing vocabulary nearly doubles retrieval of the gold page (41.7% → 79.2%).
+- **Retrieval drives answer quality:** with the gold page in the evidence, 11/16 answers were judged correct or partial; without it, 1/8.
+- **Merge bug in the runner:** raw-question results went first, so with a 6-passage cap three gold pages found by the rewritten queries were dropped (79.2% → 66.7%).
+- One synthesize answer "corrected" the calculator result, which breaks the design rule that tool output is authoritative.
+- Several "insufficient evidence" answers were on calculation questions without a calculator (working capital, quick ratio): the calculator gap (team-notes item 16), not a prompt fault.
+- One borderline refusal ("what Pfizer expects to pay for the Upjohn spin-off" read as a forecast), left alone to avoid over-fitting.
+- All citations valid after the deterministic check + repair: the safety net works.
+
+### Changes for E2E run 2 (prompt set 2026.11.5)
+
+- Runner: rewritten-query results first, raw question last; evidence cap 6 → 8 passages (still within the 8,192-token budget).
+- synthesize: a tool_result is authoritative; if the evidence seems different, quote both without choosing.

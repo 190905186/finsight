@@ -12,7 +12,7 @@ import json
 from .base import FewShotExample, Node, PromptSpec, Technique, register
 from .shared import format_evidence, format_tool_results, system_prompt
 
-V = "1.2"  # 1.2: no invented [C#]; judgment questions answered (FinanceBench dev run 1)
+V = "1.3"  # 1.3: tool results are authoritative (e2e run 1)
 
 SYNTH_STATUSES = ("answered", "partially_answered", "insufficient_evidence", "refused", "corrected")
 VERDICTS = ("pass", "fail")
@@ -43,6 +43,7 @@ Format of "answer":
 - Every sentence, bullet or table row with a fact or number ends with its markers, e.g. [S1] or [S1][C1].
 - Copy numbers with their unit scale (thousands/millions/billions) and sign exactly as the source shows; parentheses mean outflows or losses.
 - For a derived figure, show the formula and intermediate inputs from the tool_result, then the result with its sign, e.g. "($1,284M - $1,150M) / $1,150M = +11.65% [C1]".
+- A <tool_result> is authoritative: never recompute, correct or contradict it. If the evidence seems to show different inputs, give the tool_result figure and also quote the evidence figure with its marker, without choosing between them.
 - Use a [C#] marker ONLY for a calc_id that appears in a <tool_result> block. If the question needs a calculation and no tool_result supplies it, do not calculate: give the cited inputs, say the calculation result is not available, and set status "partially_answered".
 - Judgment questions ("is this metric relevant", "is the company improving") are answered: state the conclusion, then the cited figures behind it. Saying "not disclosed" is only for a fact the evidence lacks, not for a judgment the evidence lets you make.
 - Say whether each metric is GAAP or Non-GAAP. For Non-GAAP, name the main adjustments the evidence lists (e.g. stock-based compensation, amortization of acquired intangibles).

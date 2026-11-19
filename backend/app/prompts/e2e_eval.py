@@ -29,7 +29,7 @@ from .answer_eval import DEFAULT_DATA, budget_evidence, gold_hit, judge, load_it
 from .runner import run_prompt
 
 TOP_K_PER_QUERY = 5
-MAX_EVIDENCE = 6
+MAX_EVIDENCE = 8  # e2e run 1: 6 dropped pages the rewritten queries had found
 
 
 def _gold_pages(item: Dict[str, Any]) -> set:
@@ -76,7 +76,7 @@ def run_question(llm: Any, retriever: Any, item: Dict[str, Any], use_judge: bool
     filters = {"doc_name": item["doc_name"]}
     raw = retriever.retrieve(q, top_k=TOP_K_PER_QUERY, filters=filters)
     rewritten = [retriever.retrieve(x, top_k=TOP_K_PER_QUERY, filters=filters) for x in queries]
-    chunks = _merge([raw, *rewritten], MAX_EVIDENCE)
+    chunks = _merge([*rewritten, raw], MAX_EVIDENCE)  # rewritten queries first: they hit the gold page far more often
     rec["hit_raw"] = _page_hit(item, raw)
     rec["hit_rewrite"] = _page_hit(item, [x for r in rewritten for x in r]) if rewritten else None
     rec["hit_merged"] = _page_hit(item, chunks)
