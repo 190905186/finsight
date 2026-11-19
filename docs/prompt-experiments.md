@@ -126,3 +126,71 @@ Questions come from `data/evaluation/financebench_dev.jsonl` (99 questions; neve
 
 - Prompts: `[C#]` only for supplied calc IDs; if a calculation is needed and missing, give the inputs and mark `partially_answered`; answer judgment questions with a conclusion plus cited figures. Shared rule 1 now allows general financial-analysis knowledge to interpret evidence (company facts still evidence-only).
 - Harness: balanced sample across question types; strict number matching (no rescaling for figures under 100); calculation questions get a **reference calculator result** (C1 = correct answer), standing in for the `calculate_*` tools that are not built yet; an **AI judge** (same Qwen3-8B, as design §5 allows) grades synthesize answers against FinanceBench's reference answers.
+
+## FB run 2: 2026-11-20, prompt set 2026.11.4 (24-question balanced sample, reference calculator, AI judge)
+
+### synthesize_answer
+
+| technique | valid | answered | citations ok | gold figure | uses calc result | judge: correct | judge: correct+partial | p50 latency s | avg tokens |
+|---|---|---|---|---|---|---|---|---|---|
+| zero_shot | 100% | 91.7% | 87.5% | 88.9% | 100% | 58.3% | 70.8% | 3.44 | 1927 |
+| few_shot | 100% | 95.8% | 87.5% | 100% | 100% | 62.5% | 75.0% | 6.53 | 4433 |
+| **cot** | 100% | 95.8% | 87.5% | 100% | 100% | **66.7%** | **75.0%** | 5.58 | **2111** |
+
+### verify_answer (24 questions → 46 drafts: correct + planted error)
+
+| technique | valid | accuracy | catches planted error | passes correct draft | p50 latency s |
+|---|---|---|---|---|---|
+| zero_shot | 100% | 87.0% | 100% | 75.0% | 1.64 |
+| few_shot | 100% | 65.2% | 100% | 33.3% | 1.43 |
+| **cot** | 100% | **89.1%** | 95.5% | **83.3%** | 2.11 |
+
+### repair_once (22 planted-error drafts)
+
+| technique | valid | fixed | planted removed | citations ok |
+|---|---|---|---|---|
+| zero_shot | 100% | 81.8% | 90.9% | 100% |
+
+### extract_financial_fact (11 questions whose answer figure is printed in the evidence)
+
+| technique | valid | gold figure | citations ok | p50 latency s |
+|---|---|---|---|---|
+| zero_shot | 90.9% | 60.0% | 100% | 3.22 |
+| few_shot | 90.9% | 60.0% | 100% | 3.74 |
+| cot | 90.9% | 70.0% | 100% | 5.68 |
+
+### analyze_financial_report
+
+| technique | valid | citations ok | gold figure | has findings | p50 latency s |
+|---|---|---|---|---|---|
+| zero_shot | 100% | 100% | 11.1% | 100% | 3.60 |
+| few_shot | 100% | 95.8% | 22.2% | 95.8% | 2.88 |
+| **cot** | 100% | 95.8% | **55.6%** | 95.8% | 6.91 |
+
+### Findings
+
+- **Big improvement over run 1**: answered 68-84% → 92-96%; citations ok 72-80% → 87.5%; every calculation question used the supplied calculator result instead of doing arithmetic; verify passes correct drafts 33-61% → 33-83% while still catching 95-100% of planted errors; repair fixed 50% → 82%.
+- **Few-shot verify is biased**: its single example is a "fail" case, so it flags 2 of 3 correct drafts. CoT checks claim by claim and is clearly best.
+- **Remaining synthesize errors are model reasoning limits**, not format: picking the "Total" row as a segment, missing that a negative value is the lowest, judging 3M "capital-intensive" against the reference. Two answers (8%) still wrote `[C1]` with no calculator result; `render_citations()` reports these as unknown IDs, so the pipeline's deterministic check routes them to `repair_once`.
+- **Extract misses are calculation questions** where the model extracted the correct inputs (e.g. EBITDA inputs 8,910 / 2,763 / 5,207); the figure-match metric can't score these. One case (cash conversion cycle, 6+ inputs) returned incomplete JSON for all techniques.
+
+## Decisions (as of 2026-11-20)
+
+| Node | Technique | Evidence |
+|---|---|---|
+| pre_guardrail | few_shot | Run 3: 95.8%, all must-refuse correct |
+| classify_and_plan | few_shot | Run 2: 100% |
+| extract_financial_fact | **zero_shot** | FB run 2: tied within noise (6 vs 7 of 10); cheapest, fastest |
+| analyze_financial_report | **cot** | FB run 2: gold figure 56% vs 11-22% |
+| synthesize_answer | **cot** | FB run 2: best judge score (67% / 75%) at half the tokens of few-shot |
+| verify_answer | **cot** | FB run 2: 89% accuracy, 83% passes correct drafts |
+| repair_once | zero_shot | FB run 2: 82% fixed |
+| query_rewrite | few_shot (untested) | Needs retrieval: end-to-end stage (Docker) |
+
+These are now the defaults in `backend/app/prompts/base.py` (`DEFAULT_TECHNIQUE`).
+
+### Still open
+
+1. `query_rewrite` and the full chain (retrieve → answer) need the RAG database: next stage, Postgres in Docker.
+2. Confirm on the 51 held-out FinanceBench questions once, after freezing (`--data ../data/evaluation/financebench_holdout.jsonl --final-run --limit 0`).
+3. The Acme golden 75 remain blocked on missing Acme documents (team-notes item 15).

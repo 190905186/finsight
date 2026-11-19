@@ -1,0 +1,663 @@
+{
+  "prompt_set": "2026.11.4",
+  "node": "repair_once",
+  "techniques": {
+    "zero_shot": {
+      "cases": 22,
+      "valid": 1.0,
+      "json_first_try": 1.0,
+      "p50_latency_s": 1.5819999999999999,
+      "avg_tokens": 1820.5454545454545,
+      "fixed": 0.8181818181818182,
+      "planted_removed": 0.9090909090909091,
+      "cites_ok": 1.0
+    }
+  },
+  "rows": [
+    {
+      "question_id": "financebench_id_02981",
+      "case": "repair",
+      "prompt_id": "repair_once/zero_shot@1.2",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.626,
+      "retries": 0,
+      "tokens": 1544,
+      "fixed": true,
+      "planted_removed": true,
+      "cites_ok": true,
+      "output": {
+        "status": "answered",
+        "answer": "10.3% [S1][C1]",
+        "claims": [
+          {
+            "text": "10.3%",
+            "source_ids": [
+              "S1"
+            ],
+            "calc_ids": [
+              "C1"
+            ]
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00283",
+      "case": "repair",
+      "prompt_id": "repair_once/zero_shot@1.2",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.441,
+      "retries": 0,
+      "tokens": 813,
+      "fixed": false,
+      "planted_removed": true,
+      "cites_ok": true,
+      "output": {
+        "status": "corrected",
+        "answer": "700 [S1][C1]",
+        "claims": [
+          {
+            "text": "700",
+            "source_ids": [
+              "S1"
+            ],
+            "calc_ids": [
+              "C1"
+            ]
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_02987",
+      "case": "repair",
+      "prompt_id": "repair_once/zero_shot@1.2",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.656,
+      "retries": 0,
+      "tokens": 2223,
+      "fixed": true,
+      "planted_removed": true,
+      "cites_ok": true,
+      "output": {
+        "status": "corrected",
+        "answer": "24.26 [S1][C1]",
+        "claims": [
+          {
+            "text": "24.26",
+            "source_ids": [
+              "S1"
+            ],
+            "calc_ids": [
+              "C1"
+            ]
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_00705",
+      "case": "repair",
+      "prompt_id": "repair_once/zero_shot@1.2",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.908,
+      "retries": 0,
+      "tokens": 1442,
+      "fixed": true,
+      "planted_removed": true,
+      "cites_ok": true,
+      "output": {
+        "status": "corrected",
+        "answer": "$400,000,000 increase. [S1][C1]",
+        "claims": [
+          {
+            "text": "$400,000,000 increase.",
+            "source_ids": [
+              "S1"
+            ],
+            "calc_ids": [
+              "C1"
+            ]
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03031",
+      "case": "repair",
+      "prompt_id": "repair_once/zero_shot@1.2",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.666,
+      "retries": 0,
+      "tokens": 1455,
+      "fixed": true,
+      "planted_removed": true,
+      "cites_ok": true,
+      "output": {
+        "status": "corrected",
+        "answer": "$5818.00 [S1][C1]",
+        "claims": [
+          {
+            "text": "$5818.00",
+            "source_ids": [
+              "S1"
+            ],
+            "calc_ids": [
+              "C1"
+            ]
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_02119",
+      "case": "repair",
+      "prompt_id": "repair_once/zero_shot@1.2",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.672,
+      "retries": 0,
+      "tokens": 755,
+      "fixed": true,
+      "planted_removed": true,
+      "cites_ok": true,
+      "output": {
+        "status": "corrected",
+        "answer": "They could receive $66.56 per share. [S1]",
+        "claims": [
+          {
+            "text": "They could receive $66.56 per share.",
+            "source_ids": [
+              "S1"
+            ],
+            "calc_ids": []
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03069",
+      "case": "repair",
+      "prompt_id": "repair_once/zero_shot@1.2",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.557,
+      "retries": 0,
+      "tokens": 2070,
+      "fixed": true,
+      "planted_removed": true,
+      "cites_ok": true,
+      "output": {
+        "status": "answered",
+        "answer": "4.2% [S1][C1]",
+        "claims": [
+          {
+            "text": "4.2%",
+            "source_ids": [
+              "S1"
+            ],
+            "calc_ids": [
+              "C1"
+            ]
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03471",
+      "case": "repair",
+      "prompt_id": "repair_once/zero_shot@1.2",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.535,
+      "retries": 0,
+      "tokens": 1579,
+      "fixed": true,
+      "planted_removed": true,
+      "cites_ok": true,
+      "output": {
+        "status": "answered",
+        "answer": "0.68 [S1][C1]",
+        "claims": [
+          {
+            "text": "0.68",
+            "source_ids": [
+              "S1"
+            ],
+            "calc_ids": [
+              "C1"
+            ]
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03531",
+      "case": "repair",
+      "prompt_id": "repair_once/zero_shot@1.2",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.436,
+      "retries": 0,
+      "tokens": 1255,
+      "fixed": true,
+      "planted_removed": true,
+      "cites_ok": true,
+      "output": {
+        "status": "corrected",
+        "answer": "$16525 [S1]",
+        "claims": [
+          {
+            "text": "$16525",
+            "source_ids": [
+              "S1"
+            ],
+            "calc_ids": []
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03620",
+      "case": "repair",
+      "prompt_id": "repair_once/zero_shot@1.2",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.597,
+      "retries": 0,
+      "tokens": 2096,
+      "fixed": false,
+      "planted_removed": false,
+      "cites_ok": true,
+      "output": {
+        "status": "corrected",
+        "answer": "$9702.76 [S1]",
+        "claims": [
+          {
+            "text": "$9702.76",
+            "source_ids": [
+              "S1"
+            ],
+            "calc_ids": []
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03856",
+      "case": "repair",
+      "prompt_id": "repair_once/zero_shot@1.2",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.68,
+      "retries": 0,
+      "tokens": 3117,
+      "fixed": true,
+      "planted_removed": true,
+      "cites_ok": true,
+      "output": {
+        "status": "answered",
+        "answer": "0.83 [S1][C1]",
+        "claims": [
+          {
+            "text": "0.83",
+            "source_ids": [
+              "S1"
+            ],
+            "calc_ids": [
+              "C1"
+            ]
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03882",
+      "case": "repair",
+      "prompt_id": "repair_once/zero_shot@1.2",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.504,
+      "retries": 0,
+      "tokens": 1572,
+      "fixed": true,
+      "planted_removed": true,
+      "cites_ok": true,
+      "output": {
+        "status": "corrected",
+        "answer": "$1615.9 [S1]",
+        "claims": [
+          {
+            "text": "$1615.9",
+            "source_ids": [
+              "S1"
+            ],
+            "calc_ids": []
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04080",
+      "case": "repair",
+      "prompt_id": "repair_once/zero_shot@1.2",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.567,
+      "retries": 0,
+      "tokens": 1947,
+      "fixed": true,
+      "planted_removed": true,
+      "cites_ok": true,
+      "output": {
+        "status": "answered",
+        "answer": "3.46 [S2][C1]",
+        "claims": [
+          {
+            "text": "3.46",
+            "source_ids": [
+              "S2"
+            ],
+            "calc_ids": [
+              "C1"
+            ]
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04103",
+      "case": "repair",
+      "prompt_id": "repair_once/zero_shot@1.2",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.442,
+      "retries": 0,
+      "tokens": 2277,
+      "fixed": false,
+      "planted_removed": false,
+      "cites_ok": true,
+      "output": {
+        "status": "corrected",
+        "answer": "-4.0 [S1]",
+        "claims": [
+          {
+            "text": "-4.0",
+            "source_ids": [
+              "S1"
+            ],
+            "calc_ids": []
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04171",
+      "case": "repair",
+      "prompt_id": "repair_once/zero_shot@1.2",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.629,
+      "retries": 0,
+      "tokens": 1708,
+      "fixed": true,
+      "planted_removed": true,
+      "cites_ok": true,
+      "output": {
+        "status": "answered",
+        "answer": "$303.00 [S1][C1]",
+        "claims": [
+          {
+            "text": "$303.00",
+            "source_ids": [
+              "S1"
+            ],
+            "calc_ids": [
+              "C1"
+            ]
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04209",
+      "case": "repair",
+      "prompt_id": "repair_once/zero_shot@1.2",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.493,
+      "retries": 0,
+      "tokens": 1408,
+      "fixed": true,
+      "planted_removed": true,
+      "cites_ok": true,
+      "output": {
+        "status": "corrected",
+        "answer": "$59,268 [S1]",
+        "claims": [
+          {
+            "text": "$59,268",
+            "source_ids": [
+              "S1"
+            ],
+            "calc_ids": []
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04254",
+      "case": "repair",
+      "prompt_id": "repair_once/zero_shot@1.2",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.489,
+      "retries": 0,
+      "tokens": 2288,
+      "fixed": false,
+      "planted_removed": true,
+      "cites_ok": true,
+      "output": {
+        "status": "corrected",
+        "answer": "$1196 [S1]",
+        "claims": [
+          {
+            "text": "$1196",
+            "source_ids": [
+              "S1"
+            ],
+            "calc_ids": []
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04458",
+      "case": "repair",
+      "prompt_id": "repair_once/zero_shot@1.2",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.65,
+      "retries": 0,
+      "tokens": 2696,
+      "fixed": true,
+      "planted_removed": true,
+      "cites_ok": true,
+      "output": {
+        "status": "corrected",
+        "answer": "5.4% [S1][C1]",
+        "claims": [
+          {
+            "text": "5.4%",
+            "source_ids": [
+              "S1"
+            ],
+            "calc_ids": [
+              "C1"
+            ]
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04672",
+      "case": "repair",
+      "prompt_id": "repair_once/zero_shot@1.2",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.561,
+      "retries": 0,
+      "tokens": 1659,
+      "fixed": true,
+      "planted_removed": true,
+      "cites_ok": true,
+      "output": {
+        "status": "corrected",
+        "answer": "$8.70 [S1][C1]",
+        "claims": [
+          {
+            "text": "$8.70",
+            "source_ids": [
+              "S1"
+            ],
+            "calc_ids": [
+              "C1"
+            ]
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04700",
+      "case": "repair",
+      "prompt_id": "repair_once/zero_shot@1.2",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.486,
+      "retries": 0,
+      "tokens": 1338,
+      "fixed": true,
+      "planted_removed": true,
+      "cites_ok": true,
+      "output": {
+        "status": "corrected",
+        "answer": "$32,780 [S1]",
+        "claims": [
+          {
+            "text": "$32,780",
+            "source_ids": [
+              "S1"
+            ],
+            "calc_ids": []
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04735",
+      "case": "repair",
+      "prompt_id": "repair_once/zero_shot@1.2",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.653,
+      "retries": 0,
+      "tokens": 2725,
+      "fixed": true,
+      "planted_removed": true,
+      "cites_ok": true,
+      "output": {
+        "status": "answered",
+        "answer": "0.66 [S1][C1]",
+        "claims": [
+          {
+            "text": "0.66",
+            "source_ids": [
+              "S1"
+            ],
+            "calc_ids": [
+              "C1"
+            ]
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04854",
+      "case": "repair",
+      "prompt_id": "repair_once/zero_shot@1.2",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 1.729,
+      "retries": 0,
+      "tokens": 2085,
+      "fixed": true,
+      "planted_removed": true,
+      "cites_ok": true,
+      "output": {
+        "status": "corrected",
+        "answer": "$3215.00 [S1][C1]",
+        "claims": [
+          {
+            "text": "$3215.00",
+            "source_ids": [
+              "S1"
+            ],
+            "calc_ids": [
+              "C1"
+            ]
+          }
+        ]
+      },
+      "error": null
+    }
+  ],
+  "n_items": 24
+}

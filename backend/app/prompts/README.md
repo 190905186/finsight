@@ -24,13 +24,13 @@ Prompts for every LLM node in the LangGraph workflow. Each node has **zero-shot*
 | `pre_guardrail` | ✓ | ✓ (9 ex.) | ✓ | few_shot | Refusal edges (guidance vs prediction, missing data vs refusal, injection) are learned best from examples |
 | `classify_and_plan` | ✓ | ✓ (4 ex.) | ✓ | few_shot | Examples teach period pairs (Q3 FY25 + Q3 FY24) and tool choice |
 | `query_rewrite` | ✓ | ✓ (1 ex.) | – | few_shot | Teaches filing vocabulary ("purchases of property and equipment") |
-| `extract_financial_fact` | ✓ | ✓ (2 ex.) | ✓ | few_shot | Column/period alignment, parentheses = negative, "missing" handling |
+| `extract_financial_fact` | ✓ | ✓ (2 ex.) | ✓ | **zero_shot** | FinanceBench run 2: all three tied within noise; zero-shot is cheapest and fastest |
 | `analyze_financial_report` | ✓ | ✓ (1 ex.) | ✓ | cot | Multi-hop needs decomposition into sub-facts |
-| `synthesize_answer` | ✓ | ✓ (5 ex.) | ✓ | few_shot | Shows the five gold answer types: answer with formula, GAAP/Non-GAAP correction, not disclosed, refusal with facts, false-premise correction |
+| `synthesize_answer` | ✓ | ✓ (5 ex.) | ✓ | **cot** | FinanceBench run 2: judged correct 67% (few-shot 63%, zero 58%) at half the tokens of few-shot |
 | `verify_answer` | ✓ | ✓ (1 ex.) | ✓ | cot | Claim-by-claim checking catches more errors |
 | `repair_once` | ✓ | – | – | zero_shot | Tightly scoped; examples add cost with little gain |
 
-These defaults are **starting hypotheses**. Change them in `DEFAULT_TECHNIQUE` (or per run with an env var, e.g. `PROMPT_TECHNIQUE_CLASSIFY=cot`) based on dev-split results.
+These defaults are **chosen from dev-set runs** (see `docs/prompt-experiments.md`). Change them in `DEFAULT_TECHNIQUE` (or per run with an env var, e.g. `PROMPT_TECHNIQUE_CLASSIFY=cot`) based on dev-split results.
 
 ## Design decisions to keep (important for a ≤8B model)
 

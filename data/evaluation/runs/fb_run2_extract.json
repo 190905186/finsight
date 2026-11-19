@@ -1,0 +1,1274 @@
+{
+  "prompt_set": "2026.11.4",
+  "node": "extract_financial_fact",
+  "techniques": {
+    "zero_shot": {
+      "cases": 11,
+      "valid": 0.9090909090909091,
+      "json_first_try": 0.9090909090909091,
+      "p50_latency_s": 3.224,
+      "avg_tokens": 2138.7272727272725,
+      "gold_hit": 0.6,
+      "cites_ok": 1.0
+    },
+    "few_shot": {
+      "cases": 11,
+      "valid": 0.9090909090909091,
+      "json_first_try": 0.8181818181818182,
+      "p50_latency_s": 3.742,
+      "avg_tokens": 3269.0,
+      "gold_hit": 0.6,
+      "cites_ok": 1.0
+    },
+    "cot": {
+      "cases": 11,
+      "valid": 0.9090909090909091,
+      "json_first_try": 0.9090909090909091,
+      "p50_latency_s": 5.676,
+      "avg_tokens": 2364.2727272727275,
+      "gold_hit": 0.7,
+      "cites_ok": 1.0
+    }
+  },
+  "rows": [
+    {
+      "question_id": "financebench_id_01319",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 7.032,
+      "retries": 0,
+      "tokens": 1530,
+      "facts": 3,
+      "gold_hit": false,
+      "cites_ok": true,
+      "output": {
+        "facts": [
+          {
+            "metric": "Loss on disposal and sale of business interests",
+            "period": "FY2022",
+            "value": "(9)",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "Loss on disposal and sale of business interests (9) (1,683) (95)"
+          },
+          {
+            "metric": "Goodwill impairment expense",
+            "period": "FY2022",
+            "value": "(777)",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "Goodwill impairment expense (777)  Asset impairment expense (763) (1,575) (864)"
+          },
+          {
+            "metric": "Asset impairment expense",
+            "period": "FY2022",
+            "value": "(763)",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "Goodwill impairment expense (777)  Asset impairment expense (763) (1,575) (864)"
+          }
+        ],
+        "missing": [
+          "restructuring costs"
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_02119",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 3.224,
+      "retries": 0,
+      "tokens": 755,
+      "facts": 1,
+      "gold_hit": true,
+      "cites_ok": true,
+      "output": {
+        "facts": [
+          {
+            "metric": "TBVPS",
+            "period": "Q1 2021",
+            "value": "$66.56",
+            "scale": "units",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "The Firm grew TBVPS, ending the first quarter of 2021 at $66.56, up 10% versus the prior year."
+          }
+        ],
+        "missing": [
+          "Total assets",
+          "Total liabilities",
+          "Number of shareholders",
+          "Liquidation value of assets",
+          "Distribution to shareholders"
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03531",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.231,
+      "retries": 0,
+      "tokens": 1227,
+      "facts": 1,
+      "gold_hit": true,
+      "cites_ok": true,
+      "output": {
+        "facts": [
+          {
+            "metric": "Total current assets",
+            "period": "FY2019",
+            "value": "16,525",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "Total current assets 16,525"
+          }
+        ],
+        "missing": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03620",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 7.317,
+      "retries": 0,
+      "tokens": 2293,
+      "facts": 3,
+      "gold_hit": false,
+      "cites_ok": true,
+      "output": {
+        "facts": [
+          {
+            "metric": "Net income attributable to PepsiCo",
+            "period": "FY2022",
+            "value": "8,910",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "Net Income Attributable to PepsiCo $ 8,910 $ 7,618 $ 7,120"
+          },
+          {
+            "metric": "Depreciation and amortization",
+            "period": "FY2022",
+            "value": "2,763",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S2",
+            "quote": "Depreciation and amortization 2,763 2,710 2,548"
+          },
+          {
+            "metric": "Capital spending",
+            "period": "FY2022",
+            "value": "5,207",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S2",
+            "quote": "Capital spending (5,207) (4,625) (4,240)"
+          }
+        ],
+        "missing": [
+          "unadjusted EBITDA",
+          "unadjusted operating income"
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03882",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.644,
+      "retries": 0,
+      "tokens": 1561,
+      "facts": 1,
+      "gold_hit": true,
+      "cites_ok": true,
+      "output": {
+        "facts": [
+          {
+            "metric": "Trade receivables, net",
+            "period": "FY2020",
+            "value": "1,615.9",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "Trade receivables, net\n1,615.9 \n1,864.3"
+          }
+        ],
+        "missing": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04103",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/zero_shot@1.1",
+      "valid": false,
+      "json_first_try": false,
+      "calls": 2,
+      "latency_s": 31.249,
+      "retries": 0,
+      "tokens": 6469,
+      "output": {
+        "metric": "Net sales",
+        "period": "FY2019",
+        "value": "$ 16,865.2",
+        "scale": "millions",
+        "currency": "USD",
+        "basis": "GAAP",
+        "source_id": "S1",
+        "quote": "Net sales $ 16,865.2"
+      },
+      "error": "Missing required keys: ['facts', 'missing']."
+    },
+    {
+      "question_id": "financebench_id_04209",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.42,
+      "retries": 0,
+      "tokens": 1386,
+      "facts": 1,
+      "gold_hit": true,
+      "cites_ok": true,
+      "output": {
+        "facts": [
+          {
+            "metric": "Total Assets",
+            "period": "FY2021",
+            "value": "59,268",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "TOTAL ASSETS\n$59,268\n$55,556"
+          }
+        ],
+        "missing": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04254",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 4.634,
+      "retries": 0,
+      "tokens": 2368,
+      "facts": 2,
+      "gold_hit": false,
+      "cites_ok": true,
+      "output": {
+        "facts": [
+          {
+            "metric": "Operating income",
+            "period": "FY2021",
+            "value": "1,196",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "Operating income\n1,196 \n1,248 \n1,214"
+          },
+          {
+            "metric": "Depreciation and amortization",
+            "period": "FY2021",
+            "value": "636",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "Depreciation and amortization\n636 \n604 \n582"
+          }
+        ],
+        "missing": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04700",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.285,
+      "retries": 0,
+      "tokens": 1310,
+      "facts": 1,
+      "gold_hit": true,
+      "cites_ok": true,
+      "output": {
+        "facts": [
+          {
+            "metric": "Total cost of revenue",
+            "period": "FY2016",
+            "value": "32,780",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "Total cost of revenue\n32,780"
+          }
+        ],
+        "missing": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_10285",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.43,
+      "retries": 0,
+      "tokens": 1460,
+      "facts": 1,
+      "gold_hit": true,
+      "cites_ok": true,
+      "output": {
+        "facts": [
+          {
+            "metric": "Property, plant and equipment, net",
+            "period": "FY2018",
+            "value": "12,645",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "Property, plant and equipment, net $12,645"
+          }
+        ],
+        "missing": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_10420",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/zero_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 7.452,
+      "retries": 0,
+      "tokens": 3167,
+      "facts": 3,
+      "gold_hit": false,
+      "cites_ok": true,
+      "output": {
+        "facts": [
+          {
+            "metric": "Net Income",
+            "period": "FY2022",
+            "value": "(546)",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S2",
+            "quote": "NET INCOME (LOSS) ATTRIBUTABLE TO THE AES CORPORATION $ (546) $ (409) $ 46"
+          },
+          {
+            "metric": "Total Assets for FY2022",
+            "period": "FY2022",
+            "value": "38,363",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "TOTAL ASSETS $ 38,363 $ 32,963"
+          },
+          {
+            "metric": "Total Assets for FY2021",
+            "period": "FY2021",
+            "value": "32,963",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "TOTAL ASSETS $ 38,363 $ 32,963"
+          }
+        ],
+        "missing": [
+          "Average Total Assets between FY2021 and FY2022"
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_01319",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.221,
+      "retries": 0,
+      "tokens": 2151,
+      "facts": 1,
+      "gold_hit": false,
+      "cites_ok": true,
+      "output": {
+        "facts": [
+          {
+            "metric": "loss on disposal and sale of business interests",
+            "period": "FY2022",
+            "value": "(9)",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "Loss on disposal and sale of business interests (9) (1,683) (95)"
+          }
+        ],
+        "missing": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_02119",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 3.742,
+      "retries": 0,
+      "tokens": 1619,
+      "facts": 1,
+      "gold_hit": true,
+      "cites_ok": true,
+      "output": {
+        "facts": [
+          {
+            "metric": "total book value per share",
+            "period": "Q1 FY2021",
+            "value": "$66.56",
+            "scale": "dollars",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "The Firm grew TBVPS, ending the first quarter of 2021 at $66.56, up 10% versus the prior year."
+          }
+        ],
+        "missing": [
+          "capital expenditures @ Q2 FY2025",
+          "total assets @ Q2 FY2025",
+          "total liabilities @ Q2 FY2025",
+          "number of shares outstanding @ Q2 FY2025",
+          "total equity @ Q2 FY2025"
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03531",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.038,
+      "retries": 0,
+      "tokens": 2059,
+      "facts": 1,
+      "gold_hit": true,
+      "cites_ok": true,
+      "output": {
+        "facts": [
+          {
+            "metric": "total current assets",
+            "period": "FY2019",
+            "value": "16,525",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "Total current assets 16,525 15,134"
+          }
+        ],
+        "missing": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03620",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 7.334,
+      "retries": 0,
+      "tokens": 3133,
+      "facts": 3,
+      "gold_hit": false,
+      "cites_ok": true,
+      "output": {
+        "facts": [
+          {
+            "metric": "net income attributable to pepsiCo",
+            "period": "FY2022",
+            "value": "8,910",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "Net Income Attributable to PepsiCo  $ 8,910  $ 7,618  $ 7,120"
+          },
+          {
+            "metric": "depreciation and amortization",
+            "period": "FY2022",
+            "value": "2,763",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S2",
+            "quote": "Depreciation and amortization  2,763  2,710  2,548"
+          },
+          {
+            "metric": "capital spending",
+            "period": "FY2022",
+            "value": "(5,207)",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S2",
+            "quote": "Capital spending  (5,207)  (4,625)  (4,240)"
+          }
+        ],
+        "missing": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03882",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.301,
+      "retries": 0,
+      "tokens": 2386,
+      "facts": 1,
+      "gold_hit": true,
+      "cites_ok": true,
+      "output": {
+        "facts": [
+          {
+            "metric": "trade receivables, net",
+            "period": "FY2020",
+            "value": "1,615.9",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "Trade receivables, net\n1,615.9 \n1,864.3"
+          }
+        ],
+        "missing": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04103",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/few_shot@1.1",
+      "valid": false,
+      "json_first_try": false,
+      "calls": 2,
+      "latency_s": 31.504,
+      "retries": 0,
+      "tokens": 8153,
+      "output": {
+        "metric": "Net sales",
+        "period": "FY2019",
+        "value": "16,865.2",
+        "scale": "millions",
+        "currency": "USD",
+        "basis": "GAAP",
+        "source_id": "S1",
+        "quote": "Net sales  $ 16,865.2"
+      },
+      "error": "Missing required keys: ['facts', 'missing']."
+    },
+    {
+      "question_id": "financebench_id_04209",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.098,
+      "retries": 0,
+      "tokens": 2212,
+      "facts": 1,
+      "gold_hit": true,
+      "cites_ok": true,
+      "output": {
+        "facts": [
+          {
+            "metric": "total assets",
+            "period": "FY2021",
+            "value": "59,268",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "TOTAL ASSETS\n$59,268 \n$55,556"
+          }
+        ],
+        "missing": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04254",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 5.738,
+      "retries": 0,
+      "tokens": 3258,
+      "facts": 3,
+      "gold_hit": false,
+      "cites_ok": true,
+      "output": {
+        "facts": [
+          {
+            "metric": "operating income",
+            "period": "FY2021",
+            "value": "1,196",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "Operating income 1,196 1,248 1,214"
+          },
+          {
+            "metric": "depreciation and amortization",
+            "period": "FY2021",
+            "value": "636",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "Depreciation and amortization 636 604 582"
+          },
+          {
+            "metric": "depreciation and amortization",
+            "period": "FY2021",
+            "value": "636",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S2",
+            "quote": "Depreciation and amortization 636 604 582"
+          }
+        ],
+        "missing": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04700",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/few_shot@1.1",
+      "valid": true,
+      "json_first_try": false,
+      "calls": 2,
+      "latency_s": 8.249,
+      "retries": 0,
+      "tokens": 4698,
+      "facts": 2,
+      "gold_hit": true,
+      "cites_ok": true,
+      "output": {
+        "facts": [
+          {
+            "metric": "cost of revenue",
+            "period": "FY2016",
+            "value": "32,780",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "Total cost of revenue\n32,780\n33,038\n27,078"
+          },
+          {
+            "metric": "cost of revenue",
+            "period": "FY2016",
+            "value": "32,780",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "Total cost of revenue\n32,780\n33,038\n27,078"
+          }
+        ],
+        "missing": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_10285",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 2.241,
+      "retries": 0,
+      "tokens": 2292,
+      "facts": 1,
+      "gold_hit": true,
+      "cites_ok": true,
+      "output": {
+        "facts": [
+          {
+            "metric": "property, plant and equipment, net",
+            "period": "FY2018",
+            "value": "12,645",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "Property, plant and equipment, net 12,645 12,672"
+          }
+        ],
+        "missing": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_10420",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/few_shot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 7.277,
+      "retries": 0,
+      "tokens": 3998,
+      "facts": 3,
+      "gold_hit": false,
+      "cites_ok": true,
+      "output": {
+        "facts": [
+          {
+            "metric": "net income attributable to the aes corporation",
+            "period": "FY2022",
+            "value": "(546)",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S2",
+            "quote": "NET INCOME (LOSS) ATTRIBUTABLE TO THE AES CORPORATION $ (546) $ (409) $ 46"
+          },
+          {
+            "metric": "total assets for fy2022",
+            "period": "FY2022",
+            "value": "38,363",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "TOTAL ASSETS $ 38,363 $ 32,963"
+          },
+          {
+            "metric": "total assets for fy2021",
+            "period": "FY2021",
+            "value": "32,963",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "TOTAL ASSETS $ 38,363 $ 32,963"
+          }
+        ],
+        "missing": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_01319",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 4.237,
+      "retries": 0,
+      "tokens": 1479,
+      "facts": 1,
+      "gold_hit": true,
+      "cites_ok": true,
+      "output": {
+        "reasoning": [
+          "The requested metric is restructuring costs, which are not explicitly mentioned in the provided evidence.",
+          "The table contains various expenses, but there is no direct mention of restructuring costs.",
+          "The document does not include a line item for restructuring costs in the income statement for FY2022.",
+          "Since restructuring costs are not directly outlined, the value is considered 0."
+        ],
+        "facts": [
+          {
+            "metric": "Restructuring costs",
+            "period": "FY2022",
+            "value": "0",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "There is no direct mention of restructuring costs in the income statement for FY2022."
+          }
+        ],
+        "missing": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_02119",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 5.729,
+      "retries": 0,
+      "tokens": 945,
+      "facts": 1,
+      "gold_hit": true,
+      "cites_ok": true,
+      "output": {
+        "reasoning": [
+          "The evidence provided mentions the ending TBVPS (Total Book Value Per Share) for JPMorgan in the first quarter of 2021, which is a financial metric related to shareholder value.",
+          "The metric 'TBVPS' is directly relevant to determining how much each shareholder could get if the company were liquidated, as it represents the book value per share.",
+          "The value is stated as $66.56, which is in US dollars and represents the ending value for the period.",
+          "The period is specified as the first quarter of 2021, which aligns with the question's timeframe."
+        ],
+        "facts": [
+          {
+            "metric": "TBVPS",
+            "period": "FY2021",
+            "value": "$66.56",
+            "scale": "units",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "The Firm grew TBVPS, ending the first quarter of 2021 at $66.56, up 10% versus the prior year."
+          }
+        ],
+        "missing": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03531",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 5.408,
+      "retries": 0,
+      "tokens": 1447,
+      "facts": 1,
+      "gold_hit": true,
+      "cites_ok": true,
+      "output": {
+        "reasoning": [
+          "The balance sheet for FY2019 is provided in the evidence, and the table includes 'Total current assets' for the period ending May 31, 2019.",
+          "The 'Total current assets' row corresponds to the requested metric, and the column for FY2019 is clearly labeled.",
+          "The value for 'Total current assets' in FY2019 is listed as $16,525, and the scale is in millions as indicated by the 'Dollars in millions' note.",
+          "The source document is identified as 'S1', and the exact quote is extracted from the table."
+        ],
+        "facts": [
+          {
+            "metric": "Total current assets",
+            "period": "FY2019",
+            "value": "16,525",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "Total current assets 16,525"
+          }
+        ],
+        "missing": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03620",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 9.206,
+      "retries": 0,
+      "tokens": 2453,
+      "facts": 3,
+      "gold_hit": false,
+      "cites_ok": true,
+      "output": {
+        "reasoning": [
+          "The income statement provides the operating profit and depreciation and amortization figures needed for unadjusted EBITDA.",
+          "The operating profit for FY2022 is $11,512 million, and depreciation and amortization is $2,763 million.",
+          "Unadjusted EBITDA is calculated as operating profit plus depreciation and amortization, which is $11,512 million + $2,763 million = $14,275 million.",
+          "The capital spending for FY2022 is $5,207 million, which is needed to calculate unadjusted EBITDA less capex."
+        ],
+        "facts": [
+          {
+            "metric": "Operating Profit",
+            "period": "FY2022",
+            "value": "11,512",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "Operating Profit 11,512"
+          },
+          {
+            "metric": "Depreciation and amortization",
+            "period": "FY2022",
+            "value": "2,763",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S2",
+            "quote": "Depreciation and amortization 2,763"
+          },
+          {
+            "metric": "Capital spending",
+            "period": "FY2022",
+            "value": "5,207",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S2",
+            "quote": "Capital spending (5,207)"
+          }
+        ],
+        "missing": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_03882",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 5.646,
+      "retries": 0,
+      "tokens": 1773,
+      "facts": 1,
+      "gold_hit": true,
+      "cites_ok": true,
+      "output": {
+        "reasoning": [
+          "The balance sheet for FY2020 is provided in the evidence, and the metric 'Trade receivables, net' is listed under 'Current assets'.",
+          "The columns represent the periods '2020' and '2019', with the '2020' column corresponding to the requested FY2020 period.",
+          "The value for 'Trade receivables, net' in the FY2020 column is listed as '1,615.9'.",
+          "The scale is specified as 'in millions' in the header of the balance sheet."
+        ],
+        "facts": [
+          {
+            "metric": "Trade receivables, net",
+            "period": "FY2020",
+            "value": "1,615.9",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "Trade receivables, net\n1,615.9 \n1,864.3"
+          }
+        ],
+        "missing": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04103",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/cot@1.1",
+      "valid": false,
+      "json_first_try": false,
+      "calls": 2,
+      "latency_s": 40.24,
+      "retries": 0,
+      "tokens": 7219,
+      "output": {
+        "metric": "Net sales",
+        "period": "FY2019",
+        "value": "16,865.2",
+        "scale": "millions",
+        "currency": "USD",
+        "basis": "GAAP",
+        "source_id": "S1",
+        "quote": "Net sales $ 16,865.2"
+      },
+      "error": "Missing required keys: ['facts', 'missing']."
+    },
+    {
+      "question_id": "financebench_id_04209",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 4.984,
+      "retries": 0,
+      "tokens": 1578,
+      "facts": 1,
+      "gold_hit": true,
+      "cites_ok": true,
+      "output": {
+        "reasoning": [
+          "The balance sheet for FY2021 is provided in the evidence, and the metric 'Total Assets' is listed.",
+          "The 'Total Assets' row includes values for FY2021 and FY2020, with the FY2021 value being $59,268.",
+          "The scale is specified as 'amounts in millions', so the value is already in USD millions.",
+          "The value is reported under GAAP basis as it is part of the consolidated financial statements."
+        ],
+        "facts": [
+          {
+            "metric": "Total Assets",
+            "period": "FY2021",
+            "value": "59,268",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "TOTAL ASSETS\n$59,268\n$55,556"
+          }
+        ],
+        "missing": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04254",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 7.388,
+      "retries": 0,
+      "tokens": 2567,
+      "facts": 2,
+      "gold_hit": false,
+      "cites_ok": true,
+      "output": {
+        "reasoning": [
+          "The income statement in source S1 provides operating income and depreciation and amortization figures for FY2021.",
+          "The cash flow statement in source S2 provides depreciation and amortization figures for FY2021.",
+          "The metric 'operating income' is found in the income statement under the 'Operating income' row for FY2021.",
+          "The metric 'depreciation and amortization' is found in the cash flow statement under the 'Adjustments to reconcile to net cash flows provided by operating activities' section for FY2021."
+        ],
+        "facts": [
+          {
+            "metric": "Operating income",
+            "period": "FY2021",
+            "value": "1,196",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "Operating income\n1,196\n1,248\n1,214"
+          },
+          {
+            "metric": "Depreciation and amortization",
+            "period": "FY2021",
+            "value": "636",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S2",
+            "quote": "Depreciation and amortization\n636\n604\n582"
+          }
+        ],
+        "missing": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_04700",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 5.676,
+      "retries": 0,
+      "tokens": 1540,
+      "facts": 1,
+      "gold_hit": true,
+      "cites_ok": true,
+      "output": {
+        "reasoning": [
+          "The requested metric is COGS for FY2016, which is found in the 'Cost of revenue' section of the income statement table.",
+          "The table includes columns for '2016', '2015', and '2014', with the '2016' column corresponding to the FY2016 period.",
+          "The 'Total cost of revenue' row for the '2016' column shows the value for FY2016 COGS.",
+          "The scale is specified as 'In millions, except per share amounts', so the value is already in USD millions."
+        ],
+        "facts": [
+          {
+            "metric": "Total cost of revenue",
+            "period": "FY2016",
+            "value": "32,780",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "Total cost of revenue\n32,780\n33,038\n27,078"
+          }
+        ],
+        "missing": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_10285",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 4.989,
+      "retries": 0,
+      "tokens": 1652,
+      "facts": 1,
+      "gold_hit": true,
+      "cites_ok": true,
+      "output": {
+        "reasoning": [
+          "Locate the table for the Consolidated Statements of Financial Position in the FY2018 10-K filing.",
+          "Identify the column for the year-end FY2018, which is the rightmost column labeled '2018'.",
+          "Find the row for 'Property, plant and equipment, net' under the 'Assets' section.",
+          "Check the scale, which is stated as 'Dollars in millions, except per share data'."
+        ],
+        "facts": [
+          {
+            "metric": "Property, plant and equipment, net",
+            "period": "FY2018",
+            "value": "12,645",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "Property, plant and equipment, net 12,645 12,672"
+          }
+        ],
+        "missing": []
+      },
+      "error": null
+    },
+    {
+      "question_id": "financebench_id_10420",
+      "case": "extract",
+      "prompt_id": "extract_financial_fact/cot@1.1",
+      "valid": true,
+      "json_first_try": true,
+      "calls": 1,
+      "latency_s": 9.948,
+      "retries": 0,
+      "tokens": 3354,
+      "facts": 3,
+      "gold_hit": false,
+      "cites_ok": true,
+      "output": {
+        "reasoning": [
+          "The statement of financial position (balance sheet) provides the total assets for FY2022 and FY2021.",
+          "The statement of income (income statement) provides the net income for FY2022.",
+          "To calculate ROA, we need the average total assets between FY2021 and FY2022, which requires the total assets for both years.",
+          "The net income for FY2022 is provided in the income statement."
+        ],
+        "facts": [
+          {
+            "metric": "Total Assets FY2022",
+            "period": "FY2022",
+            "value": "38,363",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "TOTAL ASSETS $ 38,363 $ 32,963"
+          },
+          {
+            "metric": "Total Assets FY2021",
+            "period": "FY2021",
+            "value": "32,963",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S1",
+            "quote": "TOTAL ASSETS $ 38,363 $ 32,963"
+          },
+          {
+            "metric": "Net Income FY2022",
+            "period": "FY2022",
+            "value": "(505)",
+            "scale": "millions",
+            "currency": "USD",
+            "basis": "GAAP",
+            "source_id": "S2",
+            "quote": "NET INCOME (LOSS) (505) (951) 152"
+          }
+        ],
+        "missing": [
+          "Average Total Assets FY2021-FY2022",
+          "ROA FY2022"
+        ]
+      },
+      "error": null
+    }
+  ],
+  "n_items": 11
+}

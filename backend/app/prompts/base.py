@@ -121,14 +121,14 @@ def soft_switch(model_name: Optional[str]) -> str:
 
 _REGISTRY: Dict[Tuple[Node, Technique], PromptSpec] = {}
 
-# Starting defaults per node; replace with whatever wins on the dev split.
+# Defaults chosen from dev runs (docs/prompt-experiments.md). Override per run with PROMPT_TECHNIQUE_<NODE>.
 DEFAULT_TECHNIQUE: Dict[Node, Technique] = {
     Node.GUARDRAIL: Technique.FEW_SHOT,
     Node.CLASSIFY: Technique.FEW_SHOT,
     Node.REWRITE: Technique.FEW_SHOT,
-    Node.EXTRACT: Technique.FEW_SHOT,
-    Node.ANALYZE: Technique.COT,
-    Node.SYNTHESIZE: Technique.FEW_SHOT,
+    Node.EXTRACT: Technique.ZERO_SHOT,  # FB run 2: tied within noise, cheapest and fastest
+    Node.ANALYZE: Technique.COT,  # FB run 2: gold figure 56% vs 11-22%
+    Node.SYNTHESIZE: Technique.COT,  # FB run 2: judge 67% correct, half the tokens of few-shot
     Node.VERIFY: Technique.COT,
     Node.REPAIR: Technique.ZERO_SHOT,
 }
