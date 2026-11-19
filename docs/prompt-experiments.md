@@ -68,3 +68,30 @@ Full per-question outputs are in `data/evaluation/runs/`.
 - Three more allow examples (calculation, disclosure summary, figures plus call commentary); the set is now 5 allow / 6 refuse / 1 clarify and ends on allow.
 - The repair message for "refuse with no category" now says to switch to `allow`.
 - Caution: 24 dev questions is a small set, so one question = 4.2 points. Before freezing, extend the dev set (written fresh, never copied from the golden 75).
+
+## Run 3: 2026-11-19, prompt set 2026.11.3 (guardrail only)
+
+| technique | accuracy | category acc | JSON 1st try | valid | avg calls | p50 latency s | avg tokens |
+|---|---|---|---|---|---|---|---|
+| zero_shot | 66.7% | 62.5% | 100.0% | 100.0% | 1.00 | 1.23 | 915 |
+| **few_shot** | **95.8%** | **95.8%** | 100.0% | 100.0% | 1.00 | 0.93 | 2340 |
+
+### Findings
+
+- **Few-shot is decisively best: 23/24, all 11 must-refuse questions refused, 100% valid JSON, fastest.** Zero-shot fell back (75% → 67%) because the stricter allow-by-default wording without examples is less stable on an 8B model. Examples are what make this work.
+- The only miss is D022 ("Why did Bluefin's auditor flag a material weakness?"), refused as `legal_tax_audit_opinion`. It is borderline: the model's suggested alternative question ("What did the filing disclose about its internal controls?") would still give the user the cited facts through the refusal-with-facts flow. **Not tuned further**, to avoid over-fitting a 24-question dev set.
+
+## Decisions (as of 2026-11-19)
+
+| Node | Technique | Evidence |
+|---|---|---|
+| pre_guardrail | **few_shot** | Run 3: 95.8%, 11/11 refusals correct |
+| classify_and_plan | **few_shot** | Run 2: 100% |
+| query_rewrite, extract, analyze, synthesize, verify, repair | not yet tested | Need retrieved evidence: next stage |
+
+Both defaults already match `DEFAULT_TECHNIQUE` in `backend/app/prompts/base.py`.
+
+### Next
+
+1. Extend the dev set with 20-30 new questions (fresh, never copied from the golden 75) and re-run both nodes to confirm the scores hold.
+2. Test the evidence-side prompts (extract, synthesize, verify) using hand-picked evidence passages, then end-to-end through the RAG pipeline from `main`.
