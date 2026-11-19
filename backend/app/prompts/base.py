@@ -10,9 +10,9 @@ import os
 import re
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
+from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence, Tuple
 
-PROMPT_SET_VERSION = "2026.11.1"  # .1: aligned to the Financial Report RAG Specification & 75-query set
+PROMPT_SET_VERSION = "2026.11.2"  # .2: routing prompts fixed after dev run 1 (over-refusal)
 
 _PLACEHOLDER = re.compile(r"\{\{\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\}\}")
 
@@ -58,6 +58,8 @@ class PromptSpec:
     enums: Mapping[str, Tuple[str, ...]] = field(default_factory=dict)
     max_tokens: int = 512
     temperature: float = 0.0
+    # Extra cross-field check: returns an error string, or None when the output is consistent.
+    validator: Optional[Callable[[Dict[str, Any]], Optional[str]]] = None
 
     @property
     def prompt_id(self) -> str:

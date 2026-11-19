@@ -1,0 +1,1361 @@
+{
+  "prompt_set": "2026.11.1",
+  "node": "classify_and_plan",
+  "n_items": 13,
+  "techniques": {
+    "zero_shot": {
+      "prompt_id": "classify_and_plan/zero_shot@1.1",
+      "accuracy": 0.7692307692307693,
+      "category_accuracy": null,
+      "json_first_try": 0.9230769230769231,
+      "valid_after_repair": 1.0,
+      "avg_calls": 1.0769230769230769,
+      "p50_latency_s": 1.92,
+      "avg_tokens": 782.3076923076923
+    },
+    "few_shot": {
+      "prompt_id": "classify_and_plan/few_shot@1.1",
+      "accuracy": 0.7692307692307693,
+      "category_accuracy": null,
+      "json_first_try": 1.0,
+      "valid_after_repair": 1.0,
+      "avg_calls": 1.0,
+      "p50_latency_s": 1.636,
+      "avg_tokens": 1429.076923076923
+    },
+    "cot": {
+      "prompt_id": "classify_and_plan/cot@1.1",
+      "accuracy": 0.5384615384615384,
+      "category_accuracy": null,
+      "json_first_try": 1.0,
+      "valid_after_repair": 1.0,
+      "avg_calls": 1.0,
+      "p50_latency_s": 3.964,
+      "avg_tokens": 873.4615384615385
+    }
+  },
+  "rows": [
+    {
+      "question_id": "D001",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/zero_shot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.739,
+      "tokens": 693,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "extraction",
+        "company": "Northwind Instruments",
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [
+          "total revenue"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D002",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/zero_shot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.92,
+      "tokens": 705,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "calculation",
+        "company": "Bluefin Logistics",
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [
+          "free cash flow"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact",
+          "calculate_fcf"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D003",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/zero_shot@1.1",
+      "json_ok_first_try": false,
+      "valid": true,
+      "calls": 2,
+      "latency_s": 5.199,
+      "tokens": 1688,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "calculation",
+        "company": null,
+        "periods": [
+          "Q1 FY2025",
+          "Q2 FY2025"
+        ],
+        "metrics": [
+          "gross margin"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-Q",
+          "transcript"
+        ],
+        "tools": [
+          "search_filings",
+          "calculate_bps_delta"
+        ],
+        "clarification_question": "What is the gross margin for Northwind in Q1 FY2025 and Q2 FY2025?"
+      },
+      "error": null
+    },
+    {
+      "question_id": "D004",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/zero_shot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.875,
+      "tokens": 708,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "comparison",
+        "company": "Bluefin",
+        "periods": [
+          "FY2023",
+          "FY2024"
+        ],
+        "metrics": [
+          "segment operating income"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings",
+          "compare_periods"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D005",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/zero_shot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 2.182,
+      "tokens": 734,
+      "correct": false,
+      "category_correct": null,
+      "output": {
+        "intent": "narrative",
+        "company": "null",
+        "periods": [
+          "Q3 FY2025",
+          "Q3 FY2024"
+        ],
+        "metrics": [],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-Q",
+          "transcript"
+        ],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": "What is the name of the company being referred to as Northwind?"
+      },
+      "error": null
+    },
+    {
+      "question_id": "D006",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/zero_shot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.599,
+      "tokens": 697,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "narrative",
+        "company": "Bluefin",
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D007",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/zero_shot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 2.158,
+      "tokens": 717,
+      "correct": false,
+      "category_correct": null,
+      "output": {
+        "intent": "narrative",
+        "company": "null",
+        "periods": [
+          "FY2026"
+        ],
+        "metrics": [
+          "revenue range"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "earnings_release",
+          "transcript"
+        ],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": "What is the specific revenue range guidance provided by Northwind's management for FY2026?"
+      },
+      "error": null
+    },
+    {
+      "question_id": "D014",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/zero_shot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 2.138,
+      "tokens": 708,
+      "correct": false,
+      "category_correct": null,
+      "output": {
+        "intent": "extraction",
+        "company": null,
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [
+          "operating cash flow"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-K",
+          "10-Q",
+          "earnings_release"
+        ],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": "Please specify the company name and the exact period you are referring to."
+      },
+      "error": null
+    },
+    {
+      "question_id": "D015",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/zero_shot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.708,
+      "tokens": 694,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "extraction",
+        "company": "Bluefin Logistics",
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [
+          "operating cash flow"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D020",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/zero_shot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 2.396,
+      "tokens": 718,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "comparison",
+        "company": "Bluefin, FedEx",
+        "periods": [
+          "FY2024",
+          "FY2024"
+        ],
+        "metrics": [
+          "operating margin"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-K",
+          "10-K"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact",
+          "compare_periods"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D021",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/zero_shot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.706,
+      "tokens": 693,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "extraction",
+        "company": null,
+        "periods": [
+          "FY2015"
+        ],
+        "metrics": [
+          "revenue"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": "Please specify the company name."
+      },
+      "error": null
+    },
+    {
+      "question_id": "D022",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/zero_shot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.595,
+      "tokens": 692,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "narrative",
+        "company": "Bluefin",
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D023",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/zero_shot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 2.244,
+      "tokens": 723,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "extraction",
+        "company": "Northwind",
+        "periods": [
+          "Q2 FY2025"
+        ],
+        "metrics": [
+          "employee attrition rate"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-Q",
+          "earnings_release",
+          "transcript"
+        ],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": "Is the employee attrition rate reported in GAAP or non-GAAP basis?"
+      },
+      "error": null
+    },
+    {
+      "question_id": "D001",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/few_shot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.636,
+      "tokens": 1419,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "extraction",
+        "company": "Northwind Instruments",
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [
+          "total revenue"
+        ],
+        "basis": "GAAP",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D002",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/few_shot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 2.099,
+      "tokens": 1442,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "calculation",
+        "company": "Bluefin Logistics",
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [
+          "net income",
+          "capital expenditures",
+          "depreciation and amortization",
+          "change in working capital"
+        ],
+        "basis": "GAAP",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact",
+          "calculate_fcf"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D003",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/few_shot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 2.205,
+      "tokens": 1461,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "calculation",
+        "company": "Northwind",
+        "periods": [
+          "Q1 FY2025",
+          "Q2 FY2025"
+        ],
+        "metrics": [
+          "gross income",
+          "revenue",
+          "gross margin"
+        ],
+        "basis": "GAAP",
+        "doc_types": [
+          "10-Q"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact",
+          "calculate_margin",
+          "calculate_bps_delta"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D004",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/few_shot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.81,
+      "tokens": 1434,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "comparison",
+        "company": "Bluefin",
+        "periods": [
+          "FY2023",
+          "FY2024"
+        ],
+        "metrics": [
+          "segment operating income"
+        ],
+        "basis": "GAAP",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact",
+          "compare_periods"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D005",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/few_shot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.701,
+      "tokens": 1441,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "multi_hop",
+        "company": "Northwind Instruments",
+        "periods": [
+          "Q3 FY2025"
+        ],
+        "metrics": [
+          "inventory"
+        ],
+        "basis": "GAAP",
+        "doc_types": [
+          "10-Q",
+          "transcript"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D006",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/few_shot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.595,
+      "tokens": 1426,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "narrative",
+        "company": "Bluefin",
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [
+          "risk factors"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D007",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/few_shot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.505,
+      "tokens": 1416,
+      "correct": false,
+      "category_correct": null,
+      "output": {
+        "intent": "narrative",
+        "company": "Northwind Instruments",
+        "periods": [
+          "FY2026"
+        ],
+        "metrics": [
+          "revenue"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "investor_presentation"
+        ],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D014",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/few_shot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.459,
+      "tokens": 1406,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "clarify",
+        "company": null,
+        "periods": [],
+        "metrics": [
+          "operating cash flow"
+        ],
+        "basis": "unspecified",
+        "doc_types": [],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": "Which company should I look up operating cash flow for?"
+      },
+      "error": null
+    },
+    {
+      "question_id": "D015",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/few_shot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.635,
+      "tokens": 1420,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "extraction",
+        "company": "Bluefin Logistics",
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [
+          "operating cash flow"
+        ],
+        "basis": "GAAP",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D020",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/few_shot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 2.229,
+      "tokens": 1450,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "comparison",
+        "company": "Bluefin",
+        "periods": [
+          "FY2024",
+          "FY2024"
+        ],
+        "metrics": [
+          "operating margin"
+        ],
+        "basis": "GAAP",
+        "doc_types": [
+          "10-K",
+          "10-K"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact",
+          "calculate_margin"
+        ],
+        "clarification_question": "Which company's FY2024 operating margin should I compare?"
+      },
+      "error": null
+    },
+    {
+      "question_id": "D021",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/few_shot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.382,
+      "tokens": 1407,
+      "correct": false,
+      "category_correct": null,
+      "output": {
+        "intent": "clarify",
+        "company": null,
+        "periods": [],
+        "metrics": [
+          "revenue"
+        ],
+        "basis": "unspecified",
+        "doc_types": [],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": "Which company should I look up revenue for?"
+      },
+      "error": null
+    },
+    {
+      "question_id": "D022",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/few_shot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.568,
+      "tokens": 1420,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "narrative",
+        "company": "Bluefin",
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [
+          "material weakness"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "8-K"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D023",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/few_shot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.898,
+      "tokens": 1436,
+      "correct": false,
+      "category_correct": null,
+      "output": {
+        "intent": "clarify",
+        "company": "Northwind Instruments",
+        "periods": [
+          "Q2 FY2025"
+        ],
+        "metrics": [
+          "employee attrition rate"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-Q"
+        ],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": "Is the employee attrition rate reported in GAAP or non-GAAP basis?"
+      },
+      "error": null
+    },
+    {
+      "question_id": "D001",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/cot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 3.89,
+      "tokens": 864,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "reasoning": [
+          "The question asks for Northwind Instruments' total revenue in FY2024, so the company is identified as Northwind Instruments.",
+          "The period required is FY2024, which is a full fiscal year.",
+          "The metric needed is total revenue, which is a financial fact that can be extracted from the financial filings.",
+          "The basis for the metric is not specified, so it could be GAAP, non-GAAP, or unspecified."
+        ],
+        "intent": "extraction",
+        "company": "Northwind Instruments",
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [
+          "total revenue"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact"
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "D002",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/cot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 3.964,
+      "tokens": 868,
+      "correct": false,
+      "category_correct": null,
+      "output": {
+        "reasoning": [
+          "The question asks for Bluefin Logistics' free cash flow for FY2024, which requires identifying the company and the specific period.",
+          "The next step is to search for filings related to Bluefin Logistics for FY2024 to locate the free cash flow figure.",
+          "Once the relevant filing is identified, the free cash flow figure can be extracted.",
+          "No arithmetic calculation is needed as the free cash flow is a direct figure."
+        ],
+        "intent": "extraction",
+        "company": "Bluefin Logistics",
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [
+          "free cash flow"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-K",
+          "earnings_release"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact"
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "D003",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/cot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 4.183,
+      "tokens": 892,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "reasoning": [
+          "Identify the company as Northwind.",
+          "Determine the periods: Q1 FY2025 and Q2 FY2025.",
+          "Extract the gross margin for both Q1 FY2025 and Q2 FY2025.",
+          "Calculate the basis points change between the two periods."
+        ],
+        "intent": "calculation",
+        "company": "Northwind",
+        "periods": [
+          "Q1 FY2025",
+          "Q2 FY2025"
+        ],
+        "metrics": [
+          "gross margin for Q1 FY2025",
+          "gross margin for Q2 FY2025"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-Q",
+          "earnings_release"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact",
+          "calculate_bps_delta"
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "D004",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/cot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 3.661,
+      "tokens": 859,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "reasoning": [
+          "Identify the company as Bluefin and the periods FY2023 and FY2024.",
+          "Determine the segment operating income for each period from the financial filings.",
+          "Compare the operating income figures across the two periods.",
+          "Ensure the basis (GAAP, non-GAAP, or both) is specified."
+        ],
+        "intent": "comparison",
+        "company": "Bluefin",
+        "periods": [
+          "FY2023",
+          "FY2024"
+        ],
+        "metrics": [
+          "segment operating income"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-K",
+          "10-Q"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact",
+          "compare_periods"
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "D005",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/cot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 3.665,
+      "tokens": 871,
+      "correct": false,
+      "category_correct": null,
+      "output": {
+        "reasoning": [
+          "Identify the company as Northwind and the periods Q3 FY2025 and the earnings call.",
+          "Extract the inventory figures from the Q3 FY2025 10-Q and the management's commentary from the earnings call.",
+          "Analyze the reasons provided by management for the rise in inventory.",
+          "Summarize the qualitative disclosures related to inventory and management's comments."
+        ],
+        "intent": "narrative",
+        "company": "Northwind",
+        "periods": [
+          "Q3 FY2025",
+          "earnings call"
+        ],
+        "metrics": [],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-Q",
+          "transcript"
+        ],
+        "tools": [
+          "search_filings"
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "D006",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/cot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 3.684,
+      "tokens": 862,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "reasoning": [
+          "Identify the company as Bluefin and the period as FY2024.",
+          "Determine the document type as 10-K since the question refers to the FY2024 10-K.",
+          "Locate the section of the 10-K that discusses risk factors, typically found in the 'Risk Factors' section.",
+          "Extract and summarize the top risk factors disclosed in that section."
+        ],
+        "intent": "narrative",
+        "company": "Bluefin",
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D007",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/cot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 4.336,
+      "tokens": 886,
+      "correct": false,
+      "category_correct": null,
+      "output": {
+        "reasoning": [
+          "The question asks for Northwind's revenue guidance for FY2026, which is a forward-looking statement and likely found in an investor presentation or earnings release.",
+          "The company name is 'Northwind', and the period is FY2026, which is a future fiscal year.",
+          "The metric required is the revenue range, and the basis is not specified, so it could be GAAP, non-GAAP, or unspecified.",
+          "The document types to search are investor_presentation and earnings_release."
+        ],
+        "intent": "narrative",
+        "company": "Northwind",
+        "periods": [
+          "FY2026"
+        ],
+        "metrics": [
+          "revenue range"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "investor_presentation",
+          "earnings_release"
+        ],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D014",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/cot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 4.288,
+      "tokens": 876,
+      "correct": false,
+      "category_correct": null,
+      "output": {
+        "reasoning": [
+          "The question asks for operating cash flow from last year, which requires identifying the company and the specific period (last year).",
+          "Since the company is not specified, a clarification question is needed to determine which company the user is referring to.",
+          "Once the company is known, the relevant financial filing (e.g., 10-K, 10-Q) for the previous fiscal year can be searched.",
+          "The operating cash flow figure can then be extracted from the identified filing."
+        ],
+        "intent": "extraction",
+        "company": null,
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [
+          "operating cash flow"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact"
+        ],
+        "clarification_question": "Which company are you referring to?"
+      },
+      "error": null
+    },
+    {
+      "question_id": "D015",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/cot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 3.527,
+      "tokens": 847,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "reasoning": [
+          "Identify the company as Bluefin Logistics and the period as FY2024.",
+          "Determine the metric needed: operating cash flow for FY2024.",
+          "Search filings for Bluefin Logistics to locate the operating cash flow figure for FY2024.",
+          "Extract the operating cash flow fact from the relevant filing."
+        ],
+        "intent": "extraction",
+        "company": "Bluefin Logistics",
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [
+          "operating cash flow"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-K",
+          "10-Q"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact"
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "D020",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/cot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 3.726,
+      "tokens": 859,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "reasoning": [
+          "The question asks for a comparison of operating margins between Bluefin and FedEx for FY2024.",
+          "To compare operating margins, we need the operating margin figures for both companies for the same period.",
+          "The operating margin for Bluefin and FedEx for FY2024 must be extracted from their respective financial filings.",
+          "Once the operating margins are extracted, a comparison can be made."
+        ],
+        "intent": "comparison",
+        "company": "Bluefin, FedEx",
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [
+          "operating margin"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact",
+          "compare_periods"
+        ]
+      },
+      "error": null
+    },
+    {
+      "question_id": "D021",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/cot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 3.964,
+      "tokens": 866,
+      "correct": false,
+      "category_correct": null,
+      "output": {
+        "reasoning": [
+          "The question asks for Northwind's revenue in FY2015, but the company name is not specified.",
+          "The period FY2015 is specified, but the company name is missing, making it impossible to retrieve the correct financial data.",
+          "Without the company name, the search for the relevant filing cannot be performed.",
+          "The question lacks the necessary information to proceed with the retrieval of financial data."
+        ],
+        "intent": "clarify",
+        "company": null,
+        "periods": [
+          "FY2015"
+        ],
+        "metrics": [
+          "revenue"
+        ],
+        "basis": "unspecified",
+        "doc_types": [],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": "Please specify the company name for which you are asking about FY2015 revenue."
+      },
+      "error": null
+    },
+    {
+      "question_id": "D022",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/cot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 4.489,
+      "tokens": 894,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "reasoning": [
+          "The question asks about the reason for Bluefin's auditor flagging a material weakness in FY2024, which requires understanding the qualitative disclosures related to internal controls and audit findings.",
+          "The answer likely involves reviewing the 10-K filing for FY2024, as it contains the auditor's report and management's discussion of internal control over financial reporting.",
+          "The specific reason for the material weakness would be detailed in the 10-K's section on internal controls or the auditor's report.",
+          "No numerical calculations or comparisons are required, as the question is focused on qualitative information."
+        ],
+        "intent": "narrative",
+        "company": "Bluefin",
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D023",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/cot@1.1",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 4.832,
+      "tokens": 911,
+      "correct": false,
+      "category_correct": null,
+      "output": {
+        "reasoning": [
+          "The question asks for Northwind's employee attrition rate in Q2 FY2025, but the company name is not specified.",
+          "The period is Q2 FY2025, which is a specific quarter in the fiscal year 2025.",
+          "The metric required is the employee attrition rate, which is a qualitative or quantitative measure of employee turnover.",
+          "The question does not specify the basis (GAAP, non-GAAP, or unspecified)."
+        ],
+        "intent": "clarify",
+        "company": "null",
+        "periods": [
+          "Q2 FY2025"
+        ],
+        "metrics": [
+          "employee attrition rate"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-Q",
+          "earnings_release",
+          "transcript"
+        ],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": "Please specify the company name and the basis (GAAP, non-GAAP, or unspecified) for the employee attrition rate."
+      },
+      "error": null
+    }
+  ]
+}

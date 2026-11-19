@@ -215,3 +215,19 @@ def test_experiment_scoring_with_fake_llm():
     m = summary["techniques"]["zero_shot"]
     assert m["accuracy"] == 1.0 and m["json_first_try"] == 1.0
     assert "zero_shot" in to_markdown(summary)
+
+
+def test_guardrail_consistency_validator_triggers_repair():
+    spec = get_prompt(Node.GUARDRAIL, "few_shot")
+    bad = parse_output('{"decision": "refuse", "category": "none", "reason": "x"}', spec)
+    assert bad.error and "category" in bad.error
+    assert parse_output('{"decision": "allow", "category": "none", "reason": "x"}', spec).ok
+    assert parse_output('{"decision": "allow", "category": "investment_advice", "reason": "x"}', spec).error
+
+
+def test_routing_prompts_have_no_evidence_rules():
+    for node in (Node.GUARDRAIL, Node.CLASSIFY, Node.REWRITE):
+        for t in available(node):
+            sys_text = get_prompt(node, t).system
+            assert "No documents have been retrieved yet" in sys_text
+            assert "Never compute numbers yourself" not in sys_text

@@ -80,6 +80,10 @@ def parse_output(raw: str, spec: PromptSpec) -> ParseResult:
     for key, allowed in spec.enums.items():
         if key in data and data[key] not in allowed:
             return ParseResult(data, f"Field '{key}' must be one of {list(allowed)}, got {data[key]!r}.", raw)
+    if spec.validator is not None:
+        problem = spec.validator(data)
+        if problem:
+            return ParseResult(data, problem, raw)
     return ParseResult(data, None, raw)
 
 
