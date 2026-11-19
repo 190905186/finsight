@@ -231,3 +231,40 @@ Chain: guardrail → classify → query_rewrite → HybridRetriever (pgvector + 
 
 - Runner: rewritten-query results first, raw question last; evidence cap 6 → 8 passages (still within the 8,192-token budget).
 - synthesize: a tool_result is authoritative; if the evidence seems different, quote both without choosing.
+
+## E2E run 2: 2026-11-20, prompt set 2026.11.5 (24 questions)
+
+| metric | run 1 | run 2 |
+|---|---|---|
+| guardrail allowed | 95.8% | 95.8% |
+| page hit, raw question | 41.7% | 41.7% |
+| page hit, rewritten queries | 79.2% | 79.2% |
+| **page hit, merged evidence** | 66.7% | **79.2%** |
+| answered | 62.5% | 66.7% |
+| citations ok (after repair) | 100% | 100% |
+| verify failed → repaired | 13.0% | 17.4% |
+| gold figure | 88.9% | 66.7% |
+| judge correct / correct-or-partial | 41.7% / 50.0% | 41.7% / 54.2% |
+| avg LLM calls (excl. judge) / p50 latency | 5.04 / 13.3 s | 5.08 / 13.6 s |
+
+### Findings
+
+- The merge fix worked: the model now receives the gold page whenever the rewritten queries find it (79.2%).
+- Question-level changes between runs are mostly noise: 5 improved and 4 regressed. On 24 questions one question = 4.2 points, so the overall level is about **50-55% judged correct-or-partial end to end**.
+- **The clearest evidence for building the calculator:** on PepsiCo EBITDA-less-capex the model computed 11,512 + 2,763 − 5,207 itself and wrote 8,978 (correct: 9,068). It broke the no-arithmetic rule *and* got the arithmetic wrong. Most remaining wrong answers are calculation questions without a calculator (quick ratio, working capital ratio, working capital) or judgment questions (capital intensity, which segment grew fastest).
+
+## Summary: where the prompts stand (prompt set 2026.11.5)
+
+| Stage | Result |
+|---|---|
+| Routing (24 fictional dev questions) | guardrail 95.8% (all must-refuse correct), classify 100% |
+| Answer-side with gold evidence (FinanceBench dev) | judge correct/partial 75%, verify 89%, repair 82%, citations valid 87.5% → 100% after repair |
+| End to end with real retrieval | query_rewrite doubles gold-page retrieval (42% → 79%); answers correct/partial ~50-55% |
+
+**Main limits are outside the prompts:** (1) no deterministic calculator (team-notes item 16), (2) retrieval misses about 1 in 5 gold pages, (3) an 8B model's reasoning on comparison/judgment questions.
+
+### Remaining steps
+
+1. Freeze prompt set 2026.11.5 (no more tuning on dev).
+2. **Held-out confirmation, once:** answer-side on the 51 FinanceBench held-out questions (`answer_eval --data ../data/evaluation/financebench_holdout.jsonl --final-run --limit 0`), and end to end after ingesting their filings.
+3. Golden 75: the guardrail can be scored on its 9 must-refuse / 66 allow labels now (no documents needed, `--final-run`); full answers wait for the Acme document pack (team-notes item 15).
