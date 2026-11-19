@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence, Tuple
 
-PROMPT_SET_VERSION = "2026.11.2"  # .2: routing prompts fixed after dev run 1 (over-refusal)
+PROMPT_SET_VERSION = "2026.11.3"  # .3: guardrail allow-by-default + balanced examples (dev run 2)
 
 _PLACEHOLDER = re.compile(r"\{\{\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\}\}")
 

@@ -1,0 +1,861 @@
+{
+  "prompt_set": "2026.11.2",
+  "node": "classify_and_plan",
+  "n_items": 13,
+  "techniques": {
+    "zero_shot": {
+      "prompt_id": "classify_and_plan/zero_shot@1.2",
+      "accuracy": 0.8461538461538461,
+      "category_accuracy": null,
+      "json_first_try": 1.0,
+      "valid_after_repair": 1.0,
+      "avg_calls": 1.0,
+      "p50_latency_s": 1.809,
+      "avg_tokens": 762.2307692307693
+    },
+    "few_shot": {
+      "prompt_id": "classify_and_plan/few_shot@1.2",
+      "accuracy": 1.0,
+      "category_accuracy": null,
+      "json_first_try": 1.0,
+      "valid_after_repair": 1.0,
+      "avg_calls": 1.0,
+      "p50_latency_s": 1.68,
+      "avg_tokens": 1487.8461538461538
+    }
+  },
+  "rows": [
+    {
+      "question_id": "D001",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/zero_shot@1.2",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.848,
+      "tokens": 759,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "extraction",
+        "company": "Northwind Instruments",
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [
+          "total revenue"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D002",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/zero_shot@1.2",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.921,
+      "tokens": 765,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "calculation",
+        "company": "Bluefin Logistics",
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [
+          "free cash flow"
+        ],
+        "basis": "GAAP",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact",
+          "calculate_fcf"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D003",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/zero_shot@1.2",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 2.161,
+      "tokens": 787,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "calculation",
+        "company": "Northwind",
+        "periods": [
+          "Q1 FY2025",
+          "Q2 FY2025"
+        ],
+        "metrics": [
+          "gross margin"
+        ],
+        "basis": "GAAP",
+        "doc_types": [
+          "10-Q",
+          "transcript"
+        ],
+        "tools": [
+          "search_filings",
+          "calculate_bps_delta"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D004",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/zero_shot@1.2",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.878,
+      "tokens": 768,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "comparison",
+        "company": "Bluefin",
+        "periods": [
+          "FY2023",
+          "FY2024"
+        ],
+        "metrics": [
+          "segment operating income"
+        ],
+        "basis": "GAAP",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings",
+          "compare_periods"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D005",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/zero_shot@1.2",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.726,
+      "tokens": 773,
+      "correct": false,
+      "category_correct": null,
+      "output": {
+        "intent": "narrative",
+        "company": "Northwind",
+        "periods": [
+          "Q3 FY2025"
+        ],
+        "metrics": [],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-Q",
+          "transcript"
+        ],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D006",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/zero_shot@1.2",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.595,
+      "tokens": 757,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "narrative",
+        "company": "Bluefin",
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D007",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/zero_shot@1.2",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.79,
+      "tokens": 760,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "extraction",
+        "company": "Northwind",
+        "periods": [
+          "FY2026"
+        ],
+        "metrics": [
+          "revenue range"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "earnings_release",
+          "investor_presentation"
+        ],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D014",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/zero_shot@1.2",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.745,
+      "tokens": 750,
+      "correct": false,
+      "category_correct": null,
+      "output": {
+        "intent": "extraction",
+        "company": null,
+        "periods": [
+          "FY2023"
+        ],
+        "metrics": [
+          "operating cash flow"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-K",
+          "earnings_release"
+        ],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D015",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/zero_shot@1.2",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.832,
+      "tokens": 760,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "extraction",
+        "company": "Bluefin Logistics",
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [
+          "operating cash flow"
+        ],
+        "basis": "GAAP",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D020",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/zero_shot@1.2",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.906,
+      "tokens": 765,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "comparison",
+        "company": "Bluefin,FedEx",
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [
+          "operating margin"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings",
+          "calculate_margin",
+          "compare_periods"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D021",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/zero_shot@1.2",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.642,
+      "tokens": 750,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "extraction",
+        "company": "Northwind",
+        "periods": [
+          "FY2015"
+        ],
+        "metrics": [
+          "revenue"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D022",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/zero_shot@1.2",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.596,
+      "tokens": 752,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "narrative",
+        "company": "Bluefin",
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D023",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/zero_shot@1.2",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.809,
+      "tokens": 763,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "extraction",
+        "company": "Northwind",
+        "periods": [
+          "Q2 FY2025"
+        ],
+        "metrics": [
+          "employee attrition rate"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-Q",
+          "transcript"
+        ],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D001",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/few_shot@1.2",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.634,
+      "tokens": 1479,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "extraction",
+        "company": "Northwind Instruments",
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [
+          "total revenue"
+        ],
+        "basis": "GAAP",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D002",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/few_shot@1.2",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 2.094,
+      "tokens": 1502,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "calculation",
+        "company": "Bluefin Logistics",
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [
+          "net income",
+          "capital expenditures",
+          "depreciation and amortization",
+          "change in working capital"
+        ],
+        "basis": "GAAP",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact",
+          "calculate_fcf"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D003",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/few_shot@1.2",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 2.203,
+      "tokens": 1521,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "calculation",
+        "company": "Northwind",
+        "periods": [
+          "Q2 FY2025",
+          "Q1 FY2025"
+        ],
+        "metrics": [
+          "gross income",
+          "revenue",
+          "gross margin"
+        ],
+        "basis": "GAAP",
+        "doc_types": [
+          "10-Q"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact",
+          "calculate_margin",
+          "calculate_bps_delta"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D004",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/few_shot@1.2",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.809,
+      "tokens": 1494,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "comparison",
+        "company": "Bluefin",
+        "periods": [
+          "FY2023",
+          "FY2024"
+        ],
+        "metrics": [
+          "segment operating income"
+        ],
+        "basis": "GAAP",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact",
+          "compare_periods"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D005",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/few_shot@1.2",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.7,
+      "tokens": 1501,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "multi_hop",
+        "company": "Northwind Instruments",
+        "periods": [
+          "Q3 FY2025"
+        ],
+        "metrics": [
+          "inventory"
+        ],
+        "basis": "GAAP",
+        "doc_types": [
+          "10-Q",
+          "transcript"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D006",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/few_shot@1.2",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.401,
+      "tokens": 1477,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "narrative",
+        "company": "Bluefin",
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D007",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/few_shot@1.2",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.722,
+      "tokens": 1486,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "extraction",
+        "company": "Northwind Instruments",
+        "periods": [
+          "FY2026"
+        ],
+        "metrics": [
+          "revenue"
+        ],
+        "basis": "GAAP",
+        "doc_types": [
+          "earnings_release",
+          "investor_presentation"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D014",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/few_shot@1.2",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.438,
+      "tokens": 1465,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "clarify",
+        "company": null,
+        "periods": [],
+        "metrics": [
+          "operating cash flow"
+        ],
+        "basis": "unspecified",
+        "doc_types": [],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": "Which company should I check operating cash flow for?"
+      },
+      "error": null
+    },
+    {
+      "question_id": "D015",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/few_shot@1.2",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.635,
+      "tokens": 1480,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "extraction",
+        "company": "Bluefin Logistics",
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [
+          "operating cash flow"
+        ],
+        "basis": "GAAP",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D020",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/few_shot@1.2",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 2.072,
+      "tokens": 1503,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "comparison",
+        "company": "Bluefin",
+        "periods": [
+          "FY2024",
+          "FY2024"
+        ],
+        "metrics": [
+          "operating margin"
+        ],
+        "basis": "GAAP",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact",
+          "calculate_margin"
+        ],
+        "clarification_question": "Which company should I compare Bluefin's operating margin with?"
+      },
+      "error": null
+    },
+    {
+      "question_id": "D021",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/few_shot@1.2",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.572,
+      "tokens": 1476,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "extraction",
+        "company": "Northwind",
+        "periods": [
+          "FY2015"
+        ],
+        "metrics": [
+          "revenue"
+        ],
+        "basis": "GAAP",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D022",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/few_shot@1.2",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.394,
+      "tokens": 1472,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "narrative",
+        "company": "Bluefin",
+        "periods": [
+          "FY2024"
+        ],
+        "metrics": [],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-K"
+        ],
+        "tools": [
+          "search_filings"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    },
+    {
+      "question_id": "D023",
+      "repeat": 0,
+      "prompt_id": "classify_and_plan/few_shot@1.2",
+      "json_ok_first_try": true,
+      "valid": true,
+      "calls": 1,
+      "latency_s": 1.68,
+      "tokens": 1486,
+      "correct": true,
+      "category_correct": null,
+      "output": {
+        "intent": "extraction",
+        "company": "Northwind Instruments",
+        "periods": [
+          "Q2 FY2025"
+        ],
+        "metrics": [
+          "employee attrition rate"
+        ],
+        "basis": "unspecified",
+        "doc_types": [
+          "10-Q"
+        ],
+        "tools": [
+          "search_filings",
+          "extract_financial_fact"
+        ],
+        "clarification_question": null
+      },
+      "error": null
+    }
+  ]
+}

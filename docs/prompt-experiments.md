@@ -37,3 +37,34 @@ Full per-question outputs are in `data/evaluation/runs/`.
 - Routing nodes (guardrail, classify, rewrite) now use their own rules: route only, no documents yet is expected, calculations are allowed, never judge data availability, a company named in the question counts.
 - Guardrail: factual audit/tax/legal questions are allowed; only judgments and tax-structuring advice are refused. A consistency check (refuse ⇔ category ≠ none) triggers the one format repair.
 - Classify: clarify only when company or metric is undeterminable; guidance figures = extraction; two or more document types = multi_hop.
+
+## Run 2: 2026-11-19, prompt set 2026.11.2 (CoT dropped for routing)
+
+### pre_guardrail (24 questions)
+
+| technique | accuracy | category acc | JSON 1st try | valid | avg calls | p50 latency s | avg tokens |
+|---|---|---|---|---|---|---|---|
+| zero_shot | 75.0% | 70.8% | 100.0% | 100.0% | 1.00 | 1.30 | 823 |
+| few_shot | 70.8% | 77.3% | 87.5% | 91.7% | 1.12 | 1.14 | 2149 |
+
+### classify_and_plan (13 questions)
+
+| technique | accuracy | category acc | JSON 1st try | valid | avg calls | p50 latency s | avg tokens |
+|---|---|---|---|---|---|---|---|
+| zero_shot | 84.6% | - | 100.0% | 100.0% | 1.00 | 1.81 | 762 |
+| **few_shot** | **100.0%** | - | 100.0% | 100.0% | 1.00 | 1.68 | 1488 |
+
+### Findings
+
+- **classify_and_plan is settled: few-shot, 100%.**
+- Guardrail improved (zero-shot 54% → 75%), but still over-blocks allowed questions: "total revenue", "summarize risk factors" and "management guidance range" were refused, mostly as `out_of_scope`.
+- The new consistency check shows the bias: twice few-shot answered `refuse` with category `none` (no rule applied, but it refused anyway) and kept it after the repair turn.
+- Likely causes: the few-shot set was 6 refuse / 2 allow / 1 clarify, so the model copies the refusal ratio; `out_of_scope` was vague ("unrelated to financial reports"); and the fictional companies may look unfamiliar.
+
+### Changes for run 3 (prompt set 2026.11.3)
+
+- Allow-by-default: refuse only when a question clearly matches a refusal type; an unfamiliar company is never a reason.
+- `out_of_scope` narrowed to non-company, non-finance requests.
+- Three more allow examples (calculation, disclosure summary, figures plus call commentary); the set is now 5 allow / 6 refuse / 1 clarify and ends on allow.
+- The repair message for "refuse with no category" now says to switch to `allow`.
+- Caution: 24 dev questions is a small set, so one question = 4.2 points. Before freezing, extend the dev set (written fresh, never copied from the golden 75).
