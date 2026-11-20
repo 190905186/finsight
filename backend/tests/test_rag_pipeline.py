@@ -88,6 +88,34 @@ class FakeClient:
         return {"choices": [{"message": {"content": self.answer_text}}]}
 
 
+def test_retrieve_many_batches_query_embeddings() -> None:
+    source = _stored_chunk(
+        "source", "Revenue and cash flow from the financial statement.", 59
+    )
+    embedding_batch_sizes: list[int] = []
+
+    class CountingClient(FakeClient):
+        def create_embeddings(self, input, model=None):
+            texts = [input] if isinstance(input, str) else list(input)
+            embedding_batch_sizes.append(len(texts))
+            return super().create_embeddings(input, model)
+
+    pipeline = RAGPipeline(
+        store=FakeStore([source], dense_ids=["source"]),
+        client_factory=CountingClient,
+        embedding_model="test-model",
+        dimensions=3,
+    )
+
+    results = pipeline.retrieve_many(
+        ["revenue", "cash flow"], top_k=1, filters={"doc_name": "3M_2018_10K"}
+    )
+
+    assert len(results) == 2
+    assert all(group[0]["chunk_id"] == "source" for group in results)
+    assert embedding_batch_sizes == [2]
+
+
 def test_chunk_page_uses_recursive_character_chunks_with_overlap() -> None:
     profile = ChunkingProfile("test", chunk_size_chars=10, chunk_overlap_chars=2)
 

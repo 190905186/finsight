@@ -4,6 +4,7 @@ import re
 from typing import Any, Callable, Mapping, Protocol, Sequence
 
 from app.config import settings
+from app.rag.embeddings import embed_texts
 from app.rag.retrieval import HybridRetriever
 from app.rag.store import PgVectorStore
 from app.services.llm_client import LLMClient
@@ -58,6 +59,40 @@ class RAGPipeline:
                 embedding_model=self.embedding_model,
                 dimensions=self.dimensions,
             ).retrieve(query, top_k=top_k, filters=filters)
+
+    def retrieve_many(
+        self,
+        queries: Sequence[str],
+        *,
+        top_k: int = 5,
+        filters: Mapping[str, str] | None = None,
+    ) -> list[list[dict[str, Any]]]:
+        if not queries or any(not query.strip() for query in queries):
+            raise ValueError("queries must contain at least one non-empty query")
+        with self.client_factory() as client:
+            query_vectors = embed_texts(
+                client,
+                queries,
+                model=self.embedding_model,
+                dimensions=self.dimensions,
+                batch_size=settings.rag_embedding_batch_size,
+            )
+            retriever = HybridRetriever(
+                self.store,
+                client,
+                profile=self.profile,
+                embedding_model=self.embedding_model,
+                dimensions=self.dimensions,
+            )
+            return [
+                retriever.retrieve(
+                    query,
+                    top_k=top_k,
+                    filters=filters,
+                    query_embedding=query_vector,
+                )
+                for query, query_vector in zip(queries, query_vectors)
+            ]
 
     def answer(
         self,

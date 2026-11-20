@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Literal, Optional, Union
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class ChatMessage(BaseModel):
@@ -11,10 +11,23 @@ class ChatMessage(BaseModel):
 
 
 class ChatRequest(BaseModel):
-    user_id: str = "demo-user"
+    user_id: Optional[str] = None
     conversation_id: Optional[str] = None
-    message: str
+    message: str = Field(min_length=1, max_length=4000)
     stream: bool = False
+    prompting_strategy: Literal["zero_shot", "few_shot", "cot"] = "zero_shot"
+    company: Optional[str] = Field(default=None, max_length=255)
+    fiscal_year: Optional[int] = Field(default=None, ge=1990, le=2100)
+
+    @field_validator("message", "company")
+    @classmethod
+    def normalize_optional_text(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        normalized = value.strip()
+        if not normalized:
+            raise ValueError("Value must not be blank")
+        return normalized
 
 
 class DocumentUploadRequest(BaseModel):

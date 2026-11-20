@@ -1,4 +1,3 @@
-version: "3.9"
 services:
   backend:
     build:
@@ -11,6 +10,7 @@ services:
     depends_on:
       - postgres
       - redis
+      - public-finance-mcp
     environment:
       LLM_API_BASE: ${LLM_API_BASE:?Set LLM_API_BASE in .env}
       LLM_MODEL: ${LLM_MODEL:?Set LLM_MODEL in .env}
@@ -20,11 +20,31 @@ services:
       EMBEDDINGS_MODEL: ${EMBEDDINGS_MODEL:?Set EMBEDDINGS_MODEL in .env}
       EMBEDDINGS_DIMENSIONS: ${EMBEDDINGS_DIMENSIONS:-768}
       LLM_CA_CERT: /app/certs/vm04-ca.crt
+      PUBLIC_FINANCE_MCP_URL: http://public-finance-mcp:8001/mcp
+      FINANCEBENCH_PDF_DIR: /data/reference/financebench/pdfs
+      FINANCEBENCH_METADATA_PATH: /data/reference/financebench/data/financebench_document_information.jsonl
+      FINANCEBENCH_EVALUATION_PATH: /data/reference/financebench/data/financebench_open_source.jsonl
     volumes:
       - ./certs/vm04-ca.crt:/app/certs/vm04-ca.crt:ro
       - ./certs/vm02-ca.crt:/app/certs/vm02-ca.crt:ro
+      - ./data/reference:/data/reference:ro
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health').read()"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  public-finance-mcp:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: ["python", "-m", "app.mcp.server"]
+    env_file:
+      - .env
+    expose:
+      - "8001"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; socket.create_connection(('localhost', 8001), 2).close()"]
       interval: 10s
       timeout: 5s
       retries: 10

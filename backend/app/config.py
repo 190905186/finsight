@@ -65,6 +65,10 @@ class Settings:
     )
     postgres_dsn: str = os.getenv("DATABASE_URL", "postgresql+psycopg://financeops:financeops@localhost:5432/financeops")
     redis_url: str = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+    public_finance_mcp_url: str = os.getenv(
+        "PUBLIC_FINANCE_MCP_URL", "http://localhost:8001/mcp"
+    )
+    sec_user_agent: str = os.getenv("SEC_USER_AGENT", "")
     openapi_url: str = os.getenv("OPENAPI_URL", "/openapi.json")
     debug: bool = os.getenv("DEBUG", "false").lower() == "true"
 

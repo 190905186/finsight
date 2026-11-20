@@ -2,7 +2,14 @@
 
 Finsight is a financial-report question-answering copilot designed around evidence-grounded RAG, deterministic financial tools, and a bounded LangGraph workflow. The target capstone deployment uses one hosted OpenAI-compatible chat-completions endpoint backed by a shared instruct model of at most 8B parameters, plus the supplied embeddings endpoint. Model weights are not changed, logits are not accessed, and no larger-model fallback is permitted.
 
-**Implementation status:** this repository is still a starter/demo. Docker Compose reads the chat and embeddings endpoints and model identifiers from `.env`; the hosted-endpoint design below is not yet wired end to end. Do not treat the current runtime as satisfying the hosted inference requirement.
+The application now connects its authenticated copilot chat to a bounded
+LangGraph workflow: hybrid RAG over indexed filings, financial-fact extraction,
+read-only public-data MCP tools, deterministic metric calculations, and
+cited report rendering from validated values. The React dashboard displays
+calculations, evidence, integration status, and a short-term conversation
+thread. LangGraph checkpoints and conversation listings are process-local;
+they are not durable across a backend restart or shared across multiple
+replicas.
 
 ## Repository layout
 
@@ -13,9 +20,12 @@ Finsight is a financial-report question-answering copilot designed around eviden
 
 ## Run frontend and backend with Docker Compose
 
-Docker Compose starts the frontend, backend, PostgreSQL, and Redis. The backend
-uses the chat and embeddings endpoints configured in the repository-root
-`.env`; the frontend sends `/api` requests through Vite to the backend service.
+Docker Compose starts the frontend, backend, public-finance MCP server,
+PostgreSQL, and Redis. The backend uses the chat and embeddings endpoints
+configured in the repository-root `.env`; the MCP server exposes read-only SEC
+XBRL and U.S. Treasury Fiscal Data tools. The backend mounts `data/reference`
+read-only so the report workflow can resolve filing names and the ingestion
+command can read the local corpus.
 
 ### 1. Configure `.env`
 
@@ -28,8 +38,10 @@ if (-not (Test-Path .env)) { Copy-Item .env.example .env }
 Make sure `.env` contains the correct `LLM_API_BASE` and
 `EMBEDDINGS_API_BASE` values and the corresponding `LLM_MODEL` and
 `EMBEDDINGS_MODEL` identifiers, along with any required API keys and
-credentials. Compose mounts the configured CA certificates into the backend
-container. Keep real credentials out of source control.
+credentials. SEC lookups require a `SEC_USER_AGENT` containing your
+organization and a monitored contact email; the MCP server explicitly declines
+SEC requests if it is missing. Compose mounts the configured CA certificates
+into the backend container. Keep real credentials out of source control.
 
 ### 2. Build and start the services
 
@@ -44,6 +56,32 @@ Open the frontend at <http://localhost:5173>. The backend health check is at
 <http://localhost:8000/docs>. Stop the services with **Ctrl+C**; run
 `docker compose down` to stop and remove the containers while preserving the
 PostgreSQL data volume.
+
+### 3. Initialize and index the reference filings
+
+The reference corpus includes 84 FinanceBench PDFs. Indexing is an explicit
+one-time operation, not a startup hook: it sends extracted page chunks to the
+embeddings endpoint configured in `.env` and writes vectors to pgvector.
+Confirm the endpoint's data-handling terms before indexing.
+
+```powershell
+docker compose exec backend python -m app.rag.cli init-db
+docker compose exec backend python -m app.rag.cli ingest --profile medium
+```
+
+In the dashboard, try **3M**, fiscal year **2018**, and the prefilled report
+request. Ask follow-up questions in the same conversation to use short-term
+graph memory. The report uses only indexed filings and public MCP responses;
+unavailable or incompatible facts are marked rather than filled with guesses.
+Choose **Zero-shot**, **Few-shot**, or **Chain-of-thought** prompting in the
+report form. Few-shot adds format examples to the model prompts; chain-of-thought
+guides internal analysis but does not expose private reasoning in the answer.
+If MCP transport is unavailable, the backend calls the same public SEC and
+Treasury REST providers directly and marks that transport in the research
+pipeline. SEC data still requires a genuine monitored-contact
+`SEC_USER_AGENT`. If the chat model is rate-limited, the workflow can return
+cited filing excerpts and explicit pipeline statuses; it does not invent
+unvalidated financial metrics.
 
 ### Reusable chat-completions client
 
@@ -127,9 +165,9 @@ exact-match and token-F1 text-overlap baselines. These lexical answer scores
 are not a human or semantic judge and should be interpreted alongside
 retrieval metrics and answer review. Indexing and both evaluations send
 document chunks and/or questions to the configured inference endpoints.
-Review their data-handling terms before running. The default 384-dimensional
-schema matches the currently configured embedding model; changing models or
-dimensions requires a fresh index/schema.
+review their data-handling terms before running. The configured
+`EMBEDDINGS_DIMENSIONS` must match the embedding endpoint. Changing embedding
+models or dimensions requires a fresh index/schema.
 
 The small golden-query template in
 `backend/tests/fixtures/rag_golden_queries.json` keeps retrieval checks

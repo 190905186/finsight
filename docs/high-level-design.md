@@ -358,25 +358,29 @@ Deploy the UI and backend in the approved environment; connect outbound only to 
 
 ## 12. Implementation status and delivery sequence
 
-The current starter has a FastAPI API surface, sample finance services,
-placeholder orchestration/graph state, keyword-only in-memory retrieval, and
-evaluation scaffolding. It now includes environment-backed settings, a
-reusable OpenAI-compatible chat client, and a live smoke-test utility. The
-client is not yet wired into `/api/v1/copilot/chat` or the LangGraph workflow;
-that route still uses the demo orchestrator. Retry/call-budget policy, the
-complete workflow, production hybrid index, required corpus, reliable citation
-validator, and functional 75-query evaluation runner remain incomplete. The
-current code therefore does **not** yet implement the hosted financial-report
-RAG design end to end.
+The current runtime wires the configured chat and embeddings clients into the
+copilot workflow, uses LangGraph specialist nodes with process-local
+short-term checkpoints, retrieves from the pgvector/BM25 reference index, calls
+read-only SEC/Treasury MCP tools, and computes metrics with deterministic
+decimal arithmetic. Report-mode output is rendered from validated metric
+results and inputs rather than model-generated numeric narrative. The frontend
+displays reports, calculation inputs, source citations, tool status, and
+conversation turns. The 84-PDF corpus still needs an explicit
+`app.rag.cli ingest` run after database initialization. The SEC tool requires
+an approved SEC User-Agent contact. The demo authentication provider,
+process-local memory, retry budgets, production tenant isolation, full semantic
+citation verification, and functional 75-query evaluation runner remain
+incomplete; this is a working capstone prototype, not a production financial
+decision system.
 
 Recommended delivery:
 
 1. **Contract and corpus:** Define typed answer/evidence/tool schemas; stage legally usable source documents and build provenance/page metadata fixtures for the DOCX golden set.
-2. **Hosted adapters:** Wire the existing OpenAI-compatible chat client into the workflow and add the supplied embeddings adapter; complete secret handling, provider/model validation (≤8B), quotas, configurable timeout, retry policy, and no-fallback tests.
-3. **Ingestion and RAG:** Implement page/table-aware parsing, chunk metadata, vector and lexical indexes, ACL filtering, rank fusion, and source-resolution tests.
-4. **Deterministic tools:** Implement Decimal-based calculations, period/basis checks, restatement handling, and unit tests against gold calculations.
-5. **Graph and guardrails:** Build the bounded LangGraph nodes/routes, typed state, checkpoint policy, refusal gates, one-repair verifier path, and injection/access tests.
-6. **API/UI and traces:** Return structured answer/citation/calculation/refusal status; expose verified progress and sanitized traces.
+2. **Hosted adapters:** Validate approved inference endpoints, secrets, model constraints (≤8B), quotas, timeouts, retry policy, and no-fallback behavior.
+3. **Ingestion and RAG:** Complete page/table-aware parsing, ACL filtering, index status, and golden-query evaluation.
+4. **Deterministic tools:** Extend Decimal-based calculations with accounting-basis checks and restatement handling.
+5. **Graph and guardrails:** Add durable tenant-scoped checkpointers, explicit retry budgets, refusal tests, and stronger semantic claim verification.
+6. **API/UI and traces:** Add durable conversation storage, genuine progress streaming, and sanitized trace access.
 7. **Evaluation and release:** Implement all 75 records with documented labels/splits, measure retrieval/calculation/answer/safety/operations separately, establish acceptance gates, and rerun after every prompt/index/model configuration change.
 
 ## 13. Architectural decision summary

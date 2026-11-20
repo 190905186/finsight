@@ -85,7 +85,6 @@ class LLMClient:
         )
         response.raise_for_status()
         result = response.json()
-        print("LLMClient.create_chat_completion result:", result)
         if not isinstance(result, dict):
             raise ValueError("Chat-completions response must be a JSON object")
         return result
