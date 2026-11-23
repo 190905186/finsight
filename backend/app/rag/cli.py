@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Sequence
 
 from app.config import settings
+from app.evaluation import load_golden_questions
 from app.rag.chunking import CHUNKING_PROFILES
 from app.rag.evaluation import (
     RETRIEVAL_MODES,
@@ -43,6 +44,9 @@ def build_parser() -> argparse.ArgumentParser:
     evaluate.add_argument("--profile", choices=profile_names, default="medium")
     evaluate.add_argument("--mode", choices=RETRIEVAL_MODES, default="sharedStore")
     evaluate.add_argument("--k", nargs="+", type=int, default=[1, 3, 5, 10])
+    evaluate.add_argument(
+        "--dataset", choices=("golden", "financebench"), default="golden"
+    )
 
     experiment = commands.add_parser(
         "experiment", help="Compare chunk profiles using retrieval-only metrics"
@@ -53,6 +57,9 @@ def build_parser() -> argparse.ArgumentParser:
     experiment.add_argument("--mode", choices=RETRIEVAL_MODES, default="sharedStore")
     experiment.add_argument("--pdf-dir", type=Path, default=settings.financebench_pdf_dir)
     experiment.add_argument("--k", nargs="+", type=int, default=[1, 3, 5, 10])
+    experiment.add_argument(
+        "--dataset", choices=("golden", "financebench"), default="golden"
+    )
 
     answer_evaluate = commands.add_parser(
         "answer-evaluate",
@@ -63,7 +70,29 @@ def build_parser() -> argparse.ArgumentParser:
     answer_evaluate.add_argument("--top-k", type=int, default=5)
     answer_evaluate.add_argument("--limit", type=int)
     answer_evaluate.add_argument("--output", type=Path, required=True)
+    answer_evaluate.add_argument(
+        "--dataset", choices=("golden", "financebench"), default="golden"
+    )
+    compare_prompts = commands.add_parser(
+        "compare-prompts",
+        help="Compare zero-shot, few-shot, and private-CoT on a gold split",
+    )
+    compare_prompts.add_argument("--profile", choices=profile_names, default="medium")
+    compare_prompts.add_argument("--mode", choices=RETRIEVAL_MODES, default="sharedStore")
+    compare_prompts.add_argument("--top-k", type=int, default=5)
+    compare_prompts.add_argument(
+        "--split", choices=("prompt_dev", "prompt_holdout"), default="prompt_dev"
+    )
+    compare_prompts.add_argument("--output-dir", type=Path, required=True)
     return parser
+
+
+def _load_evaluation_questions(dataset: str) -> list[RetrievalQuestion]:
+    if dataset == "golden":
+        return load_golden_questions()
+    if dataset == "financebench":
+        return load_financebench_questions()
+    raise ValueError(f"Unsupported evaluation dataset: {dataset}")
 
 
 def _evaluate_profile(
@@ -116,7 +145,7 @@ def main(argv: Sequence[str] | None = None) -> None:
             return
 
         if args.command == "evaluate":
-            questions = load_financebench_questions()
+            questions = _load_evaluation_questions(args.dataset)
             with LLMClient() as client:
                 metrics = _evaluate_profile(
                     store, client, args.profile, args.k, questions, args.mode
@@ -127,7 +156,7 @@ def main(argv: Sequence[str] | None = None) -> None:
         if args.command == "experiment":
             profiles = configured_profiles(args.profiles)
             metadata = load_configured_document_metadata()
-            questions = load_financebench_questions()
+            questions = _load_evaluation_questions(args.dataset)
             results = []
             with LLMClient() as client:
                 query_embeddings = embed_texts(
@@ -158,7 +187,7 @@ def main(argv: Sequence[str] | None = None) -> None:
             return
 
         if args.command == "answer-evaluate":
-            questions = load_financebench_questions()
+            questions = _load_evaluation_questions(args.dataset)
             pipeline = RAGPipeline(store=store, profile=args.profile)
             metrics = evaluate_answers(
                 questions,
@@ -174,6 +203,29 @@ def main(argv: Sequence[str] | None = None) -> None:
                     output_file.write(json.dumps(row, ensure_ascii=False) + "\n")
             metrics["results_path"] = str(args.output.resolve())
             print(json.dumps(metrics, indent=2))
+            return
+
+        if args.command == "compare-prompts":
+            questions = load_golden_questions(args.split)
+            pipeline = RAGPipeline(store=store, profile=args.profile)
+            results = []
+            args.output_dir.mkdir(parents=True, exist_ok=True)
+            for strategy in ("zero_shot", "few_shot", "cot"):
+                metrics = evaluate_answers(
+                    questions,
+                    pipeline,
+                    retrieval_mode=args.mode,
+                    top_k=args.top_k,
+                    prompting_strategy=strategy,
+                )
+                result_rows = metrics.pop("results")
+                output_path = args.output_dir / f"{strategy}.jsonl"
+                with output_path.open("w", encoding="utf-8", newline="\n") as output_file:
+                    for row in result_rows:
+                        output_file.write(json.dumps(row, ensure_ascii=False) + "\n")
+                metrics["results_path"] = str(output_path.resolve())
+                results.append(metrics)
+            print(json.dumps(results, indent=2))
     finally:
         store.close()
 

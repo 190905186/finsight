@@ -5,6 +5,7 @@ import re
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
+from time import perf_counter
 from typing import Any, Protocol, Sequence
 
 from app.config import settings
@@ -22,6 +23,7 @@ class RetrievalQuestion:
     gold_evidence: frozenset[tuple[str, int]]
     doc_name: str | None = None
     reference_answer: str | None = None
+    question_type: str | None = None
 
 
 class AnswerPipeline(Protocol):
@@ -31,6 +33,7 @@ class AnswerPipeline(Protocol):
         *,
         top_k: int = 5,
         filters: dict[str, str] | None = None,
+        prompting_strategy: str = "zero_shot",
     ) -> dict[str, Any]: ...
 
 
@@ -80,6 +83,9 @@ def load_financebench_questions(
             reference_answer = row.get("answer")
             if reference_answer is not None and not isinstance(reference_answer, str):
                 raise ValueError(f"Invalid reference answer on line {line_number}")
+            question_type = row.get("question_type")
+            if question_type is not None and not isinstance(question_type, str):
+                raise ValueError(f"Invalid question type on line {line_number}")
 
             questions.append(
                 RetrievalQuestion(
@@ -88,6 +94,7 @@ def load_financebench_questions(
                     gold_evidence=frozenset(gold_evidence),
                     doc_name=row_doc_name or evidence_doc_names[0],
                     reference_answer=reference_answer,
+                    question_type=question_type,
                 )
             )
     if not questions:
@@ -134,6 +141,7 @@ def evaluate_retrieval(
         raise ValueError("Query embedding count does not match labeled question count")
     recall_sums = {k: 0.0 for k in ordered_ks}
     reciprocal_rank_sum = 0.0
+    query_latencies: list[dict[str, Any]] = []
     for question, query_vector in zip(questions, query_vectors):
         filters = None
         if retrieval_mode == "singleStore":
@@ -142,11 +150,18 @@ def evaluate_retrieval(
                     f"Question {question.question_id} has no document for singleStore evaluation"
                 )
             filters = {"doc_name": question.doc_name}
+        started_at = perf_counter()
         results = retriever.retrieve(
             question.query,
             top_k=max(ordered_ks),
             filters=filters,
             query_embedding=query_vector,
+        )
+        query_latencies.append(
+            {
+                "question_id": question.question_id,
+                "latency_ms": round((perf_counter() - started_at) * 1000, 2),
+            }
         )
         retrieved = [
             (item["document"], int(item["page_index"]))
@@ -177,6 +192,10 @@ def evaluate_retrieval(
             str(k): recall_sums[k] / denominator for k in ordered_ks
         },
         "mrr": reciprocal_rank_sum / denominator,
+        "mean_retrieval_latency_ms": round(
+            sum(item["latency_ms"] for item in query_latencies) / denominator, 2
+        ),
+        "query_latencies": query_latencies,
     }
 
 
@@ -207,12 +226,15 @@ def evaluate_answers(
     retrieval_mode: str = "sharedStore",
     top_k: int = 5,
     limit: int | None = None,
+    prompting_strategy: str = "zero_shot",
 ) -> dict[str, Any]:
     if top_k <= 0:
         raise ValueError("top_k must be positive")
     if limit is not None and limit <= 0:
         raise ValueError("limit must be positive")
     _validate_retrieval_mode(retrieval_mode)
+    if prompting_strategy not in {"zero_shot", "few_shot", "cot"}:
+        raise ValueError("prompting_strategy must be zero_shot, few_shot, or cot")
     selected = list(questions if limit is None else questions[:limit])
     if not selected:
         raise ValueError("At least one question is required")
@@ -222,6 +244,7 @@ def evaluate_answers(
     results: list[dict[str, Any]] = []
     exact_match_sum = 0.0
     token_f1_sum = 0.0
+    query_latencies: list[float] = []
     for question in selected:
         filters = None
         if retrieval_mode == "singleStore":
@@ -230,7 +253,15 @@ def evaluate_answers(
                     f"Question {question.question_id} has no document for singleStore evaluation"
                 )
             filters = {"doc_name": question.doc_name}
-        response = pipeline.answer(question.query, top_k=top_k, filters=filters)
+        started_at = perf_counter()
+        response = pipeline.answer(
+            question.query,
+            top_k=top_k,
+            filters=filters,
+            prompting_strategy=prompting_strategy,
+        )
+        latency_ms = round((perf_counter() - started_at) * 1000, 2)
+        query_latencies.append(latency_ms)
         answer = response.get("answer")
         if not isinstance(answer, str) or not answer.strip():
             raise ValueError(f"Question {question.question_id} returned no answer")
@@ -246,6 +277,7 @@ def evaluate_answers(
                 "citations": response.get("citations", []),
                 "normalized_exact_match": exact_match,
                 "token_f1": token_f1,
+                "latency_ms": latency_ms,
             }
         )
 
@@ -253,8 +285,10 @@ def evaluate_answers(
     return {
         "evaluation_scope": "end_to_end_answer_quality",
         "retrieval_mode": retrieval_mode,
+        "prompting_strategy": prompting_strategy,
         "questions_scored": denominator,
         "normalized_exact_match": exact_match_sum / denominator,
         "token_f1": token_f1_sum / denominator,
+        "mean_answer_latency_ms": round(sum(query_latencies) / denominator, 2),
         "results": results,
     }

@@ -47,6 +47,33 @@ _METRIC_NAMES = (
     "operating_cash_flow",
     "capital_expenditures",
 )
+_HUMAN_REVIEW_PATTERNS = (
+    re.compile(
+        r"\b(?:execute|place|submit|initiate|release|approve|authorize|process|send|file)"
+        r"\b.{0,80}\b(?:market order|trade|order|payment|invoice|transfer|wire|funds|"
+        r"purchase order|reimbursement|tax return)\b",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\b(?:buy|sell)\s+(?:\d[\d,]*\s+)?(?:shares?|stocks?|securities|options|bonds)\b",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\b(?:pay|transfer|wire)\b.{0,80}\b(?:\$\s?\d|\d[\d,]*|vendor|account|"
+        r"invoice|funds)\b",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\b(?:change|update|replace|close)\b.{0,80}\b(?:bank account|account details|"
+        r"routing number|beneficiary|account)\b",
+        re.IGNORECASE,
+    ),
+)
+_CONSEQUENTIAL_ACTION_REFUSAL = (
+    "I cannot execute or approve payments, trades, transfers, account changes, or "
+    "other consequential actions. I can provide evidence and analysis for a qualified "
+    "human to review."
+)
 
 
 def _append_recent_messages(
@@ -77,10 +104,16 @@ class GraphState(TypedDict, total=False):
     citations: list[dict[str, Any]]
     status: str
     agent_trace: list[str]
+    critic_retry_count: int
+    critic_feedback: str
 
 
 def _normalized_name(value: str) -> str:
     return re.sub(r"[^A-Z0-9]", "", value.upper())
+
+
+def _requires_human_review_action(query: str) -> bool:
+    return any(pattern.search(query) for pattern in _HUMAN_REVIEW_PATTERNS)
 
 
 def _format_report_value(value: str | None) -> str:
@@ -426,7 +459,11 @@ class FinanceReportGraph:
         builder.add_edge("fact_extractor", "metric_calculator")
         builder.add_edge("metric_calculator", "financial_analyst")
         builder.add_edge("financial_analyst", "report_verifier")
-        builder.add_edge("report_verifier", END)
+        builder.add_conditional_edges(
+            "report_verifier",
+            self._verification_route,
+            {"retry": "financial_analyst", "done": END},
+        )
         self.graph = builder.compile(checkpointer=self.checkpointer)
 
     @staticmethod
@@ -450,6 +487,9 @@ class FinanceReportGraph:
             "fiscal_year": fiscal_year,
             "report_mode": report_mode,
             "retrieval_filters": filters,
+            "critic_retry_count": 0,
+            "critic_feedback": "",
+            "status": "running",
             "agent_trace": ["plan"],
         }
 
@@ -817,6 +857,27 @@ class FinanceReportGraph:
         evidence = state.get("evidence", [])
         metrics = state.get("metrics", [])
         analyst_status: str | None = None
+        if state.get("critic_feedback"):
+            answer = (
+                "The generated answer did not pass citation verification. "
+                "Retrieved evidence for human review:\n\n"
+                + "\n\n".join(
+                    (
+                        f"[{item['source']}] {item['document']}, page {item['page']}: "
+                        f"{str(item['snippet'])[:500]}"
+                    )
+                    for item in evidence[:3]
+                )
+                if evidence
+                else (
+                    "The generated answer did not pass citation verification, and "
+                    "no filing evidence is available to support an answer."
+                )
+            )
+            return {
+                "answer": answer,
+                "agent_trace": [*state.get("agent_trace", []), "financial_analyst"],
+            }
         if state.get("report_mode"):
             return {
                 "answer": _report_text(state),
@@ -974,10 +1035,26 @@ class FinanceReportGraph:
     def _verify(state: GraphState) -> dict[str, Any]:
         valid_labels = {item["source"] for item in state.get("evidence", [])}
         answer_labels = set(re.findall(r"\[(R\d+)\]", state.get("answer", "")))
-        if answer_labels - valid_labels:
-            raise ValueError("Final answer contains a citation absent from retrieved evidence.")
-        if valid_labels and not answer_labels:
-            raise ValueError("Final answer must cite retrieved filing evidence.")
+        citation_failure = bool(answer_labels - valid_labels) or bool(
+            valid_labels and not answer_labels
+        )
+        if citation_failure:
+            retry_count = state.get("critic_retry_count", 0)
+            if retry_count < 1:
+                return {
+                    "critic_retry_count": retry_count + 1,
+                    "critic_feedback": (
+                        "The draft used a missing citation or omitted required citations."
+                    ),
+                    "status": "critic_retry",
+                    "agent_trace": [
+                        *state.get("agent_trace", []),
+                        "report_verifier",
+                    ],
+                }
+            raise ValueError(
+                "Citation verification failed after the bounded critic retry."
+            )
 
         metrics = state.get("metrics", [])
         data_status = state.get("data_status", {})
@@ -1014,6 +1091,10 @@ class FinanceReportGraph:
             "agent_trace": [*state.get("agent_trace", []), "report_verifier"],
         }
 
+    @staticmethod
+    def _verification_route(state: GraphState) -> str:
+        return "retry" if state.get("status") == "critic_retry" else "done"
+
     def run(
         self,
         *,
@@ -1024,6 +1105,21 @@ class FinanceReportGraph:
         fiscal_year: int | None = None,
         prompting_strategy: str = "zero_shot",
     ) -> dict[str, Any]:
+        if _requires_human_review_action(query):
+            return {
+                "conversation_id": conversation_id,
+                "prompting_strategy": prompting_strategy,
+                "status": "refused",
+                "answer": _CONSEQUENTIAL_ACTION_REFUSAL,
+                "company": company,
+                "fiscal_year": fiscal_year,
+                "metrics": [],
+                "macro_context": None,
+                "citations": [],
+                "data_status": {"safety": "human_review_required"},
+                "agent_trace": ["safety_gate"],
+            }
+
         thread_id = f"{user_id}:{conversation_id}"
         state = self.graph.invoke(
             {
@@ -1033,7 +1129,10 @@ class FinanceReportGraph:
                 "fiscal_year": fiscal_year,
                 "messages": [{"role": "user", "content": query}],
             },
-            config={"configurable": {"thread_id": thread_id}},
+            config={
+                "recursion_limit": 12,
+                "configurable": {"thread_id": thread_id},
+            },
         )
         return {
             "conversation_id": conversation_id,

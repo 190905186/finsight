@@ -5,7 +5,12 @@ from typing import Any
 import httpx
 import pytest
 
-from app.graph.workflow import FinanceReportGraph, _as_facts
+from app.evaluation import load_safety_cases
+from app.graph.workflow import (
+    FinanceReportGraph,
+    _as_facts,
+    _requires_human_review_action,
+)
 
 
 class FakeRAGPipeline:
@@ -119,6 +124,46 @@ def test_langgraph_returns_cited_report_and_threaded_memory() -> None:
     assert other_thread["conversation_id"] == "conversation-b"
 
 
+@pytest.mark.parametrize(
+    "case",
+    load_safety_cases(),
+    ids=lambda case: case.case_id,
+)
+def test_consequential_actions_are_refused_before_tools(case) -> None:
+    class NoCallRAGPipeline:
+        def retrieve(self, *args: Any, **kwargs: Any) -> list[dict[str, Any]]:
+            raise AssertionError("A refused request must not retrieve evidence.")
+
+        def retrieve_many(self, *args: Any, **kwargs: Any) -> list[list[dict[str, Any]]]:
+            raise AssertionError("A refused request must not retrieve evidence.")
+
+    class NoCallLLM:
+        def __init__(self) -> None:
+            raise AssertionError("A refused request must not call the model.")
+
+    graph = FinanceReportGraph(
+        rag_pipeline=NoCallRAGPipeline(),
+        llm_factory=NoCallLLM,
+    )
+    result = graph.run(
+        query=case.query,
+        conversation_id=case.case_id,
+        user_id="user-a",
+    )
+
+    assert result["status"] == "refused"
+    assert result["answer"] == case.expected_answer
+    assert result["citations"] == []
+    assert result["agent_trace"] == ["safety_gate"]
+    assert result["data_status"]["safety"] == "human_review_required"
+
+
+def test_informational_finance_query_is_not_blocked_by_action_guard() -> None:
+    assert not _requires_human_review_action(
+        "What were 3M's FY2018 purchases of property, plant and equipment?"
+    )
+
+
 def test_report_research_targets_each_financial_statement() -> None:
     pipeline = FakeRAGPipeline()
     graph = FinanceReportGraph(
@@ -186,6 +231,33 @@ def test_report_synthesis_displays_only_calculated_metric_values() -> None:
     assert "Net margin**: 10%" in result["answer"]
     assert "Gross margin**: Unavailable" in result["answer"]
     assert "[R1]" in result["answer"]
+
+
+def test_citation_critic_performs_one_bounded_retry() -> None:
+    class UncitedLLM(FakeLLMClient):
+        calls = 0
+
+        def create_chat_completion(self, *args: Any, **kwargs: Any) -> dict[str, Any]:
+            type(self).calls += 1
+            return {"choices": [{"message": {"content": "Revenue increased."}}]}
+
+    graph = FinanceReportGraph(
+        rag_pipeline=FakeRAGPipeline(),
+        llm_factory=UncitedLLM,
+    )
+
+    result = graph.run(
+        query="Summarize filing details",
+        conversation_id="critic-retry",
+        user_id="user-a",
+    )
+
+    assert UncitedLLM.calls == 2
+    assert result["status"] == "ready"
+    assert "did not pass citation verification" in result["answer"]
+    assert "[R1]" in result["answer"]
+    assert result["agent_trace"].count("financial_analyst") == 2
+    assert result["agent_trace"].count("report_verifier") == 2
 
 
 def test_product_chat_skips_financial_extraction_and_is_ready_with_citations() -> None:

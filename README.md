@@ -153,6 +153,7 @@ Set-Location backend
 ..\.venv\Scripts\python.exe -m app.rag.cli experiment --mode sharedStore
 ..\.venv\Scripts\python.exe -m app.rag.cli experiment --mode singleStore
 ..\.venv\Scripts\python.exe -m app.rag.cli answer-evaluate --profile medium --mode sharedStore --limit 10 --output evaluation\financebench_answers.jsonl
+..\.venv\Scripts\python.exe -m app.rag.cli compare-prompts --split prompt_dev --output-dir evaluation\prompt-comparison
 ```
 
 `evaluate` and `experiment` measure page-level `recall_at_k` and MRR without
@@ -169,10 +170,18 @@ review their data-handling terms before running. The configured
 `EMBEDDINGS_DIMENSIONS` must match the embedding endpoint. Changing embedding
 models or dimensions requires a fresh index/schema.
 
-The small golden-query template in
-`backend/tests/fixtures/rag_golden_queries.json` keeps retrieval checks
-separate from answer-and-citation checks. The default test run validates its
-shape and skips live integration tests. To run those tests against the
+Evaluation commands use a balanced, 75-query FinanceBench gold set by default;
+pass `--dataset financebench` to evaluate all 150 supplied source questions.
+`compare-prompts` evaluates zero-shot, few-shot, and private-CoT on the
+15-question prompt-development split and writes separate answer JSONL files.
+Use `--split prompt_holdout` for the untouched 60-question holdout only after
+choosing a strategy. Fifteen additional consequential-action refusal cases are
+tested locally without model or database calls. See
+[the capstone specification and evaluation protocol](./docs/capstone-spec-and-evaluation.md)
+for the answer contract, data provenance, and known conformance gaps.
+
+The default test run validates all gold labels and refusal cases, and skips
+live retrieval and answer integration tests. To run those tests against the
 configured PostgreSQL index and inference APIs:
 
 ```powershell
@@ -182,8 +191,7 @@ Set-Location backend
 ```
 
 The integration cases use `singleStore` retrieval with known document filters;
-they are a small smoke-test set, not a substitute for shared-corpus
-FinanceBench evaluation.
+they measure page recall separately from citation-grounded answer quality.
 
 After indexing and configuring the chat endpoint, the authenticated
 `POST /api/v1/rag/query` endpoint returns an answer and the source/page snippets
@@ -240,8 +248,15 @@ prompt or retrieval logic; it forwards the natural-language prompt to
 
 ## Security and governance
 
-The starter documents authentication and decision boundaries, but its demo token/authentication code is not production-hardened. The hosted target also requires explicit approval of endpoint data handling and secret management. It does not permit autonomous trade execution, payment release, or account changes.
+The copilot refuses consequential actions such as executing trades, releasing
+payments, approving invoices, or changing accounts; those require a qualified
+human. The source-excerpt prompts treat retrieved text as untrusted. The
+starter authentication code is not production-hardened, and comprehensive PII
+controls, prompt-injection red-team coverage, and approved endpoint data
+handling remain production requirements. See
+[the specification](./docs/capstone-spec-and-evaluation.md) for the boundary
+and remaining gaps.
 
 ## Notes
 
-This repository is intentionally a starter and is not production-ready. The Compose prototype still uses local model endpoints, whereas the capstone target requires the approved hosted chat and embeddings endpoints. Replace the prototype inference wiring, complete hybrid ingestion/retrieval and LangGraph orchestration, add hardened identity/tenant isolation, and implement the DOCX's 75-query evaluation before claiming conformance. Stage source documents lawfully and retain their page-level provenance; benchmark gold answers are not source evidence.
+This repository is intentionally a starter and is not production-ready. The Compose prototype still uses local model endpoints, whereas the capstone target requires the approved hosted chat and embeddings endpoints. The staged corpus contains 84 PDFs, below the 500–2,000-document target. Hardened identity/tenant isolation, durable shared state, production rate limiting/caching, full observability, and prompt-injection/PII controls are still required before claiming conformance. Stage source documents lawfully and retain their page-level provenance; benchmark gold answers are not source evidence.

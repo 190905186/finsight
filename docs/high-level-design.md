@@ -1,394 +1,232 @@
-# Finsight Financial Report RAG Copilot — High-Level Design
+# Finsight Financial Report RAG Copilot — Current High-Level Design
 
-**Status:** Target architecture for the financial-report question-answering capstone  
-**Primary requirement:** Use one shared hosted OpenAI-compatible chat-completions endpoint backed by a single instruct model with at most 8B parameters, plus the supplied embeddings endpoint. No model-weight changes, logit access, frontier-model fallback, or alternate chat model.  
-**Scope:** Evidence-grounded question answering over an explicitly indexed corpus of financial filings, earnings releases, investor presentations, and transcripts.  
-**Companion diagrams:** [Target architecture](./architecture.svg) · [Current Ask RAG request flow](./rag-ask-flow.svg)
+**Status:** Describes the repository's current implementation, not a production
+target-state architecture.
+**Companion diagrams:** [Current architecture](./architecture.svg) ·
+[Current Ask RAG request flow](./rag-ask-flow.svg) ·
+[Capstone specification and evaluation](./capstone-spec-and-evaluation.md)
 
-The target architecture below describes the intended system. The separate
-[current Ask RAG flow](./rag-ask-flow.svg) traces the implemented frontend-to-answer
-path, which currently uses a direct FastAPI `RAGPipeline` rather than the target
-LangGraph multi-agent workflow.
+## 1. Purpose and boundaries
 
-## 1. Goals and boundaries
+Finsight is a financial-report question-answering prototype. Users can ask
+questions about indexed financial filings, request metric reports, inspect
+citations and calculation inputs, and continue a short-term conversation.
+The system combines page-level filing retrieval, configured chat and
+embeddings endpoints, public SEC/Treasury data tools, and deterministic
+financial calculations.
 
-### Goals
+The service is decision support. A deterministic pre-workflow gate refuses
+recognized trade, payment, account-change, and other consequential-action
+requests; there are no tools that execute those actions. Numeric report values
+are calculated from validated extraction facts or SEC facts, not authored by
+the answer model. If evidence or data is unavailable, the response should
+identify the gap rather than invent a value.
 
-- Answer direct extraction, period comparisons, financial calculations, and multi-document questions using only authorized indexed evidence.
-- Provide page/section/period citations for factual statements, show formulas and inputs for derived metrics, and distinguish GAAP from Non-GAAP measures.
-- Use a small shared model efficiently: constrain its role to classification, bounded planning, tool selection from an allowlist, and evidence-based synthesis.
-- Use LangChain for model/embedding adapters, document loaders and retrievers; use LangGraph for typed, bounded, observable workflow state and conditional routing.
-- Detect unsupported, unsafe, ambiguous, or out-of-corpus requests and respond with an explicit refusal, correction, or evidence-gap explanation.
-- Evaluate retrieval, deterministic calculations, answer quality, citations, refusal behavior, latency, and hosted-model usage independently.
+This is not a production financial decision system. The authentication helper
+is a demo token implementation, conversation/checkpoint/evaluation state is
+process-local, and several controls listed as future needs below are not
+implemented. The application does not currently enforce a provider-attested
+model-size limit. The actual configured model and endpoint are deployment
+configuration; an operator must verify they satisfy policy.
 
-### Non-goals
+## 2. Runtime components
 
-- Investment recommendations, price targets, unguided forecasts, live market data, legal/tax/audit opinions, or invented disclosures.
-- Arbitrary SQL, autonomous actions, model-generated financial calculations presented as authoritative, or hidden cross-tenant retrieval.
-- Fine-tuning, weight changes, logits access, switching to a larger model, or a second model used as a planner/reranker/critic.
-- Treating the fictional Acme benchmark answers, synthetic data, or model knowledge as source evidence.
-
-## 2. System context and hosted inference constraint
-
-The application backend calls a single configured OpenAI-compatible chat endpoint. Every LLM-mediated step—intent classification, constrained planning, optional query rewrite, extraction fallback, synthesis, and critic verification—uses that same endpoint and the same configured instruct model (parameter count at or below 8B). Concurrency, token budgets, retries, and per-request call counts are bounded so that agents do not become independent model deployments.
-
-The configured embeddings endpoint is used for both indexing and query embedding. Record the embedding provider/model identifier, vector dimension, and version with the index; a changed embedding model requires a controlled re-embedding and index rebuild. The embeddings service is not a second chat model.
-
-The hosted endpoint is a deliberate trust boundary: only the minimum authorized, redacted query and retrieved evidence needed for the task may be sent. Before deployment, confirm endpoint authentication, transport security, data-retention/training terms, residency, and permitted financial-data handling with the endpoint operator. If organizational policy forbids the necessary data from leaving its boundary, do not send it to the hosted service; fail closed rather than silently switching providers.
-
-**Configuration:**
-
-| Setting | Purpose |
+| Component | Current responsibility |
 |---|---|
-| `LLM_API_BASE` | HTTPS base URL for the OpenAI-compatible chat endpoint |
-| `LLM_API_KEY` | Secret supplied through a secret manager/environment, never committed or logged |
-| `LLM_CA_CERT` | CA certificate used to verify the chat endpoint TLS certificate |
-| `LLM_MODEL` | The approved instruct model identifier; verify provider attestation that it is ≤8B |
-| `EMBEDDINGS_API_BASE` | HTTPS base URL for the supplied embeddings endpoint |
-| `EMBEDDINGS_API_KEY` | Embeddings credential, independently stored as a secret |
-| `EMBEDDINGS_MODEL` | Embedding model identifier/version |
-| `LLM_TIMEOUT_SECONDS`, `LLM_MAX_RETRIES`, `LLM_MAX_CALLS_PER_REQUEST` | Target bounded-call policy; no alternate-model fallback |
+| React + TypeScript frontend | Collects company, fiscal year, prompt strategy, and question; renders workflow status, metrics, citations, and conversation turns. |
+| FastAPI backend | Exposes authenticated chat, direct RAG, finance, documents, and evaluation routes. |
+| Copilot workflow | Runs a compiled LangGraph state graph with a safety gate before graph/tool/model work, followed by planner, retrieval, public-data, extraction, calculation, synthesis, and citation-verification nodes. |
+| Direct RAG pipeline | Answers `POST /api/v1/rag/query` using hybrid retrieval and a cited answer prompt, independently of the LangGraph copilot workflow. |
+| Filing index | PostgreSQL with pgvector stores page chunks and vectors. BM25 lexical indexes are constructed in process from indexed chunk text. |
+| Public finance MCP service | Offers read-only SEC company-facts and U.S. Treasury debt tools; backend can use direct REST providers when MCP transport is unavailable. |
+| Inference adapters | `LLMClient` calls configured OpenAI-compatible chat-completions and embeddings APIs using separate endpoint/model settings and TLS configuration. |
+| Docker Compose | Provisions frontend, backend, MCP service, PostgreSQL, and Redis. Redis is provisioned but is not currently used by the application for caching or durable state. |
 
-Use separate credentials/scopes where the provider supports them. Do not expose keys to the browser. The application must return a clear service-unavailable or partial-evidence response for endpoint errors, timeouts, rate limits, or invalid model output.
+The repository includes 84 FinanceBench filing PDFs. They are staged input
+documents, not proof that the database has been initialized or populated.
+Ingestion is an explicit operator command.
 
-### Current chat-completions adapter
+## 3. User-facing request flows
 
-The backend now has a reusable synchronous `LLMClient` in
-`app/services/llm_client.py`. Its current development configuration uses
-`https://103.42.50.41:1034/v1` with model `Qwen/Qwen3-8B`; these values are
-environment configuration, not constants in the client. The client sends
-`POST {LLM_API_BASE}/chat/completions` with a JSON body containing `model`,
-`messages`, and `max_tokens`; `temperature` is optional. When configured, it
-sends the API key as a Bearer authorization header and verifies TLS using
-`LLM_CA_CERT`. The current client has a 60-second timeout, returns the decoded
-JSON object, and propagates transport and non-success HTTP errors. Retries and
-per-request call budgets are not yet implemented.
+### Copilot chat and report
 
-Example wire contract (the credential is a placeholder, never a literal key):
+The frontend posts to `POST /api/v1/copilot/chat`. The request may include a
+company, fiscal year, conversation ID, and one of three prompt strategies:
+`zero_shot`, `few_shot`, or `cot`. The response contains a status, answer,
+metrics, citations, data-source statuses, and an agent trace.
 
-```http
-POST /v1/chat/completions
-Authorization: Bearer ${LLM_API_KEY}
-Content-Type: application/json
+Before entering the graph, recognized consequential actions return a refusal
+without calling the graph, retrieval, or model. This is a narrow phrase-pattern
+guard, not comprehensive financial-policy classification. Within the graph:
 
-{
-  "model": "Qwen/Qwen3-8B",
-  "messages": [
-    {"role": "user", "content": "Explain RAG in three steps."}
-  ],
-  "max_tokens": 128
-}
-```
+1. **`plan`** extracts a year and sets report/retrieval scope.
+2. **`rag_researcher`** retrieves evidence, using three targeted searches for
+   reports and one search for ordinary questions.
+3. **`public_data_researcher`** fetches current/prior SEC annual facts and
+   Treasury context for report requests that specify a company and year.
+4. **`fact_extractor`** asks the configured model for explicitly quoted facts.
+   Values are accepted only when the quoted value and metric label are found
+   in the retrieved snippet. Malformed JSON receives one repair attempt;
+   certain rate-limit or invalid-output failures are recorded in data status.
+5. **`metric_calculator`** combines validated filing facts with SEC facts and
+   calculates report metrics using deterministic `Decimal` arithmetic.
+6. **`financial_analyst`** either renders report metrics directly or uses the
+   configured chat model to answer a non-report question from excerpts and
+   validated metrics.
+7. **`report_verifier`** checks citation labels against retrieved evidence. A
+   failed check routes through one bounded critic retry; if citation checks
+   still fail, the workflow raises an error. Graph invocation has a recursion
+   limit of 12.
 
-The client expects an OpenAI-compatible response with the generated text at
-`choices[0].message.content`.
+The graph uses LangGraph's in-memory `MemorySaver`. The API separately keeps
+conversation display messages in a process-local dictionary. Neither survives
+a backend restart or provides state shared across replicas. The `/stream`
+route currently returns a completed response object; it is not event
+streaming.
 
-Local development loads the ignored `source/financeops-ai/.env` file. The
-development CA certificate is `docs/vm04-ca.crt`; Compose mounts it read-only
-inside the backend container. Never place the API key in this design document,
-source code, or logs.
+### Direct RAG question
 
-`app/services/llm_connection_tester.py` provides a one-request embeddings smoke
-test using a non-sensitive sample string. Run it from the backend directory
-with `python -m app.services.llm_connection_tester`. It checks for a non-empty
-numeric vector and reports only its dimension. This verifies connectivity and
-basic response shape, not the RAG workflow.
+The frontend's main report/chat form uses the copilot route. The separate
+`POST /api/v1/rag/query` route calls `RAGPipeline` directly. It retrieves
+evidence, prompts the model with a zero-shot, few-shot, or private-CoT
+strategy, and validates returned citation IDs. It does not use the LangGraph
+or SEC/Treasury workflow.
 
-## 3. Logical architecture
+## 4. Retrieval, ingestion, and evidence
 
-| Layer | Responsibility |
-|---|---|
-| React + TypeScript UI | Submit questions, show answer, period/metric labels, citations, evidence snippets, formulas, refusal/evidence-gap status, and request ID |
-| FastAPI `/api/v1` | Authentication, request validation, authorization, rate limits, API schemas, streaming/result transport, and correlation IDs |
-| Policy and request gate | Scope/intent validation, supported-question/refusal rules, prompt-injection isolation, sensitive-data minimization, and per-request budgets |
-| LangGraph workflow | Typed state, deterministic routing, checkpointing, bounded loops, retry/critic path, and explicit terminal states |
-| LangChain adapters | OpenAI-compatible chat client, embeddings client, document loaders, text splitters, vector/keyword retrievers, and optional output parsers |
-| Specialist nodes | Financial research, retrieval/evidence assembly, deterministic calculation, synthesis, and verification; logical roles share one model endpoint |
-| Tool layer | Read-only corpus lookup, filing metadata lookup, period/metric normalization, and deterministic financial calculations using decimal arithmetic |
-| RAG data plane | Original source files, parsed pages/tables, provenance-bearing chunks, embedding vectors, lexical index, and access metadata |
-| Evaluation/operations | Golden-set runner, deterministic metric checks, retrieval and answer metrics, sanitized traces, endpoint usage, and audit events |
+### Ingestion
 
-The LLM is not the source of truth. The indexed source documents and deterministic calculation outputs are authoritative. Tools are typed and allowlisted; retrieved text is untrusted data and cannot grant permissions or modify system policy.
+`python -m app.rag.cli ingest --profile medium` reads PDF files from the
+configured FinanceBench directory. PyMuPDF extracts text page by page;
+recursive character splitters implement 512/30, 1024/30, and 1536/30
+character/overlap profiles. Chunks exceeding 500 BGE tokenizer tokens are
+split further to respect the embedding input limit. The configured embeddings
+client generates vectors, which are stored with profile, model, document,
+page, and metadata in PostgreSQL/pgvector.
 
-## 4. End-to-end online question flow
-
-1. **Receive and authorize.** The client sends a question, selected company/entity if applicable, and optional fiscal period. FastAPI authenticates the user, resolves corpus/document access, checks request size and rate limits, and assigns request and trace IDs.
-2. **Apply deterministic pre-guardrails.** Validate scope and reject disallowed requests before retrieval where possible. Detect attempts to obtain investment advice, unauthorized/internal forecasts, live data, tax/legal/audit opinions, or prompt-policy overrides. Treat user input and all document text as untrusted.
-3. **Initialize graph state.** Create a typed, request-scoped state containing the original question, allowed corpus scope, selected entity/period, policy decision, step/call budgets, evidence list, tool results, answer draft, verification status, and trace identifiers. Do not place secrets or unnecessary personal data in prompts or state logs.
-4. **Classify and plan.** A constrained supervisor node uses the shared small model only when deterministic rules cannot confidently classify the task. It emits schema-validated intent, entities/periods, required evidence types, and an allowlisted plan. Invalid output gets at most one bounded repair; otherwise return a clarification or explicit failure.
-5. **Retrieve evidence.** The retrieval node applies ACL, company, filing type, period, metric, and source filters before content enters model context. It runs dense vector retrieval and lexical/BM25 retrieval in parallel, fuses ranks (for example reciprocal-rank fusion), optionally performs deterministic metadata-aware reranking, removes duplicate/contradictory chunks, and returns a bounded context with exact document, page/section, period, accession/version, units, and source IDs.
-6. **Check evidence sufficiency and period basis.** Require evidence to support every requested period, metric, and comparison. Prefer the latest applicable recast/restated filing when it explicitly restates prior periods, but preserve the earlier disclosure and explain the basis difference. If evidence is missing, conflicting, or mixes incompatible bases without a reconciliation bridge, route to clarification/refusal rather than guessing.
-7. **Call deterministic tools.** For numerical questions, extract/normalize raw values with source IDs and units, then call a typed calculator. It validates compatible periods, currency, scale, signs, GAAP/Non-GAAP basis, and denominator; uses decimal arithmetic and explicit formulas; returns inputs, outputs, rounding, and provenance. The model may request only registered read-only tools with schema-validated arguments. No model-generated SQL or code execution.
-8. **Synthesize with evidence.** The synthesis node receives only the bounded evidence bundle and verified calculation results. It produces a direct answer first, followed by a compact table/bullets as needed. Every factual claim/metric carries `[Doc_Name | Section/Page | Period]`; derived metrics show formula and intermediate inputs. Label GAAP/Non-GAAP and material adjustments.
-9. **Verify and guard the response.** A critic node, using the same model endpoint, checks supported claims, citation IDs, period/unit consistency, calculation/tool alignment, required basis labels, and refusal policy. Deterministic validators verify citations resolve to retrieved source IDs and numbers match tool outputs. Allow at most one bounded repair. Unresolved claims are removed or converted to explicit uncertainty; never emit success-shaped unsupported output.
-10. **Return and record.** Return a typed response with answer, citations, calculation details, evidence status, refusal status, and request ID. Persist sanitized workflow events and source references under the applicable retention policy. The UI can open the citation to the source page/section.
-
-### Example response contract
-
-```json
-{
-  "status": "answered",
-  "answer": "FY2024 revenue was ... [FY24 10-K | Item 8, p. 54 | FY2024].",
-  "claims": [
-    {
-      "text": "FY2024 revenue was ...",
-      "citations": [
-        {
-          "document_id": "filing-accession-or-corpus-id",
-          "document_name": "FY24 10-K",
-          "section": "Item 8, Consolidated Statements of Operations",
-          "page": 54,
-          "period": "FY2024"
-        }
-      ]
-    }
-  ],
-  "calculations": [],
-  "refusal_reason": null,
-  "evidence_status": "sufficient",
-  "request_id": "correlation-id"
-}
-```
-
-The identifier and values above are illustrative. A refusal should use `status: "refused"` with a concise reason and, where useful, a safe alternative such as summarizing filed historical metrics.
-
-## 5. LangGraph workflow and multi-agent design
-
-“Multi-agent” is implemented as bounded specialist roles/nodes inside one compiled graph, not as autonomous agents with independent memory, credentials, or model deployments. All model calls use the same configured hosted model. Most numeric work and policy checks are ordinary deterministic code.
-
-### Graph nodes
-
-1. `authorize_and_validate` — deterministic authentication/context checks; no LLM.
-2. `pre_guardrail` — supported-scope/refusal policy and prompt-injection boundary.
-3. `classify_and_plan` — bounded supervisor; outputs validated `intent`, `company`, `periods`, `metric`, `basis`, and allowed actions.
-4. `retrieve_hybrid` — LangChain retrievers with mandatory metadata/ACL filters; parallel lexical and vector search, rank fusion, evidence sufficiency.
-5. `analyze_financial_report` — specialist role for direct extraction, cross-period comparisons, restatements, and multi-hop narrative synthesis over retrieved evidence.
-6. `calculate_metric` — deterministic tools for growth, margins, FCF, leverage, ratios, bps changes, and specified formulae. Specialist node may request a tool; it does not calculate authoritative numeric results itself.
-7. `synthesize_answer` — concise, citation-bearing structured draft; uses the same shared chat endpoint.
-8. `verify_answer` — deterministic validators plus same-model critic; checks citations, claim grounding, units, accounting basis, math, and refusal correctness.
-9. `repair_once` — optional single bounded correction routed back to synthesis or calculation; cannot broaden access or add new tools.
-10. `finalize`, `clarify`, `refuse`, `insufficient_evidence`, `degraded` — explicit terminal nodes.
-
-### State and control rules
-
-- Use a typed graph state and strict structured-output schemas. Persist only state needed to resume; do not persist provider secrets or raw sensitive content in generic traces.
-- Route calculations only after the required evidence is present. Route missing periods or incompatible accounting bases to a clarification/refusal terminal.
-- Set graph maximum steps, model calls, tool calls, context tokens, wall-clock timeout, and retry count. No unbounded agent loop.
-- Tools are read-only and parameterized; no arbitrary SQL, web browsing, email, payments, filings, or external market-data tools.
-- Use LangGraph checkpointing for recoverable requests only with encrypted, tenant-scoped state and retention controls. Checkpoint errors must be visible.
-- Stream progress/status events if enabled, but mark the answer final/verified only after verification completes.
-
-## 6. RAG ingestion and retrieval design
-
-### Corpus and ingestion
-
-The target corpus contains public-company Form 10-K/10-Q/8-K filings, earnings releases, investor presentations, and earnings-call transcripts. The DOCX's Acme Corp FY2024–Q3 FY2025 reference pack is the source for its 75-query golden set. It is not evidence that these documents are currently present in the repository. Do not answer Acme-specific queries from parametric memory or the gold answers if the corresponding source document has not been ingested.
-
-The implemented FinanceBench path is exposed by `app.rag.cli`: it extracts
-page-level text with PyMuPDF, applies recursive character splitting, batches
-embeddings through the existing `LLMClient`, and writes versioned profile/model
-vectors to PostgreSQL/pgvector. The chunking experiment compares 512/30,
-1024/30 (the reference notebook baseline), and 1536/30 character/overlap
-profiles. FinanceBench evidence page labels are retained as zero-based indices;
-chunks that exceed 500 BGE tokenizer tokens are split further to stay within
-the embeddings service's 512-token input limit. The query endpoint displays
-one-based PDF pages in citations. Retrieval
-evaluation separately reports page-level `recall_at_k` and MRR for shared-corpus
-and per-question-document scopes. A distinct answer-evaluation command records
-generated answers and citations and reports normalized exact match and token
-F1; those text-overlap scores are baselines, not semantic or human judgments.
-The query endpoint is `POST /api/v1/rag/query`; generated claims are prompted
-to cite source labels and returned labels are validated against retrieved pages.
-
-Ingestion is an operator-controlled, auditable pipeline:
-
-1. Register company, source URL, document type, filing accession/date, reporting period, terms/license, acquisition time, and content hash.
-2. Validate file type/size; malware-scan; parse PDF text/tables while retaining page numbers and table/row context. OCR is a separately monitored path for image-only pages.
-3. Normalize extracted values without losing original units, signs, labels, fiscal-period dimensions, or table coordinates. Retain the immutable original and parser version.
-4. Chunk by filing section/semantic boundary, not arbitrary character count alone. Keep tables intact where practical; attach company, form, period, section, page, accession/version, GAAP basis, currency/unit, and ACL metadata to each chunk.
-5. Call the supplied embeddings endpoint in controlled batches and persist model/version/dimension. Build dense and lexical indexes; reject and report malformed records instead of silently dropping them.
-6. Run ingestion validation and retrieval tests, then atomically publish the new index version. Reindexing never mutates the source record.
+The current path does not implement OCR, image-based table extraction,
+whole-corpus atomic publishing, or the target 500–2,000-document corpus. PDFs
+with no extractable text fail ingestion. The current local set is 84 PDFs.
 
 ### Query-time retrieval
 
-1. Resolve entity, period, filing type, metric, and accounting basis from the request and graph state.
-2. Enforce authorization and metadata filters before vector or lexical retrieval. Never rely on the model prompt for ACL enforcement.
-3. Run dense semantic retrieval and lexical/BM25 search; fuse ranks and prefer exact filing-period/table/footnote matches. Use deterministic reranking initially; any future learned reranker must use the same shared ≤8B chat endpoint or a non-generative method, not introduce another LLM.
-4. Deduplicate overlapping chunks; detect conflicting values across documents; preserve original and restated disclosures with their time/version.
-5. Return a small evidence bundle including exact quotations/snippets, page/section, period, units, source URL/accession, chunk ID, and retrieval scores. Enforce a token budget before hosted inference.
-6. If source support is absent or ambiguous, do not fill gaps from model memory. Return missing-evidence status or request a company/period clarification.
+The current `HybridRetriever`:
 
-## 7. Financial tool catalog
+1. Loads indexed chunks, optionally filtered by document/company.
+2. Computes dense candidates through pgvector and lexical BM25 candidates
+   against an in-process index.
+3. Combines rankings using reciprocal-rank fusion.
+4. Applies a deterministic lexical coverage/phrase reranker.
+5. Returns bounded snippets with document, zero-based page index, display
+   page, metadata, and retrieval scores.
 
-Tools are deterministic, typed, versioned, read-only where they access data, and return source IDs alongside values.
+The answer pipelines use retrieved text as untrusted evidence, ask for exact
+citation labels, and reject labels not present in the retrieved result set.
+Direct RAG citations use `[S#]`; graph answers use `[R#]`. The backend maps
+zero-based stored page indexes to one-based PDF display pages.
 
-| Tool | Purpose and safeguards |
+## 5. Public and deterministic tools
+
+The MCP service implements two read-only public-data tools:
+
+- `get_sec_financial_facts(company, fiscal_year)` resolves an issuer and
+  extracts annual USD facts from SEC Company Facts.
+- `get_treasury_debt_context(fiscal_year)` retrieves a U.S. public-debt
+  observation from Treasury Fiscal Data.
+
+The SEC tool requires an operator-configured `SEC_USER_AGENT` with a monitored
+contact email. If MCP transport fails, the backend invokes the same provider
+handlers directly and marks the transport fallback in response status.
+
+`compute_report_metrics` computes revenue growth, margins, current ratio,
+liabilities-to-equity, and free cash flow when required inputs are available
+and compatible. The calculation layer preserves source information and marks
+missing, incompatible, or non-computable inputs. Other invoice, expense, and
+vendor-risk tools exist in the repository and API, but the current LangGraph
+copilot path does not route user questions to those tools.
+
+## 6. Prompts, safety, and citations
+
+The direct RAG and LangGraph synthesis paths support:
+
+- **Zero-shot:** base instruction and evidence context.
+- **Few-shot:** one format example; its values and labels are placeholders.
+- **Private CoT (`cot`):** asks the model to reason internally and return only
+  the concise answer, not hidden reasoning.
+
+Prompt instructions tell the model to treat source excerpts as untrusted data.
+This is a defense-in-depth instruction, not a complete prompt-injection
+security boundary. The repository has a basic test verifying that
+instruction-like source text remains in the evidence input while the system
+prompt labels it untrusted.
+
+Factual filing claims must cite evidence. Citation IDs are validated against
+the retrieved sources. The graph verifier retries once for citation mismatch
+or missing citations, then fails explicitly. This check verifies citation
+membership, not semantic entailment of every claim.
+
+Fifteen consequential-action examples are tested against the pre-workflow
+refusal path. PII detection/redaction, enterprise authorization/tenant
+isolation, comprehensive refusal tests, and a broader corpus prompt-injection
+red-team suite remain unimplemented.
+
+## 7. Evaluation
+
+The source-backed evaluation set comprises 75 FinanceBench questions selected
+equally from three benchmark types and 15 refusal cases. Prompt development
+uses 15 questions; the remaining 60 are reserved as a holdout. The FinanceBench
+source answers and page labels are evaluation references, not source evidence.
+
+Current evaluation capabilities:
+
+- `evaluate_retrieval` calculates page-level recall@k and MRR without answer
+  generation.
+- `evaluate_answers` separately records generated answers, citations,
+  normalized exact match, token-F1, and per-query/mean answer latency.
+- `compare-prompts` runs zero-shot, few-shot, and private-CoT comparisons on a
+  selected prompt split and writes JSONL results.
+- Authenticated `/api/v1/evaluation/run` performs a real retrieval-only or
+  answer-quality run; `/results` and `/metrics` return process-local run
+  records and latency summaries.
+
+These are functional evaluation scaffolds; live scores have not been asserted
+here. Exact-match and token-F1 are lexical baselines, not semantic or human
+judgments. The API run history is in memory. Cost/token accounting, end-to-end
+task completion and tool-call averages, a failure taxonomy, persistent
+evaluation history, and distributed tracing via OpenTelemetry/LangSmith/
+Langfuse are not implemented.
+
+## 8. API and deployment
+
+Important endpoints:
+
+| Endpoint | Behavior |
 |---|---|
-| `search_filings` | Query the authorized corpus by company/form/period/section; return source references and evidence only |
-| `get_filing_metadata` | Resolve accession, filing date, reporting period, document version and page/section map |
-| `extract_financial_fact` | Normalize a retrieved fact with original label/value/unit/currency/basis and provenance |
-| `calculate_growth` | `(current - prior) / prior`; check same metric, compatible periods and non-zero denominator |
-| `calculate_margin` | `numerator / revenue`; require aligned period, entity, currency, and GAAP basis |
-| `calculate_fcf` | `operating cash flow - capital expenditures`; show both source inputs and sign conventions |
-| `calculate_ratio` | Compute named ratios such as current ratio, leverage, DSO, and interest coverage only from documented definitions and inputs |
-| `calculate_bps_delta` | Convert margin difference to basis points; do not confuse percentage change with percentage-point change |
-| `reconcile_gaap_nongaap` | Produce bridge only when filing explicitly discloses all adjustments; otherwise mark unreconciled |
-| `compare_periods` | Align periods, restatements and discontinued operations; preserve both reported and recast values with explanation |
+| `POST /api/v1/copilot/chat` | Run graph-based chat/report workflow. |
+| `POST /api/v1/copilot/stream` | Return the completed chat response; no incremental event stream yet. |
+| `GET /api/v1/copilot/conversations` | List this process's conversations for the authenticated subject. |
+| `POST /api/v1/rag/query` | Direct hybrid-RAG answer with validated citations. |
+| `POST /api/v1/evaluation/run` | Run actual retrieval-only or answer-quality evaluation. |
+| `POST /api/v1/auth/login` | Demo login/token endpoint; not production authentication. |
 
-All currency values use `Decimal` or equivalent fixed-precision arithmetic. Tool outputs include formula, raw inputs, units, rounding policy, period, basis, source IDs, and validation status. The model cannot override tool output or silently change calculation definitions.
+Docker Compose provisions the React Vite frontend, FastAPI backend, MCP
+service, PostgreSQL/pgvector, and Redis. Backend/frontend ports are bound to
+localhost. The Redis container currently has no application cache integration.
+There is no production rate limiter, response cache, durable checkpoint store,
+or multi-replica-safe conversation/evaluation persistence.
 
-## 8. Guardrails and refusal behavior
+## 9. Current implementation gaps
 
-### Required DOCX policy cases
-
-The copilot must explicitly decline or safely correct:
-
-1. **Investment advice:** No buy/sell/hold/short/allocation recommendation. Offer an objective summary of filed historical results and risks instead.
-2. **Unguided prediction/price target:** No stock-price forecast, target, or future financial/macro prediction beyond clearly attributed management guidance in indexed documents.
-3. **Out-of-corpus/missing periods/entities:** State that the requested filing, metric, period, subsidiary, or competitor is unavailable; never answer from pretrained memory.
-4. **Live/external market data:** No current price, intraday market capitalization, current P/E, or breaking news without an explicitly indexed source and supported scope.
-5. **Legal, tax, or audit opinion:** No determination of GAAP/IFRS compliance, audit opinion, or corporate tax structuring. It may summarize what the filing states without adopting an opinion.
-6. **Incompatible accounting bases:** Do not calculate a blended GAAP/Non-GAAP metric without an explicit reconciliation bridge. Explain the mismatch and, where supported, provide separate like-for-like figures.
-
-### Additional protections
-
-- **Prompt injection:** System/developer policy and typed tool allowlists are immutable; retrieved text is quoted evidence only. Ignore document instructions asking for secrets, policy changes, or external actions.
-- **False premises and undisclosed facts:** Verify the premise against the corpus; correct it only with evidence, otherwise say it is not established.
-- **Citation integrity:** A citation must resolve to a source actually returned for this request. Do not generate citation labels from model output alone.
-- **Claim coverage:** Require citations for every factual statement and metric; remove unsupported narrative claims.
-- **Math and unit safety:** Require tool-produced values for derived quantities; preserve sign, scale, dates, currency, restatement, and accounting basis.
-- **Data isolation:** Apply tenant/document authorization before retrieval and before source display; test against cross-scope retrieval leakage.
-- **Privacy and endpoint safety:** Redact or exclude secrets and unnecessary PII; send only authorized minimum context to the hosted endpoint. No credentials in browser, prompts, traces, or error messages.
-- **No consequential actions:** The service is decision support only. No trades, payments, ledger writes, approvals, or policy overrides.
-
-Refusal is a valid, structured result, not a generic error. Distinguish `refused`, `clarification_required`, `insufficient_evidence`, and `provider_unavailable`.
-
-## 9. Evaluation design
-
-### Golden set
-
-Use all 75 queries from the source DOCX, with immutable IDs and versioned gold references. Preserve the required harness fields:
-
-```json
-{
-  "question_id": "Q001",
-  "category": "extraction",
-  "expected_behavior": "answer",
-  "required_citations": ["FY24 10-K | Item 8 | p. 54"],
-  "key_numbers": [14820]
-}
-```
-
-The harness record should additionally preserve the original question, expected answer, source page/note IDs, expected intent/tools, rubric, and split. Map the benchmark into the five DOCX categories: Q001–015 `extraction`, Q016–030 `calculation`, Q031–045 `multi_hop`, Q046–065 `refusal`, Q066–075 `edge_case`. Expected behavior is `refuse` for policy/out-of-scope requests and `answer` for supported fact, correction, and safe alternative cases as specified by each gold record. Preserve exact gold semantics when labeling ambiguous correction cases.
-
-The DOCX's Acme pack and values are a benchmark specification, not checked-in primary source evidence. Retrieval tests that assert its citations require the canonical source filings/releases/transcripts to be staged with matching page metadata. If they are absent, mark affected tests as fixture-unavailable; do not count a memorized gold answer as a RAG success.
-
-### Worked golden-set example: Q016 (calculation)
-
-Q016 tests whether the system can retrieve both periods, compute a growth rate deterministically, and cite the source:
-
-**Question:** “Calculate Acme's YoY revenue growth rate in Q3 FY2025.”
-
-An evaluation record can encode the DOCX gold as:
-
-```json
-{
-  "question_id": "Q016",
-  "category": "calculation",
-  "expected_behavior": "answer",
-  "user_query": "Calculate Acme's YoY revenue growth rate in Q3 FY2025.",
-  "required_citations": [
-    "Q3 FY25 10-Q | Consolidated Statements of Operations | p. 3"
-  ],
-  "key_numbers": [4110, 3600, 510, 14.17],
-  "expected_calculation": "(4110 - 3600) / 3600 * 100",
-  "expected_answer": "Q3 FY2025 revenue grew 14.17% year over year. Calculation: ($4,110M - $3,600M) / $3,600M = $510M / $3,600M = 14.17%.",
-  "split": "held_out"
-}
-```
-
-For this example, the runner executes the normal graph rather than injecting the gold answer: authorize and classify → retrieve Q3 FY2025 and comparable Q3 FY2024 revenue evidence from the indexed 10-Q → assert the required filing/page was retrieved → pass the two period-aligned values and their units/source IDs to `calculate_growth` → verify the tool result and formula → synthesize and verify the cited response. The run passes only if (a) the required citation is retrieved and resolves to the staged source, (b) the deterministic tool inputs are 4,110M and 3,600M with compatible periods/units, (c) the computed result is 14.17% under the benchmark rounding rule, and (d) the final answer shows the formula and cites the evidence. A correct number without source evidence is not a RAG pass; a retrieved citation with an incorrect calculation is not an answer pass. Report retrieval and answer/calculation outcomes separately. If the canonical 10-Q page is not staged, mark Q016 fixture-unavailable rather than scoring a memorized answer.
-
-### Metrics and test layers
-
-| Layer | Measures |
+| Requirement area | Current status |
 |---|---|
-| Ingestion | Parse/page/table coverage, metadata completeness, duplicate handling, source hash and parser/version traceability |
-| Retrieval | Recall@k for required citations, MRR, nDCG@k, correct-period retrieval, page/note citation coverage, contradiction/restatement handling |
-| Calculation | Exact numeric match/tolerance, formula and intermediate-input correctness, units/signs/rounding, GAAP/Non-GAAP consistency |
-| Answer | Factual precision, citation support/precision/recall, answer completeness, structured-output validity, unsupported-claim rate |
-| Guardrails | Refusal precision/recall, safe alternative behavior, prompt-injection resistance, false-premise correction, out-of-corpus abstention |
-| Operations | Hosted calls/question, input/output tokens, latency percentiles, timeout/rate-limit/error rate, retries, cost/quotas, graph steps |
+| Written behavior and gold set | Specification, 75 source-labeled questions, 15 refusal cases, and prompt splits exist. |
+| Prompt strategy comparison | Three strategies and a CLI comparison runner exist; endpoint-backed comparison scores still need to be recorded. |
+| RAG corpus size | Hybrid retrieval and chunk-size experiment exist; 84 staged PDFs are below the 500–2,000-document requirement. |
+| Agent loop and state | Planner, executor/research nodes, citation verifier, one retry, and recursion cap exist; state is process-local and tool failure handling is incomplete. |
+| Evaluation/observability | Retrieval and answer metrics plus latency exist; cost, task/tool metrics, failure taxonomy, persistent history, and tracing are missing. |
+| Ship and responsible AI | React and Compose exist; production rate limiting/caching, durable state, PII controls, hardened auth, and comprehensive injection/refusal tests are missing. |
 
-Run unit tests for tools and policy gates, retrieval tests using labeled source/page IDs, graph integration tests with a deterministic fake OpenAI-compatible server, and end-to-end evaluation against the hosted endpoint. Separate prompt-development and held-out evaluation splits. Tune prompts/chunking/reranking only on development data; freeze and report the 75-query run with model ID, endpoint configuration identifier, prompt version, corpus/index version, and evaluation code revision. Establish numeric pass thresholds from a baseline and product requirements before claiming acceptance; do not tune against the held-out results.
-
-For small-model reliability, prefer explicit schemas, short task prompts, low context duplication, bounded choices, deterministic calculations, and repair-once behavior. Compare prompt/retrieval/tool changes with the same model endpoint and record request/token budgets.
-
-## 10. API, persistence and observability
-
-### Target API
-
-- `POST /api/v1/copilot/chat` — synchronous typed response.
-- `POST /api/v1/copilot/stream` — progress events followed by a final verified result or explicit failure.
-- `POST /api/v1/documents` and ingestion status endpoints — authorized corpus administration; indexing is not available to ordinary chat users.
-- `POST /api/v1/evaluation/runs` and `GET /api/v1/evaluation/runs/{id}` — authorized benchmark execution and results.
-- `GET /api/v1/requests/{request_id}/trace` — sanitized, role-protected trace for debugging.
-
-### Persistence
-
-Persist source document metadata and immutable originals separately from parsed pages/chunks. Store vectors with embedding version and provenance. Persist evaluation runs, index/model/prompt versions, user/tenant scope, request IDs, graph-node events, tool inputs/outputs (redacted), citation references, and verification status. Indexes and vectors are rebuildable; original source bytes and source metadata are authoritative. Apply retention and deletion policies to source, cache, checkpoint, and trace data.
-
-### Observability
-
-Trace request → guardrail → planner → retrieval (dense and lexical) → tool → synthesis → verification → response. Record safe metrics for endpoint latency, token usage, rate-limit retries, retrieval scores, citation coverage, tool/math verification, refusal reason codes, graph transitions, and failures. Sanitize/redact before persistence or export; do not store API keys, full unredacted user documents, or unnecessary personal/financial identifiers in traces. Any hosted telemetry requires explicit approval and privacy review; default to approved application telemetry.
-
-## 11. Deployment and failure handling
-
-Deploy the UI and backend in the approved environment; connect outbound only to the configured chat and embeddings endpoints and required approved infrastructure. Keep API keys in a secret manager and enforce TLS, egress allowlists, timeouts, quotas, and endpoint identity verification. Postgres/pgvector and a lexical index may be self-managed or hosted according to data policy; apply tenant scoping in repositories and database policy. No runtime fallback to a local, larger, or different chat model.
-
-| Failure | Required behavior |
-|---|---|
-| Chat or embeddings endpoint unavailable/rate-limited | Bounded retry only for retry-safe calls; return `provider_unavailable` or a clearly marked partial result |
-| Embedding model/version mismatch | Stop query/index mixing and require compatible index or controlled rebuild |
-| No relevant evidence | Return `insufficient_evidence`; ask for company/period if resolvable |
-| Conflicting or restated values | Explain disclosure dates/bases and cite both; ask for clarification if comparison remains undefined |
-| Invalid tool/model output | Schema validation, at most one repair, then explicit degraded/error state |
-| Citation does not resolve | Remove claim or fail verification; never fabricate the citation |
-| Authorization or policy failure | Deny before retrieval; log a sanitized reason code |
-
-## 12. Implementation status and delivery sequence
-
-The current runtime wires the configured chat and embeddings clients into the
-copilot workflow, uses LangGraph specialist nodes with process-local
-short-term checkpoints, retrieves from the pgvector/BM25 reference index, calls
-read-only SEC/Treasury MCP tools, and computes metrics with deterministic
-decimal arithmetic. Report-mode output is rendered from validated metric
-results and inputs rather than model-generated numeric narrative. The frontend
-displays reports, calculation inputs, source citations, tool status, and
-conversation turns. The 84-PDF corpus still needs an explicit
-`app.rag.cli ingest` run after database initialization. The SEC tool requires
-an approved SEC User-Agent contact. The demo authentication provider,
-process-local memory, retry budgets, production tenant isolation, full semantic
-citation verification, and functional 75-query evaluation runner remain
-incomplete; this is a working capstone prototype, not a production financial
-decision system.
-
-Recommended delivery:
-
-1. **Contract and corpus:** Define typed answer/evidence/tool schemas; stage legally usable source documents and build provenance/page metadata fixtures for the DOCX golden set.
-2. **Hosted adapters:** Validate approved inference endpoints, secrets, model constraints (≤8B), quotas, timeouts, retry policy, and no-fallback behavior.
-3. **Ingestion and RAG:** Complete page/table-aware parsing, ACL filtering, index status, and golden-query evaluation.
-4. **Deterministic tools:** Extend Decimal-based calculations with accounting-basis checks and restatement handling.
-5. **Graph and guardrails:** Add durable tenant-scoped checkpointers, explicit retry budgets, refusal tests, and stronger semantic claim verification.
-6. **API/UI and traces:** Add durable conversation storage, genuine progress streaming, and sanitized trace access.
-7. **Evaluation and release:** Implement all 75 records with documented labels/splits, measure retrieval/calculation/answer/safety/operations separately, establish acceptance gates, and rerun after every prompt/index/model configuration change.
-
-## 13. Architectural decision summary
-
-- **One shared ≤8B instruct model** through one hosted OpenAI-compatible endpoint for every chat/reasoning role.
-- **Supplied embeddings endpoint** for indexing and query vectors; versioned independently from chat.
-- **LangChain** for model, embedding, loading, splitting, and retrieval integrations.
-- **LangGraph** for explicit, typed, bounded multi-agent orchestration and state transitions.
-- **Hybrid RAG + deterministic finance tools** rather than relying on model memory or model arithmetic.
-- **Hard policy and evidence checks** before and after generation, with citations resolving to indexed sources.
-- **75-query DOCX golden set** as an evaluation contract, gated by availability of its corresponding primary-source pack.
+Do not present the diagram or this design as production readiness. Review model
+attestation and endpoint data-handling terms, stage a suitably sized lawful
+corpus, implement the outstanding controls, and run evaluation against the
+configured services before making conformance claims.
